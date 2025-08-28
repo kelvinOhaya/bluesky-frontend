@@ -1,4 +1,3 @@
-
 # ChatApp Frontend
 
 This is the frontend for **ChatApp**, a real-time chat application built with React and Vite. It supports multi-user chat rooms, authentication, and live messaging using Socket.IO.
@@ -30,10 +29,12 @@ frontend/
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js (v18+ recommended)
 - Backend server (see `/backend` folder)
 
 ### Installation
+
 1. Install dependencies:
    ```sh
    npm install
@@ -45,10 +46,13 @@ frontend/
    (Adjust the URL if your backend runs elsewhere)
 
 ### Running the App
+
 Start the development server:
+
 ```sh
 npm run dev
 ```
+
 The app will be available at [http://localhost:5173](http://localhost:5173) by default.
 
 ## Usage
@@ -59,10 +63,9 @@ The app will be available at [http://localhost:5173](http://localhost:5173) by d
 4. Rename or leave chat rooms as needed.
 
 ## Technologies Used
+
 - [React](https://react.dev/)
 - [Vite](https://vitejs.dev/)
 - [Socket.IO Client](https://socket.io/)
 - [Axios](https://axios-http.com/)
 - [CSS Modules](https://github.com/css-modules/css-modules)
-
-
