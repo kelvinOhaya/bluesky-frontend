@@ -26,7 +26,7 @@ function ChatRoom() {
       socket.connect();
       const fetchChatRooms = async () => {
         if (!isLoading && user && accessToken && socket != null) {
-          await loadChatRooms();
+          await loadChatRooms(accessToken);
         }
       };
       fetchChatRooms();

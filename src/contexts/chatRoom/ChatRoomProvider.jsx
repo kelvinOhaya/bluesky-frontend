@@ -28,9 +28,13 @@ function ChatRoomProvider({ children }) {
     setIsCreator(user._id === element.creator);
   };
 
-  const loadChatRooms = async () => {
+  const loadChatRooms = async (token) => {
     try {
-      const { data } = await api.get("/chatroom/send-info");
+      const { data } = await api.get("/chatroom/send-info", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       data.chatRooms.map((chatRoom) => {
         if (chatRoom.isDm === true) {
@@ -115,7 +119,7 @@ function ChatRoomProvider({ children }) {
       if (foundUser._id === user._id) {
         await fetchUser(accessToken);
       }
-      await Promise.all([loadMessages(), loadChatRooms()]);
+      await Promise.all([loadMessages(), loadChatRooms(accessToken)]);
     };
 
     const updateGroupProfilePicture = async (updatedChat) => {
