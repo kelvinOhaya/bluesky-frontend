@@ -28,14 +28,9 @@ function ChatRoomProvider({ children }) {
     setIsCreator(user._id === element.creator);
   };
 
-  const loadChatRooms = async (token) => {
-    if (!token) return;
+  const loadChatRooms = async () => {
     try {
-      const { data } = await api.get("/chatroom/send-info", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { data } = await api.get("/chatroom/send-info");
 
       data.chatRooms.map((chatRoom) => {
         if (chatRoom.isDm === true) {
