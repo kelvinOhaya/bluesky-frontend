@@ -72,11 +72,7 @@ const AuthProvider = ({ children }) => {
     if (!token) return;
 
     try {
-      const { data } = await api.get("/auth/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { data } = await api.get("/auth/me");
       setUser(data.user);
       console.log("Current User", data.user);
     } catch (error) {

@@ -29,6 +29,7 @@ function ChatRoomProvider({ children }) {
   };
 
   const loadChatRooms = async (token) => {
+    if (!token) return;
     try {
       const { data } = await api.get("/chatroom/send-info", {
         headers: {
