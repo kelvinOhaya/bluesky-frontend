@@ -115,7 +115,7 @@ function ChatRoomProvider({ children }) {
       if (foundUser._id === user._id) {
         await fetchUser(accessToken);
       }
-      await Promise.all([loadMessages(), loadChatRooms(accessToken)]);
+      await Promise.all([loadMessages(), loadChatRooms()]);
     };
 
     const updateGroupProfilePicture = async (updatedChat) => {
