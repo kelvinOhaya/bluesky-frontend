@@ -73,7 +73,7 @@ const AuthProvider = ({ children }) => {
 
     try {
       const { data } = await api.get("/auth/me", {
-        header: {
+        headers: {
           Authorization: `Bearer ${token}`,
         },
       });
