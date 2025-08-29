@@ -22,7 +22,7 @@ function ChatRoom() {
     // loadMessage()
     if (!socket) return;
 
-    if (effectRan.current === true) {
+    if (effectRan.current === false) {
       socket.connect();
       const fetchChatRooms = async () => {
         if (!isLoading && user && accessToken && socket != null) {
