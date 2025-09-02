@@ -18,6 +18,7 @@ function ChatRoomProvider({ children }) {
     setMessages(null);
     console.log(socket.id);
     prevRoomId.current = currentChat?._id;
+    console.log(socket.id);
     await api.put("/chatroom/update-current-room", {
       currentRoomId: element._id,
       socketId: socket.id,
@@ -172,10 +173,12 @@ function ChatRoomProvider({ children }) {
               : room
           )
         );
-        setCurrentChat((prev) => ({
-          ...prev,
-          memberCount: data.updatedRoom.memberCount,
-        }));
+        if (currentChat._id === data.updatedRoom._id) {
+          setCurrentChat((prev) => ({
+            ...prev,
+            memberCount: data.updatedRoom.memberCount,
+          }));
+        }
       } else {
         console.log("Unfortunately, the room does not exist :(");
         setChatRooms((prev) => [...prev, data.updatedRoom]);
@@ -184,6 +187,24 @@ function ChatRoomProvider({ children }) {
 
     const handlePrintSuccess = () => {
       console.log("Socket Event received from express!!");
+    };
+
+    const handleUserLeft = (data) => {
+      const { currentRoomId } = data;
+      setChatRooms((prev) =>
+        prev.map((room) =>
+          room._id === currentRoomId
+            ? { ...room, memberCount: room.memberCount - 1 }
+            : room
+        )
+      );
+
+      if (currentChat?._id === currentRoomId) {
+        setCurrentChat((prev) => ({
+          ...prev,
+          memberCount: prev.memberCount - 1,
+        }));
+      }
     };
 
     //listeners
@@ -195,6 +216,7 @@ function ChatRoomProvider({ children }) {
     socket.on("reduce-member-count", handleReduceMemberCount);
     socket.on("update-member-count", handleUpdateMemberCount);
     socket.on("update-chat-room-client", handleUpdateChatRoomClient);
+    socket.on("user-left", handleUserLeft);
 
     return () => {
       socket.off("print-success", handlePrintSuccess);
@@ -205,6 +227,7 @@ function ChatRoomProvider({ children }) {
       socket.off("reduce-member-count", handleReduceMemberCount);
       socket.off("update-member-count", handleUpdateMemberCount);
       socket.off("update-chat-room-client", handleUpdateChatRoomClient);
+      socket.off("user-left", handleUserLeft);
     };
   }, [socket, user, chatRooms, messages]);
 
@@ -241,7 +264,7 @@ function ChatRoomProvider({ children }) {
 
   const checkIfDmExists = (joinCode) => {
     const dmExists = chatRooms.find(
-      (room) => room.otherUser?.joinCode === joinCode
+      (room) => room.otherUser?.joinCode === joinCode && room.isDm === true
     );
     return dmExists ? true : false;
   };
@@ -279,7 +302,9 @@ function ChatRoomProvider({ children }) {
       await api.delete("/chatroom/leave-room", {
         data: { currentRoomId: currentChat?._id },
       });
-      socket.emit("leave-room", { currentRoomId: currentChat._id });
+      socket.emit("leave-room", {
+        currentRoomId: currentChat._id,
+      });
       setChatRooms((prev) =>
         prev.filter((room) => room._id != currentChat._id)
       );
