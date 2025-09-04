@@ -1,0 +1,22 @@
+Next Steps:
+
+How to give live updates
+
+Frontend:
+1: Send a delete request to the "leave-room" endpoint, including the current room ID 
+
+Express/Mongoose(Backend):
+2: Upon receiving the request, find the room with the matching current room id from the client, and remove the user's ID from the member's array, and add it to the exMember's array 
+
+Frontend:
+3: Send a socket event to the backend called "leave-room", including the current room ID
+
+Socket (Backend):
+4: Use Mongoose to find the room that matches the room ID that was sent from the client
+5: Store the length of the member's array in a variable, and send an event called "update-member-count" to all the members of the room, including the variable it was stored in and the current room Id again
+6: Leave the room using socket.leave()
+
+Frontend:
+7: Upon receiving updateMember count, use the room id from the event to find the room, and update the member count variable to the new value in ChatRooms. Do the same for currentChat if it is open
+
+
