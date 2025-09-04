@@ -16,25 +16,22 @@ function ChatRoom() {
   const { isLoading, setIsLoading, user, accessToken, fetchUser } = useAuth();
   const { socket } = useSocket();
   const location = useLocation();
-  const effectRan = useRef(false);
 
   useEffect(() => {
     // loadMessage()
     if (!socket) return;
 
-    if (effectRan.current === false) {
-      socket.connect();
-      const fetchChatRooms = async () => {
-        if (!isLoading && user && accessToken && socket != null) {
-          await loadChatRooms();
-        }
-      };
-      fetchChatRooms();
-    }
+    socket.connect();
+    console.log(socket);
+    const fetchChatRooms = async () => {
+      if (!isLoading && user && accessToken && socket != null) {
+        await loadChatRooms();
+      }
+    };
+    fetchChatRooms();
 
     return () => {
       socket.disconnect();
-      effectRan.current = true;
     };
   }, [socket, location.pathname]);
 

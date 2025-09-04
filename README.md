@@ -1,6 +1,6 @@
 # ChatApp Frontend
 
-This is the frontend for **ChatApp**, a real-time chat application built with React and Vite. It supports multi-user chat rooms, authentication, and live messaging using Socket.IO.
+This is the frontend for **BlueSky**, a real-time chat application built with React and Vite. It supports multi-user chat rooms, authentication, and live messaging using Socket.IO.
 
 ## Features
 
