@@ -9,24 +9,26 @@ function ChatRoomProvider({ children }) {
   const { user, isLoading, accessToken, fetchUser } = useAuth();
   const { socket } = useSocket();
   const [isCreator, setIsCreator] = useState(null);
-  const [chatRooms, setChatRooms] = useState(null);
-  const [currentChat, setCurrentChat] = useState(null);
+  const [chatRooms, setChatRooms] = useState([]);
+  const [currentChatId, setCurrentChatId] = useState(null);
+  const currentChat =
+    chatRooms.find((room) => currentChatId === room._id) || null;
   const [messages, setMessages] = useState(null);
-  const prevRoomId = useRef();
+  const prevRoomId = useRef(); //seems to be for debugging purposes
 
   const activateChat = async (element) => {
+    //store the old room value in prevRoomId
+    prevRoomId.current = currentChatId;
+    //set the currentChatId to the element that was clicked
     setMessages(null);
-    console.log(socket.id);
-    prevRoomId.current = currentChat?._id;
-    console.log(socket.id);
+    setCurrentChatId(element._id);
+    setIsCreator(user._id === element.creator);
+
+    //save the current chat to mongoDB
     await api.put("/chatroom/update-current-room", {
       currentRoomId: element._id,
       socketId: socket.id,
     });
-
-    // console.log(data.success);
-    setCurrentChat(element);
-    setIsCreator(user._id === element.creator);
   };
 
   const loadChatRooms = async () => {
@@ -40,7 +42,7 @@ function ChatRoomProvider({ children }) {
       });
 
       setChatRooms(data.chatRooms);
-      setCurrentChat(data.currentChat);
+      setCurrentChatId(data.currentChat._id);
     } catch (error) {
       if (error.response && error.response.status == 401) {
         console.log("Error trying to load the chat rooms: ", error);
@@ -103,7 +105,7 @@ function ChatRoomProvider({ children }) {
             : room
         )
       );
-      setCurrentChat({ ...foundChatRoom });
+      setCurrentChatId(foundChatRoom._id);
     };
 
     const updateProfilePicture = async (foundUser) => {
@@ -126,25 +128,29 @@ function ChatRoomProvider({ children }) {
           updatedChat._id === room._id ? updatedChat : room
         );
       });
-      setCurrentChat(updatedChat);
+      setCurrentChatId(updatedChat._id);
       console.log("FINAL RESULTS:\n", currentChat);
     };
 
-    const handleUpdateMemberCount = (data) => {
-      const { roomId, newMemberCount } = data;
-      console.log(
-        `User has left the room!! \nRoomId: ${roomId}\nNew Member Count: ${newMemberCount}`
-      );
-      setChatRooms((prev) =>
-        prev.map((room) =>
-          room._id === roomId ? { ...room, memberCount: newMemberCount } : room
-        )
-      );
-      setCurrentChat((prev) => ({ ...prev, memberCount: newMemberCount }));
-      console.log(newMemberCount);
+    const handlePrintSuccess = () => {
+      console.log("Socket Event received from express!!");
     };
 
-    const handleReduceMemberCount = (data) => {
+    const handleIncreaseMemberCount = (data) => {
+      //debug messages to check values
+      console.log(`Updated room ID: ${data.updatedRoomId}`);
+
+      setChatRooms((prev) =>
+        prev.map((room) =>
+          room._id === data.updatedRoomId
+            ? { ...room, memberCount: room.memberCount + 1 }
+            : room
+        )
+      );
+    };
+
+    //backend data object: {roomId: id of the sender's currentChat}
+    const handleDecreaseMemberCount = (data) => {
       const { roomId } = data;
       setChatRooms((prev) =>
         prev.map((room) =>
@@ -154,57 +160,10 @@ function ChatRoomProvider({ children }) {
         )
       );
     };
-    const handleUpdateChatRoomClient = (data) => {
-      const roomExistsAlready =
-        chatRooms.find((room) => room._id === data.updatedRoom._id) || null;
 
-      console.log(
-        `Here is your room: \n${
-          JSON.stringify(data.updatedRoom) || null
-        } \nRoomExistsAlready: ${roomExistsAlready}`
-      );
-
-      if (roomExistsAlready) {
-        console.log("The Room Exists!");
-        setChatRooms((prev) =>
-          prev.map((room) =>
-            room._id === data.updatedRoom._id
-              ? { ...room, memberCount: data.updatedRoom.memberCount }
-              : room
-          )
-        );
-        if (currentChat._id === data.updatedRoom._id) {
-          setCurrentChat((prev) => ({
-            ...prev,
-            memberCount: data.updatedRoom.memberCount,
-          }));
-        }
-      } else {
-        console.log("Unfortunately, the room does not exist :(");
-        setChatRooms((prev) => [...prev, data.updatedRoom]);
-      }
-    };
-
-    const handlePrintSuccess = () => {
-      console.log("Socket Event received from express!!");
-    };
-
-    const handleUserLeft = (data) => {
-      const { currentRoomId } = data;
-      setChatRooms((prev) =>
-        prev.map((room) =>
-          room._id === currentRoomId
-            ? { ...room, memberCount: room.memberCount - 1 }
-            : room
-        )
-      );
-
-      if (currentChat?._id === currentRoomId) {
-        setCurrentChat((prev) => ({
-          ...prev,
-          memberCount: prev.memberCount - 1,
-        }));
-      }
+    const handleAddRoom = (data) => {
+      const { updatedRoom } = data;
+      setChatRooms((prev) => [...prev, updatedRoom]);
     };
 
     //listeners
@@ -213,10 +172,9 @@ function ChatRoomProvider({ children }) {
     socket.on("update-room-name", updateCurrentChat);
     socket.on("receive-photo-update", updateProfilePicture);
     socket.on("receive-group-photo-update", updateGroupProfilePicture);
-    socket.on("reduce-member-count", handleReduceMemberCount);
-    socket.on("update-member-count", handleUpdateMemberCount);
-    socket.on("update-chat-room-client", handleUpdateChatRoomClient);
-    socket.on("user-left", handleUserLeft);
+    socket.on("increase-member-count", handleIncreaseMemberCount);
+    socket.on("add-room", handleAddRoom);
+    socket.on("decrease-member-count", handleDecreaseMemberCount);
 
     return () => {
       socket.off("print-success", handlePrintSuccess);
@@ -224,10 +182,9 @@ function ChatRoomProvider({ children }) {
       socket.off("update-room-name", updateCurrentChat);
       socket.off("receive-photo-update", updateProfilePicture);
       socket.off("receive-group-photo-update", updateGroupProfilePicture);
-      socket.off("reduce-member-count", handleReduceMemberCount);
-      socket.off("update-member-count", handleUpdateMemberCount);
-      socket.off("update-chat-room-client", handleUpdateChatRoomClient);
-      socket.off("user-left", handleUserLeft);
+      socket.off("add-room", handleAddRoom);
+      socket.off("increase-member-count", handleIncreaseMemberCount);
+      socket.off("decrease-member-count", handleDecreaseMemberCount);
     };
   }, [socket, user, chatRooms, messages]);
 
@@ -268,14 +225,17 @@ function ChatRoomProvider({ children }) {
     );
     return dmExists ? true : false;
   };
+
+  //for joining group chats in general
   const joinRoom = async (joinCode) => {
     try {
+      /*
+        Send a post request with the following join code
+        Expected data object: {newRoom: the new chat room}
+      */
       const { data } = await api.post("/chatRoom/join", { joinCode });
+      console.log(`Here is your new room: \n${data.newRoom}`);
       setChatRooms((prev) => (prev ? [...prev, data.newRoom] : [data.newRoom]));
-      socket.emit("update-chat-room", {
-        currentRoomId: data.newRoom._id,
-        isDm: false,
-      });
     } catch (error) {
       console.log("Error trying to verify join codes: ", error);
     }
@@ -291,26 +251,22 @@ function ChatRoomProvider({ children }) {
     } else {
       setChatRooms([data.newRoom]);
     }
-    setCurrentChat(data.newRoom);
+    setCurrentChatId(data.newRoom._id);
   };
 
   //send a delete request to "chatroom/leave-room"
-  //call loadChatRooms again
   const leaveChatRoom = async () => {
-    if (!currentChat?._id) return;
+    if (!currentChatId) return;
     try {
       await api.delete("/chatroom/leave-room", {
-        data: { currentRoomId: currentChat?._id },
+        data: { currentRoomId: currentChatId },
       });
-      socket.emit("leave-room", {
-        currentRoomId: currentChat._id,
-      });
-      setChatRooms((prev) =>
-        prev.filter((room) => room._id != currentChat._id)
-      );
-      setCurrentChat(null);
-
-      //filter out the room upon delete. also current chat is on some bs and wont delete
+      //send an event to leave the current socket room
+      socket.emit("leave-room", { currentRoomId: currentChatId });
+      //filter out the old chat room
+      setChatRooms((prev) => prev.filter((room) => room._id != currentChatId));
+      //set currentChat and messages to null
+      setCurrentChatId(null);
       setMessages(null);
     } catch (error) {
       console.log("Error leaving chat room: ", error);
@@ -342,21 +298,17 @@ function ChatRoomProvider({ children }) {
     }
   };
 
-  /**make an api call to the "/chatroom/find-user"**/
+  /*
+  make an api call to the "/chatroom/find-user"
+  */
   const findUser = async (joinCode) => {
     const { data } = await api.post("/chatroom/find-user", {
       joinCode,
       socketId: socket.id,
     });
-    console.log("NEW ROOM: \n", data.newRoom);
-    socket.emit("update-chat-room", {
-      userId: user._id,
-      otherUserId: data.otherUserId,
-      currentRoomId: data.newRoom._id,
-      isDm: true,
-    });
+    //log the new room for proof the new room got to the client
+    // console.log("NEW ROOM: \n", data.newRoom);
     setChatRooms((prev) => [...prev, data.newRoom]);
-    setCurrentChat(data.newRoom);
   };
 
   return (
@@ -367,7 +319,8 @@ function ChatRoomProvider({ children }) {
         messages,
         setMessages,
         currentChat,
-        setCurrentChat,
+        currentChatId,
+        setCurrentChatId,
         isCreator,
         setIsCreator,
         createGroup,

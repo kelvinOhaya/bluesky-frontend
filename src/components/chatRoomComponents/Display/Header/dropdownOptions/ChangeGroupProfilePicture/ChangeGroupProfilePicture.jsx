@@ -10,7 +10,8 @@ import useSocket from "../../../../../../contexts/socket/useSocket";
 
 function ChangeGroupProfilePicture({ dropdownFeatures, setDropdownFeatures }) {
   const { user, setUser } = useAuth();
-  const { messages, setMessages, currentChat, setCurrentChat } = useChatRoom();
+  const { messages, setMessages, currentChatId, setCurrentChatId } =
+    useChatRoom();
   const { socket } = useSocket();
   const [isLoading, setIsLoading] = useState(false);
   const fileRef = useRef(null);

@@ -10,8 +10,10 @@ function SocketProvider({ children }) {
   useEffect(() => {
     if (!user) return;
     const socket = io(import.meta.env.VITE_BASE_BACKEND_URL, {
-      autoConnect: false,
       auth: { userId: user._id },
+      transports: ["websocket", "polling"],
+      reconnection: true,
+      reconnectionDelay: 1000,
     });
     setSocket(socket);
   }, [user]);

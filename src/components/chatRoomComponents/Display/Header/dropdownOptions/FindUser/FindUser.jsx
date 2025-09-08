@@ -6,7 +6,7 @@ import useSocket from "../../../../../../contexts/socket/useSocket";
 import useAuth from "../../../../../../contexts/auth/useAuth";
 
 function FindUser({ dropdownFeatures, setDropdownFeatures }) {
-  const { verifyJoinCode, findUser, currentChat, checkIfDmExists } =
+  const { verifyJoinCode, findUser, currentChatId, checkIfDmExists } =
     useChatRoom();
   const { user } = useAuth();
   const { socket } = useSocket();

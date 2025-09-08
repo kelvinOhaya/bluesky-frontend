@@ -11,7 +11,7 @@ import useChatRoom from "../../../contexts/chatRoom/useChatRoom";
 // ChatsTab displays the list of chat rooms the user is a member of, and allows switching between them
 function ChatsTab({ className }) {
   // Destructure chat room state and actions from context
-  const { chatRooms, currentChat, setCurrentChat, activateChat } =
+  const { chatRooms, currentChatId, setCurrentChatId, activateChat } =
     useChatRoom();
 
   return (
@@ -33,9 +33,7 @@ function ChatsTab({ className }) {
                   className={
                     styles.tabButton +
                     // Highlight the button if this chat room is currently active
-                    (currentChat?._id === chatRoom._id
-                      ? " " + styles.active
-                      : "")
+                    (currentChatId === chatRoom._id ? " " + styles.active : "")
                   }
                   style={{ overflow: "hidden" }}
                   key={chatRoom._id}
