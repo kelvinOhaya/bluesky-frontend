@@ -74,7 +74,7 @@ const AuthProvider = ({ children }) => {
     try {
       const { data } = await api.get("/auth/me");
       setUser(data.user);
-      console.log("Current User", data.user);
+      //console.log("Current User", data.user);
     } catch (error) {
       setUser(null);
       console.log("Error getting the user from the api: ", error);

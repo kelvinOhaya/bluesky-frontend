@@ -22,7 +22,7 @@ function ChatRoom() {
     if (!socket) return;
 
     socket.connect();
-
+    // console.log(socket);
     const fetchChatRooms = async () => {
       if (!isLoading && user && accessToken && socket != null) {
         await loadChatRooms();
