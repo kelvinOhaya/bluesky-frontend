@@ -27,10 +27,10 @@ function ChatRoom() {
       if (!isLoading && user && accessToken && socket != null) {
         await loadChatRooms();
         //FOR DEBUGGING ONLY
-        console.log(`Access Token: ${accessToken}`);
-        console.log(`Socket ID: ${socket.id}`);
-        console.log(`User ID: ${user._id}`);
-      }
+      //   console.log(`Access Token: ${accessToken}`);
+      //   console.log(`Socket ID: ${socket.id}`);
+      //   console.log(`User ID: ${user._id}`);
+      // }
     };
     fetchChatRooms();
 
