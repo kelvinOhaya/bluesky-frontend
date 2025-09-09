@@ -38,7 +38,7 @@ function NewGroupForm({ dropdownFeatures, setDropdownFeatures }) {
               value={groupName}
               onChange={(e) => {
                 setGroupName(e.target.value);
-                console.log(groupName);
+                //console.log(groupName);
               }}
             />
             <span>

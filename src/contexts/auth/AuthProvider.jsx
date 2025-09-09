@@ -41,7 +41,7 @@ const AuthProvider = ({ children }) => {
       setAccessToken(response.data.accessToken);
       return response.status;
     } catch (error) {
-      console.log("Error when trying to login: ", error);
+      //console.log("Error when trying to login: ", error);
       return error.response.status;
     }
   };
@@ -54,7 +54,7 @@ const AuthProvider = ({ children }) => {
       await fetchUser(response.data.accessToken);
       return response.status;
     } catch (error) {
-      console.log("Error when trying to login: ", error);
+      //console.log("Error when trying to login: ", error);
       return error.response?.status;
     }
   };
@@ -77,7 +77,7 @@ const AuthProvider = ({ children }) => {
       //console.log("Current User", data.user);
     } catch (error) {
       setUser(null);
-      console.log("Error getting the user from the api: ", error);
+      //console.log("Error getting the user from the api: ", error);
     }
   };
 

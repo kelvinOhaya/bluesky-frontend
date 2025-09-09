@@ -46,7 +46,7 @@ function SignUp() {
         return;
       }
     } catch (error) {
-      console.log("Error verifying signup form: ", error);
+      //console.log("Error verifying signup form: ", error);
     }
 
     const signUpStatus = await signUp({ username, password });

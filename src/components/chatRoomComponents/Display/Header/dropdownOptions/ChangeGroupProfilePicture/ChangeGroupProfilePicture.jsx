@@ -47,10 +47,10 @@ function ChangeGroupProfilePicture({ dropdownFeatures, setDropdownFeatures }) {
       }
     } catch (error) {
       if (error && error.response && error.response.data) {
-        console.log(
-          "Error from the server when trying to upload to cloudinary: ",
-          JSON.stringify(error, null, 2)
-        );
+        // console.log(
+        //   "Error from the server when trying to upload to cloudinary: ",
+        //   JSON.stringify(error, null, 2)
+        // );
       }
     } finally {
       setIsLoading(false);

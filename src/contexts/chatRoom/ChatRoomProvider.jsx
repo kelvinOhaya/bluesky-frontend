@@ -37,7 +37,7 @@ function ChatRoomProvider({ children }) {
 
       data.chatRooms.map((chatRoom) => {
         if (chatRoom.isDm === true) {
-          console.log(chatRoom);
+          //  console.log(chatRoom);
         }
       });
 
@@ -45,7 +45,7 @@ function ChatRoomProvider({ children }) {
       setCurrentChatId(data.currentChat._id);
     } catch (error) {
       if (error.response && error.response.status == 401) {
-        console.log("Error trying to load the chat rooms: ", error);
+        // console.log("Error trying to load the chat rooms: ", error);
       }
     }
   };
@@ -58,7 +58,7 @@ function ChatRoomProvider({ children }) {
 
       setMessages(data.messages);
     } catch (error) {
-      console.log("Error loading all the messages: ", error);
+      //console.log("Error loading all the messages: ", error);
     }
   };
 
@@ -69,7 +69,7 @@ function ChatRoomProvider({ children }) {
   //join a room when a chat is selected
   useEffect(() => {
     if (!currentChat) return;
-    console.log(currentChat);
+    //console.log(currentChat);
     socket.emit("join-room", {
       prevRoom: prevRoomId.current,
       newRoom: currentChat._id,
@@ -122,23 +122,23 @@ function ChatRoomProvider({ children }) {
     };
 
     const updateGroupProfilePicture = async (updatedChat) => {
-      console.log("SOCKET EVENT RECEIVED!");
+      //console.log("SOCKET EVENT RECEIVED!");
       setChatRooms((prev) => {
         return prev.map((room) =>
           updatedChat._id === room._id ? updatedChat : room
         );
       });
       setCurrentChatId(updatedChat._id);
-      console.log("FINAL RESULTS:\n", currentChat);
+      //console.log("FINAL RESULTS:\n", currentChat);
     };
 
     const handlePrintSuccess = () => {
-      console.log("Socket Event received from express!!");
+      //console.log("Socket Event received from express!!");
     };
 
     const handleIncreaseMemberCount = (data) => {
       //debug messages to check values
-      console.log(`Updated room ID: ${data.updatedRoomId}`);
+      //console.log(`Updated room ID: ${data.updatedRoomId}`);
 
       setChatRooms((prev) =>
         prev.map((room) =>
@@ -211,7 +211,7 @@ function ChatRoomProvider({ children }) {
       });
       return data.isValid;
     } catch (error) {
-      console.log("Error trying to verify join codes: ", error);
+      //console.log("Error trying to verify join codes: ", error);
     }
   };
   const checkIfRoomExists = (joinCode) => {
@@ -234,10 +234,10 @@ function ChatRoomProvider({ children }) {
         Expected data object: {newRoom: the new chat room}
       */
       const { data } = await api.post("/chatRoom/join", { joinCode });
-      console.log(`Here is your new room: \n${data.newRoom}`);
+      //console.log(`Here is your new room: \n${data.newRoom}`);
       setChatRooms((prev) => (prev ? [...prev, data.newRoom] : [data.newRoom]));
     } catch (error) {
-      console.log("Error trying to verify join codes: ", error);
+      //console.log("Error trying to verify join codes: ", error);
     }
   };
 
@@ -269,7 +269,7 @@ function ChatRoomProvider({ children }) {
       setCurrentChatId(null);
       setMessages(null);
     } catch (error) {
-      console.log("Error leaving chat room: ", error);
+      //console.log("Error leaving chat room: ", error);
     }
   };
 
@@ -294,7 +294,7 @@ function ChatRoomProvider({ children }) {
 
       //if all went well, update the frontend accordingly
     } catch (error) {
-      console.log("Error trying to update the names: ", error);
+      //console.log("Error trying to update the names: ", error);
     }
   };
 

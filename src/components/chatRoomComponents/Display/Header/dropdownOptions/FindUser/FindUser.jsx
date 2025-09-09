@@ -34,7 +34,7 @@ function FindUser({ dropdownFeatures, setDropdownFeatures }) {
     }
 
     const dmExists = checkIfDmExists(joinCode);
-    console.log(dmExists);
+    // console.log(dmExists);
     if (dmExists) {
       setIsSearching(false);
       setAlreadyInDm(true);
