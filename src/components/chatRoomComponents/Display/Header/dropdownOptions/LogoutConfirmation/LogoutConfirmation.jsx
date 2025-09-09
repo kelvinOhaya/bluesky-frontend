@@ -8,13 +8,13 @@ import { useNavigate } from "react-router-dom";
 function LogoutConfirmation({ dropdownFeatures, setDropdownFeatures }) {
   const { logout, setUser } = useAuth();
   const navigate = useNavigate();
-  const { setIsCreator, setChatRooms, setCurrentChat, setMessages } =
+  const { setIsCreator, setChatRooms, setCurrentChatId, setMessages } =
     useChatRoom();
 
   const handleLogout = async () => {
     setIsCreator(null);
     setChatRooms(null);
-    setCurrentChat(null);
+    setCurrentChatId(null);
     setMessages(null);
     setUser(null);
     await logout();
