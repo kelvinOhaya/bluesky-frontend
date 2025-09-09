@@ -12,7 +12,7 @@ function ChatRoomProvider({ children }) {
   const [chatRooms, setChatRooms] = useState([]);
   const [currentChatId, setCurrentChatId] = useState(null);
   const currentChat =
-    chatRooms.find((room) => currentChatId === room._id) || null;
+    chatRooms?.find((room) => currentChatId === room._id) || null;
   const [messages, setMessages] = useState(null);
   const prevRoomId = useRef(); //seems to be for debugging purposes
 

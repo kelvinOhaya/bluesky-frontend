@@ -19,7 +19,7 @@ function LogoutConfirmation({ dropdownFeatures, setDropdownFeatures }) {
     setUser(null);
     await logout();
 
-    navigate("/");
+    navigate("/register");
   };
 
   return (
