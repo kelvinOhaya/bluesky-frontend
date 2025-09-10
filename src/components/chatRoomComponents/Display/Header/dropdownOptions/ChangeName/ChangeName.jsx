@@ -5,7 +5,7 @@ import useChatRoom from "../../../../../../contexts/chatRoom/useChatRoom";
 import api from "../../../../../../utils/api";
 
 function ChangeName({ dropdownFeatures, setDropdownFeatures }) {
-  const { currentChatId, changeName } = useChatRoom();
+  const { currentChatId, currentChat, changeName } = useChatRoom();
   const [newName, setNewName] = useState("");
   const [errors, setErrors] = useState({
     fieldIsEmpty: false,

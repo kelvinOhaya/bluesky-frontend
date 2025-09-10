@@ -37,14 +37,6 @@ function ChangeProfilePicture({ dropdownFeatures, setDropdownFeatures }) {
       const { data } = await api.post("/upload/profile-picture", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
-      if (data.foundUser) {
-        // setIsLoading(false);
-        socket.emit("update-profile-picture", {
-          user: user,
-          currentRoomId: currentChat._id,
-        });
-      }
     } catch (error) {
       if (error && error.response && error.response.data) {
         console.log(

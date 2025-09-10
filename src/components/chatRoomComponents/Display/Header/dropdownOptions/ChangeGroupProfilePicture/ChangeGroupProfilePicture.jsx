@@ -2,16 +2,15 @@ import { useState, useCallback, useRef } from "react";
 import styles from "../ChangeProfilePicture/ChangeProfilePicture.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { PlusIcon } from "../../../../../general/icons";
-import useAuth from "../../../../../../contexts/auth/useAuth";
+// import useAuth from "../../../../../../contexts/auth/useAuth";
 import useChatRoom from "../../../../../../contexts/chatRoom/useChatRoom";
 import { useDropzone } from "react-dropzone";
 import api from "../../../../../../utils/api";
 import useSocket from "../../../../../../contexts/socket/useSocket";
 
 function ChangeGroupProfilePicture({ dropdownFeatures, setDropdownFeatures }) {
-  const { user, setUser } = useAuth();
-  const { messages, setMessages, currentChatId, setCurrentChatId } =
-    useChatRoom();
+  // const { user, setUser } = useAuth();
+  const { currentChat } = useChatRoom();
   const { socket } = useSocket();
   const [isLoading, setIsLoading] = useState(false);
   const fileRef = useRef(null);
@@ -40,11 +39,6 @@ function ChangeGroupProfilePicture({ dropdownFeatures, setDropdownFeatures }) {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-
-      if (data.foundChatRoom) {
-        // setIsLoading(false);
-        socket.emit("update-group-profile-picture", data.foundChatRoom);
-      }
     } catch (error) {
       if (error && error.response && error.response.data) {
         // console.log(

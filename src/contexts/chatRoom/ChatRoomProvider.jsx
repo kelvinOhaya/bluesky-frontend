@@ -88,47 +88,80 @@ function ChatRoomProvider({ children }) {
       );
     };
 
-    const updateCurrentChat = (foundChatRoom) => {
+    const handleUpdateRoomName = (data) => {
+      const { roomId, newName } = data;
       console.log(
-        `Here is the chatroom from the name change socket event: ${JSON.stringify(
-          foundChatRoom
+        `Data from the change name socket event: \n ${JSON.stringify(
+          data,
+          null,
+          2
+        )}
         )}`
       );
       setChatRooms((prev) =>
         prev.map((room) =>
-          room._id === foundChatRoom._id
+          room._id === roomId
             ? {
                 ...room,
-                name: foundChatRoom.name,
-                memberCount: foundChatRoom.memberCount,
+                name: newName,
               }
             : room
         )
       );
-      setCurrentChatId(foundChatRoom._id);
     };
 
-    const updateProfilePicture = async (foundUser) => {
-      // console.log(
-      //   "Event received with the following found user: \n",
-      //   foundUser,
-      //   "\n\nRequested from the user: \n",
-      //   user
-      // );
-      if (foundUser._id === user._id) {
-        await fetchUser(accessToken);
-      }
-      await Promise.all([loadMessages(), loadChatRooms()]);
+    const handleUpdateProfilePicture = async (data) => {
+      const { foundUserId, newProfilePicture } = data;
+
+      console.log(
+        `Data from the update-profile-picture socket event\nFound user ID: ${foundUserId}\nNew Profile Picture Object: ${newProfilePicture}`
+      );
+
+      //update DMs with the person who changed their profile Picture as the other user to have the new profile picture
+      setChatRooms((prev) =>
+        prev.map((room) =>
+          room.isDm && room.otherUser._id === foundUserId
+            ? {
+                ...room,
+                otherUser: {
+                  ...room.otherUser,
+                  profilePicture: newProfilePicture,
+                },
+              }
+            : room
+        )
+      );
+
+      //update messages to have the new picture if they are from the user that changed their profile
+      setMessages((prev) =>
+        prev.map((message) =>
+          message.sender._id === foundUserId
+            ? {
+                ...message,
+                sender: {
+                  ...message.sender,
+                  profilePicture: newProfilePicture,
+                },
+              }
+            : message
+        )
+      );
     };
 
-    const updateGroupProfilePicture = async (updatedChat) => {
-      //console.log("SOCKET EVENT RECEIVED!");
+    const updateGroupProfilePicture = async (data) => {
+      const { roomId, newProfilePicture } = data;
+      console.log(
+        "Data for new profile picture: \n",
+        JSON.stringify(data, null, 2)
+      );
       setChatRooms((prev) => {
         return prev.map((room) =>
-          updatedChat._id === room._id ? updatedChat : room
+          room._id === roomId
+            ? { ...room, profilePicture: newProfilePicture }
+            : room
         );
       });
-      setCurrentChatId(updatedChat._id);
+      setCurrentChatId(roomId);
       //console.log("FINAL RESULTS:\n", currentChat);
     };
 
@@ -169,8 +202,8 @@ function ChatRoomProvider({ children }) {
     //listeners
     socket.on("receive-message", handleReceiveMessage);
     socket.on("print-success", handlePrintSuccess);
-    socket.on("update-room-name", updateCurrentChat);
-    socket.on("receive-photo-update", updateProfilePicture);
+    socket.on("update-room-name", handleUpdateRoomName);
+    socket.on("update-profile-picture", handleUpdateProfilePicture);
     socket.on("receive-group-photo-update", updateGroupProfilePicture);
     socket.on("increase-member-count", handleIncreaseMemberCount);
     socket.on("add-room", handleAddRoom);
@@ -179,8 +212,8 @@ function ChatRoomProvider({ children }) {
     return () => {
       socket.off("print-success", handlePrintSuccess);
       socket.off("receive-message", handleReceiveMessage);
-      socket.off("update-room-name", updateCurrentChat);
-      socket.off("receive-photo-update", updateProfilePicture);
+      socket.off("update-room-name", handleUpdateRoomName);
+      socket.off("update-profile-picture", handleUpdateProfilePicture);
       socket.off("receive-group-photo-update", updateGroupProfilePicture);
       socket.off("add-room", handleAddRoom);
       socket.off("increase-member-count", handleIncreaseMemberCount);
