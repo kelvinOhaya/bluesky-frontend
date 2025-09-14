@@ -288,7 +288,16 @@ function Header({ className }) {
         />
         <Overlay
           dropdownFeatures={dropdownFeatures}
-          getActiveFeature={() => activeFeature}
+          getActiveFeature={() =>
+            dropdownFeatures.createGroupChat ||
+            dropdownFeatures.roomSearch ||
+            dropdownFeatures.userSearch ||
+            dropdownFeatures.logoutConfirmation ||
+            dropdownFeatures.changeName ||
+            dropdownFeatures.changeProfilePicture ||
+            dropdownFeatures.changeGroupProfilePicture ||
+            dropdownFeatures.leaveChatRoom
+          }
           setDropdownFeatures={setDropdownFeatures}
         />
       </div>
