@@ -30,7 +30,7 @@ function Display({ className }) {
           const showDivider = !prevDate || !isSameDay(prevDate, currentDate); //show the divider if the days are different or it its the first message
 
           return (
-            <>
+            <div key={message._id || index} className={styles.messageWrapper}>
               <span
                 style={{
                   textAlign: "center",
@@ -49,12 +49,11 @@ function Display({ className }) {
                   : null}
               </span>
               <Message
-                key={message._id || index}
                 isSender={user.username === message.sender.username}
                 ref={bottomTextMessageRef}
                 message={message}
               />
-            </>
+            </div>
           );
         })}
       </div>

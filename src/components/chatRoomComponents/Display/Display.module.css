@@ -21,3 +21,9 @@
 .messageContainer::-webkit-scrollbar {
   display: none;
 }
+
+.messageWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}

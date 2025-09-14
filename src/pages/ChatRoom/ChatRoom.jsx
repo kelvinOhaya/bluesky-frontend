@@ -54,7 +54,7 @@ function ChatRoom() {
     return (
       <div className={styles.container}>
         <motion.nav
-          initial={false}
+          initial={{ x: getNavOffset() }}
           animate={{
             x: sidebarIsOpen ? 0 : getNavOffset(),
             width: sidebarIsOpen ? (isMobile ? "100vw" : "300px") : "300px",
@@ -75,6 +75,7 @@ function ChatRoom() {
         </motion.nav>
         <motion.div
           className={styles.mainContent}
+          initial={{ marginLeft: "-300px" }}
           animate={{
             marginLeft: !isMobile ? (sidebarIsOpen ? "0px" : "-300px") : "0",
           }}
