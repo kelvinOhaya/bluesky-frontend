@@ -6,15 +6,36 @@ import api from "../../utils/api";
 import { useRef } from "react";
 
 function ChatRoomProvider({ children }) {
-  const { user, isLoading, accessToken, fetchUser } = useAuth();
+  const { user } = useAuth();
   const { socket } = useSocket();
   const [isCreator, setIsCreator] = useState(null);
   const [chatRooms, setChatRooms] = useState([]);
   const [currentChatId, setCurrentChatId] = useState(null);
+  const [messages, setMessages] = useState(null);
+  const [isTablet, setIsTablet] = useState(window.innerWidth < 1010);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 798);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const currentChat =
     chatRooms?.find((room) => currentChatId === room._id) || null;
-  const [messages, setMessages] = useState(null);
   const prevRoomId = useRef(); //seems to be for debugging purposes
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsTablet(window.innerWidth < 1010);
+      setIsMobile(window.innerWidth < 798);
+      setWindowWidth(window.innerWidth);
+      // console.log(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(
+    () => console.log(`Is it Tablet?: ${isTablet}\nIs it Mobile?: ${isMobile}`),
+    [isTablet, isMobile]
+  );
 
   const activateChat = async (element) => {
     //store the old room value in prevRoomId
@@ -53,7 +74,7 @@ function ChatRoomProvider({ children }) {
   const loadMessages = async () => {
     try {
       const { data } = await api.post("/chatroom/load-messages", {
-        currentChatId: currentChat._id,
+        currentChatId: currentChatId,
       });
 
       setMessages(data.messages);
@@ -359,6 +380,10 @@ function ChatRoomProvider({ children }) {
         createGroup,
         verifyJoinCode,
         joinRoom,
+        windowWidth,
+        setWindowWidth,
+        isTablet,
+        setIsTablet,
         checkIfRoomExists,
         checkIfDmExists,
         activateChat,

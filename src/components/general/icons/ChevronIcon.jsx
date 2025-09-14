@@ -1,20 +1,24 @@
+import { motion } from "framer-motion";
+
 const ChevronIcon = ({
   direction = "right",
   size = 24,
   color = "currentColor",
+  isActive,
   className,
 }) => {
-  const rotations = {
-    right: "0",
-    down: "90",
-    left: "180",
-    up: "270",
-  };
-
-  const rotation = rotations[direction] || "0";
-
   return (
-    <div className={className}>
+    <motion.div
+      className={className}
+      whileTap={{ scale: 1.2 }}
+      animate={{
+        rotate: isActive ? 180 : 0,
+      }}
+      transition={{
+        duration: 0.2,
+        ease: "easeOut",
+      }}
+    >
       <svg
         width={size}
         height={size}
@@ -24,12 +28,22 @@ const ChevronIcon = ({
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        style={{ transform: `rotate(${rotation}deg)` }}
         xmlns="http://www.w3.org/2000/svg"
+        style={{
+          transform: `rotate(${
+            direction === "down"
+              ? 90
+              : direction === "up"
+              ? -90
+              : direction === "left"
+              ? 180
+              : 0
+          }deg)`,
+        }}
       >
         <polyline points="9 18 15 12 9 6" />
       </svg>
-    </div>
+    </motion.div>
   );
 };
 

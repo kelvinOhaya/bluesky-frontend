@@ -20,8 +20,7 @@ function Dropdown({ isActive, setIsActive, icon, type, children }) {
   const { user } = useAuth();
   return (
     <div
-      onMouseEnter={() => setIsActive({ isActive, [type]: true })}
-      onMouseLeave={() => setIsActive({ isActive, [type]: false })}
+      onClick={() => setIsActive((prev) => ({ ...prev, [type]: !prev[type] }))}
       className={styles.container}
     >
       {icon}

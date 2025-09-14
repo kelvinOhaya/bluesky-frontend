@@ -9,6 +9,20 @@
   align-items: center;
 }
 
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
 .tabButtonContainer {
   margin-top: 20px;
   background: none;
@@ -58,5 +72,35 @@
 
 .tabButton:hover {
   background: var(--primary);
+  cursor: pointer;
+}
+
+.menuIconVertical {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebarButton {
+  position: absolute;
+  right: 0;
+  color: white;
+  background: var(--dark-primary);
+  font-size: 1rem;
+  font-weight: bolder;
+  border: none;
+  outline: none;
+  width: fit-content;
+  height: 100vh;
+  z-index: 1007;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebarButton:hover {
+  filter: brightness(0.8);
   cursor: pointer;
 }

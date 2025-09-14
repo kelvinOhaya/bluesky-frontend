@@ -6,12 +6,10 @@
   display: flex;
   padding: 0 10px;
   height: fit-content;
-  cursor: default;
+  cursor: pointer;
   margin-left: auto;
   z-index: 99;
-  /* margin-left: auto; */
-  pointer-events: none;
-  display: inline-block;
+  pointer-events: auto;
 }
 
 /* Navbar Content Styles */

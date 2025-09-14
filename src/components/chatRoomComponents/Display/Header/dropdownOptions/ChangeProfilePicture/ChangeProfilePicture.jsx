@@ -10,7 +10,7 @@ import useSocket from "../../../../../../contexts/socket/useSocket";
 
 function ChangeProfilePicture({ dropdownFeatures, setDropdownFeatures }) {
   const { user, setUser } = useAuth();
-  const { messages, setMessages, currentChat } = useChatRoom();
+  const { messages, setMessages, currentChat, setChatRooms } = useChatRoom();
   const { socket } = useSocket();
   const { isLoading, setIsLoading } = useState(false);
   const fileRef = useRef(null);
@@ -37,6 +37,8 @@ function ChangeProfilePicture({ dropdownFeatures, setDropdownFeatures }) {
       const { data } = await api.post("/upload/profile-picture", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+
+      setUser((prev) => ({ ...prev, profilePicture: data.newProfilePicture }));
     } catch (error) {
       if (error && error.response && error.response.data) {
         console.log(

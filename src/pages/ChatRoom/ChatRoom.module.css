@@ -3,9 +3,10 @@
 .container {
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   top: 50%;
   left: 50%;
+  overflow: hidden;
   transform: translate(-50%, -50%);
   /* border: 1px solid red; */
   display: flex;
@@ -13,21 +14,48 @@
   overflow: hidden;
 }
 
+.mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  min-width: 0;
+}
+
+.navContainer {
+  position: relative;
+  height: 100%;
+  width: 0px;
+  display: flex;
+}
+
 .nav {
+  position: relative;
   background: var(--dark-primary);
   filter: brightness(0.9);
+  flex-shrink: 0;
+  min-width: 0;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .sidebarButton {
+  position: absolute;
   color: white;
   background: var(--dark-primary);
   font-size: 1rem;
   font-weight: bolder;
   border: none;
   outline: none;
-  width: 15px;
+  width: 30px;
+  height: 60px;
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 9999;
+  cursor: pointer;
 }
-
 .sidebarButton:hover {
   filter: brightness(0.8);
   cursor: pointer;
@@ -42,13 +70,16 @@
 
 .header {
   max-height: 100px;
+  width: 100%;
   /* border: 1px solid green !important; */
 }
 
 .chatsTab {
   background: var(--dark-primary);
-  height: inherit;
   width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
   /* border: 1px solid purple; */
 }
 
@@ -58,4 +89,37 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  min-width: 0;
+}
+
+.sidebarButton {
+  color: white;
+  background: var(--dark-primary);
+  font-size: 1rem;
+  font-weight: bolder;
+  height: 100vh;
+  border: none;
+  outline: none;
+  z-index: 1007;
+  cursor: pointer;
+}
+
+@media (max-width: 798px) {
+  .nav {
+    position: fixed;
+    height: 100vh !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 1000 !important;
+    width: 100vw !important;
+  }
+
+  .mainContent {
+    position: fixed;
+    height: 100vh !important;
+    width: 100vw;
+    top: 0;
+    right: 0;
+    /* transform: translateX(-2.5%); */
+  }
 }

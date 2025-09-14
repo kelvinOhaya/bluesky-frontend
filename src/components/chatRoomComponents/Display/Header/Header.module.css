@@ -14,6 +14,7 @@
 /* UserLabel Styles */
 .userLabel {
   /* border: 1px solid magenta; */
+  width: fit-content;
   flex: 1;
   height: fit-content;
   padding: 5px 5px 5px 0px;
@@ -24,8 +25,7 @@
   justify-content: center;
 }
 .userLabel p {
-  width: 300px;
-  min-width: 300px;
+  width: fit-content;
 }
 
 .joinCode {
@@ -43,9 +43,21 @@
   justify-content: center;
   align-items: center;
   background: none;
-  padding: 11px;
+  padding: 11px 2%;
   width: fit-content;
   height: fit-content;
+  pointer-events: auto;
+}
+
+.mobileDropdownIcon {
+  /* border: 1px solid yellow; */
+  margin-bottom: 10px;
+  position: relative;
+  top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 2%;
   pointer-events: auto;
 }
 

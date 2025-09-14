@@ -1,7 +1,7 @@
 import styles from "./ChatRoom.module.css";
 import { useState, useEffect } from "react";
 import "../../styles/global.css";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import useChatRoom from "../../contexts/chatRoom/useChatRoom";
 import useSocket from "../../contexts/socket/useSocket";
 import useAuth from "../../contexts/auth/useAuth";
@@ -12,24 +12,35 @@ import { useLocation } from "react-router-dom";
 import { useRef } from "react";
 
 function ChatRoom() {
-  const { loadChatRooms, currentChat } = useChatRoom();
+  const { loadChatRooms, currentChat, isMobile, isTablet, windowWidth } =
+    useChatRoom();
   const { isLoading, setIsLoading, user, accessToken, fetchUser } = useAuth();
+  const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
+  const [activeGroupChat, setActiveGroupChat] = useState(0);
   const { socket } = useSocket();
+  const controls = useAnimation();
   const location = useLocation();
 
+  const getNavOffset = () => {
+    // Define screen size ranges
+    const isSmallMobile = windowWidth < 670;
+    const isRegularMobile = windowWidth >= 670 && windowWidth < 790;
+    const isTabletSize = windowWidth >= 790 && windowWidth < 900;
+    const isDesktop = windowWidth >= 900;
+
+    if (isSmallMobile) return "-97%";
+    if (isRegularMobile) return "-98%";
+    if (isTabletSize) return "-98%";
+    if (isDesktop) return "-95%";
+  };
+
   useEffect(() => {
-    // loadMessage()
     if (!socket) return;
 
     socket.connect();
-    // console.log(socket);
     const fetchChatRooms = async () => {
       if (!isLoading && user && accessToken && socket != null) {
         await loadChatRooms();
-        //FOR DEBUGGING ONLY
-        //   console.log(`Access Token: ${accessToken}`);
-        //   console.log(`Socket ID: ${socket.id}`);
-        //   console.log(`User ID: ${user._id}`);
       }
     };
     fetchChatRooms();
@@ -39,37 +50,38 @@ function ChatRoom() {
     };
   }, [socket, location.pathname]);
 
-  const [sidebarIsOpen, setSidebarIsOpen] = useState(true);
-  const [activeGroupChat, setActiveGroupChat] = useState(0);
-  const animationWidth = sidebarIsOpen ? "300px" : "0";
-
   if (!isLoading) {
     return (
       <div className={styles.container}>
         <motion.nav
-          initial={{ width: "300px" }}
-          style={{
-            pointerEvents: sidebarIsOpen ? "all" : "none",
+          initial={false}
+          animate={{
+            x: sidebarIsOpen ? 0 : getNavOffset(),
+            width: sidebarIsOpen ? (isMobile ? "100vw" : "300px") : "300px",
           }}
-          animate={{ width: animationWidth }}
           transition={{ duration: 0.3 }}
+          style={{
+            pointerEvents: sidebarIsOpen ? "all" : "auto",
+          }}
           className={styles.nav}
         >
           <ChatsTab
             isOpen={sidebarIsOpen}
             className={styles.chatsTab}
-            width={animationWidth}
             activeGroupChat={activeGroupChat}
             setActiveGroupChat={setActiveGroupChat}
+            setSidebarIsOpen={setSidebarIsOpen}
           />
         </motion.nav>
-        <button
-          onClick={() => setSidebarIsOpen((prev) => !prev)}
-          className={styles.sidebarButton}
+        <motion.div
+          className={styles.mainContent}
+          animate={{
+            marginLeft: !isMobile ? (sidebarIsOpen ? "0px" : "-300px") : "0",
+          }}
+          transition={{ duration: 0.3 }}
         >
-          <MenuIconVertical size={15} />
-        </button>
-        <Display className={styles.display} />
+          <Display className={styles.display} />
+        </motion.div>
       </div>
     );
   }

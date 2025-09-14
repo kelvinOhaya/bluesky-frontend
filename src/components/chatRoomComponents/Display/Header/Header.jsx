@@ -14,6 +14,7 @@ import {
   SearchIcon,
   PencilIcon,
   ProfileIcon,
+  ChevronIcon,
   SettingsIcon,
   ChatRoomIcon,
 } from "../../../general/icons";
@@ -35,10 +36,11 @@ import useAuth from "../../../../contexts/auth/useAuth";
 
 function Header({ className }) {
   const { user } = useAuth();
-  const { currentChat } = useChatRoom();
+  const { currentChat, currentChatId, isTablet } = useChatRoom();
   const [isActive, setIsActive] = useState({
     settings: false,
     groupOptions: false,
+    mobileFacts: false,
   });
   const [dropdownFeatures, setDropdownFeatures] = useState({
     createGroupChat: false,
@@ -68,7 +70,7 @@ function Header({ className }) {
   return (
     <div className={className}>
       <div className={styles.container}>
-        {currentChat && (
+        {currentChatId && (
           <>
             <UserLabel
               className={styles.userLabel}
@@ -84,14 +86,49 @@ function Header({ className }) {
                   : currentChat.profilePicture?.url || null
               }
             />
-            <p className={styles.memberCount}>
-              Members: {currentChat.memberCount}
-            </p>
+            {!isTablet && (
+              <>
+                <p className={styles.memberCount}>
+                  Members: {currentChat.memberCount}
+                </p>
 
-            {!currentChat.isDm && (
-              <span className={styles.joinCode}>
-                Join Code: {currentChat?.joinCode || "999999"}
-              </span>
+                {!currentChat.isDm && (
+                  <span className={styles.joinCode}>
+                    Join Code: {currentChat?.joinCode || "999999"}
+                  </span>
+                )}
+              </>
+            )}
+
+            {isTablet && (
+              <Dropdown
+                isActive={isActive.mobileFacts}
+                type={"mobileFacts"}
+                setIsActive={setIsActive}
+                icon={
+                  <ChevronIcon
+                    className={styles.mobileDropdownIcon}
+                    isActive={isActive.mobileFacts}
+                    direction={"down"}
+                    size={30}
+                  />
+                }
+              >
+                <Option
+                  className={styles.option}
+                  label={`Members: ${currentChat?.memberCount}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                  }}
+                />
+                <Option
+                  className={styles.option}
+                  label={`Join Code: ${currentChat?.joinCode || "999999"}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                  }}
+                />
+              </Dropdown>
             )}
 
             <Dropdown
@@ -169,7 +206,7 @@ function Header({ className }) {
             condition={dropdownFeatures.changeProfilePicture}
             onClick={() =>
               setDropdownFeatures({
-                dropdownFeatures,
+                ...dropdownFeatures,
                 changeProfilePicture: true,
               })
             }
@@ -180,14 +217,17 @@ function Header({ className }) {
             label={"Create Group Chat"}
             condition={dropdownFeatures.createGroupChat}
             onClick={() =>
-              setDropdownFeatures({ dropdownFeatures, createGroupChat: true })
+              setDropdownFeatures({
+                ...dropdownFeatures,
+                createGroupChat: true,
+              })
             }
           />
           <Option
             className={styles.option}
             icon={ProfileIcon}
             onClick={() =>
-              setDropdownFeatures({ dropdownFeatures, userSearch: true })
+              setDropdownFeatures({ ...dropdownFeatures, userSearch: true })
             }
             label={"Find Other Users"}
           />
@@ -195,7 +235,7 @@ function Header({ className }) {
             className={styles.option}
             icon={SearchIcon}
             onClick={() =>
-              setDropdownFeatures({ dropdownFeatures, roomSearch: true })
+              setDropdownFeatures({ ...dropdownFeatures, roomSearch: true })
             }
             label={"Find Group Chats"}
           />
