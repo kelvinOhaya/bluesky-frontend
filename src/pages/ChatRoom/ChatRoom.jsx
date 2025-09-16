@@ -44,6 +44,7 @@ function ChatRoom() {
       }
     };
     fetchChatRooms();
+    console.table(user);
 
     return () => {
       socket.disconnect();

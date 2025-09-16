@@ -11,11 +11,16 @@
   color: white;
 }
 
+.option {
+  padding: 10px;
+}
+
 /* UserLabel Styles */
 .userLabel {
   /* border: 1px solid magenta; */
   width: fit-content;
   flex: 1;
+  overflow: hidden;
   height: fit-content;
   padding: 5px 5px 5px 0px;
   font-size: 2rem;
@@ -25,7 +30,8 @@
   justify-content: center;
 }
 .userLabel p {
-  width: fit-content;
+  width: fit-content !important;
+  text-overflow: ellipsis !important;
 }
 
 .joinCode {

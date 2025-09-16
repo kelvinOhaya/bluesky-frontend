@@ -50,8 +50,10 @@ function SignUp() {
     }
 
     const signUpStatus = await signUp({ username, password });
+    console.log(`Status: ${signUpStatus}`);
     if (signUpStatus === 200) {
-      navigate("/chatroom");
+      const last = "/chatroom";
+      window.location.href = last;
     } else return;
 
     // navigate("/chatroom");

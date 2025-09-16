@@ -9,11 +9,18 @@ import useAuth from "../../../contexts/auth/useAuth";
 
 function Display({ className }) {
   const bottomTextMessageRef = useRef(null);
-  const { messages } = useChatRoom();
+  const { messages, currentChatId } = useChatRoom();
+  const [isWelcomePage, setIsWelcomePage] = useState(
+    currentChatId !== "68c0671711b70a88b9b0cd90" || false
+  );
   const { user, accessToken } = useAuth();
   const currentDate = new Date();
 
   // console.log(accessToken);
+  useEffect(() => {
+    if (!currentChatId) return;
+    setIsWelcomePage(currentChatId === "68c0671711b70a88b9b0cd90");
+  }, [currentChatId]);
 
   useEffect(() => {
     bottomTextMessageRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -57,7 +64,7 @@ function Display({ className }) {
           );
         })}
       </div>
-      <TextBar />
+      {!isWelcomePage && <TextBar />}
     </div>
   );
 }
