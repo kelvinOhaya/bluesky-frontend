@@ -20,7 +20,7 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const refresh = async () => {
       try {
-        const { data } = await api.post("/auth/refresh-token");
+        const { data } = await api.post("/auth/refresh-token", { test: true });
         setAccessToken(data.accessToken);
         await fetchUser(data.accessToken);
       } catch {
