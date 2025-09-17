@@ -41,7 +41,9 @@ export const injectAuthToken = (getToken, setAccessToken) => {
         originalRequest._retry = true;
 
         try {
-          const { data } = await api.post("/auth/refresh-token");
+          const { data } = await api.post("/auth/refresh-token", {
+            dummy: true,
+          });
           const newAccessToken = data.accessToken;
 
           setAccessToken(newAccessToken);
