@@ -14,6 +14,7 @@ function SocketProvider({ children }) {
       transports: ["websocket", "polling"],
       reconnection: true,
       reconnectionDelay: 1000,
+      withCredentials: true,
     });
     setSocket(socket);
   }, [user]);
