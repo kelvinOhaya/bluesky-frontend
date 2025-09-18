@@ -9,3 +9,4 @@ export { default as ProfileIcon } from "./ProfileIcon.jsx";
 export { default as SearchIcon } from "./SearchIcon.jsx";
 export { default as SendIcon } from "./SendIcon.jsx";
 export { default as SettingsIcon } from "./SettingsIcon.jsx";
+export { default as CloudIcon } from "./CloudIcon.jsx";
