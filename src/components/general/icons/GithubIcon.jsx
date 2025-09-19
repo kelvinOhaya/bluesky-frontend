@@ -1,6 +1,6 @@
 function GithubIcon({ size, color, href, className }) {
   return (
-    <a href={href} className={className}>
+    <a href={href} className={className} target="_blank">
       <svg
         xmlns="https://icons8.com/icon/62856/github"
         width={size}

@@ -72,7 +72,7 @@
 .footer {
   margin-top: auto;
   width: 100%;
-  background-color: var(--primary);
+  background-color: var(--dark-primary);
   color: white;
   border-top: 1px solid white;
   box-shadow: 2px 0 5px -2px #030e2b;
@@ -95,7 +95,7 @@
 }
 
 .textContainer h1 {
-  color: var(--primary);
+  color: var(--dark-primary);
   width: 100%;
   font-size: 4rem;
   text-align: center;
@@ -112,17 +112,20 @@
 .textContainer button {
   width: 20%;
   min-width: 210px;
-  padding: 10px;
-  background: var(--primary);
+  padding: 20px;
+  background: var(--dark-primary);
   margin-top: 20%;
   margin-bottom: 20px;
   color: white;
   outline: none;
   font-weight: bold;
+  border: none;
   font-size: 1.5rem;
   border-radius: 10px;
-  transition: transform 0.1s ease-out;
-  text-align: center;
+  transition: transform 0.1s cubic-bezier(0, 0, 0.58, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .textContainer button:hover {
@@ -134,6 +137,7 @@
   display: flex;
   font-size: 1.1rem !important;
   margin-bottom: 0px;
+  color: var(--dark-primary);
 }
 
 .iconWrapper {

@@ -1,6 +1,6 @@
 function LinkedInIcon({ color = "currentColor", className, size, href }) {
   return (
-    <a className={className} href={href}>
+    <a className={className} href={href} target="_blank">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"

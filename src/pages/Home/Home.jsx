@@ -45,15 +45,15 @@ function Home() {
               <>
                 <div className={styles.descriptorContainer}>
                   <div className={styles.feature}>
-                    <MessageIcon size={35} color={"#0d4ae2"} />
+                    <MessageIcon size={35} color={"#0935a0"} />
                     <p>Real-Time</p>
                   </div>
                   <div className={styles.feature}>
-                    <GlobeIcon size={35} color={"#0d4ae2"} />
+                    <GlobeIcon size={35} color={"#0935a0"} />
                     <p>Works Anywhere</p>
                   </div>
                   <div className={styles.feature}>
-                    <LockIcon size={35} color={"#0d4ae2"} />
+                    <LockIcon size={35} color={"#0935a0"} />
                     <p>JWT Protected</p>
                   </div>
                 </div>
