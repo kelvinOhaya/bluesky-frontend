@@ -14,34 +14,32 @@ export default function Background() {
 
   return (
     <div className={styles.container}>
-      {Array.from({ length: windowWidth / CLOUD_WIDTH }).map(
-        (row, rowIndex) => (
-          <div
-            style={{
-              display: "flex",
-              overflow: "hidden",
-              width: "100vw",
-              position: "relative",
-              height: "fitContent",
+      {Array.from({ length: 7 }).map((row, rowIndex) => (
+        <div
+          style={{
+            display: "flex",
+            overflow: "hidden",
+            width: "100vw",
+            position: "relative",
+            height: "fitContent",
+          }}
+        >
+          <motion.div
+            initial={{ x: rowIndex % 2 ? "0" : "-100%" }}
+            animate={{ x: rowIndex % 2 ? "-100%" : "0" }}
+            transition={{
+              duration: ANIMATION_DURATION,
+              repeat: Infinity,
+              ease: "linear",
             }}
+            className={styles.cloudRow}
           >
-            <motion.div
-              initial={{ x: rowIndex % 2 ? "0" : "-100%" }}
-              animate={{ x: rowIndex % 2 ? "-100%" : "0" }}
-              transition={{
-                duration: ANIMATION_DURATION,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-              className={styles.cloudRow}
-            >
-              {Array.from({ length: CLOUD_COUNT }).map((_, i) => (
-                <CloudIcon key={`cloud-1: ${i}`} size={CLOUD_WIDTH} />
-              ))}
-            </motion.div>
-          </div>
-        )
-      )}
+            {Array.from({ length: CLOUD_COUNT }).map((_, i) => (
+              <CloudIcon key={`cloud-1: ${i}`} size={CLOUD_WIDTH} />
+            ))}
+          </motion.div>
+        </div>
+      ))}
     </div>
   );
 }

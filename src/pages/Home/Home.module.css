@@ -1,45 +1,110 @@
 @import url("../../styles/variables.css");
 
 .container {
-  border: 1px solid red;
+  /* border: 1px solid red; */
   color: white;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  height: 80%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+  color: var(--primary);
   z-index: 99;
 }
 
+.descriptorContainer {
+  /* border: 1px solid red !important; */
+  display: flex;
+  width: fit-content;
+  justify-content: space-between;
+  margin-bottom: 20%;
+}
+.descriptorContainer * {
+  /* border: 1px solid var(--primary); */
+}
+
+.feature {
+  text-align: center;
+  flex: 1;
+}
+
+.feature p {
+  font-size: 0.9rem !important;
+}
+
+.phoneWrapper {
+  position: absolute;
+  right: 0;
+  width: 200px;
+  bottom: 60%;
+  height: 20%;
+}
+
+.textContainer {
+  background: white;
+  display: flex;
+  height: 100%;
+  width: 50%;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+}
+
 /* For debugging purposes */
-.container * {
+.textContainer * {
   /* border: 1px solid yellow; */
 }
 
-.container h1 {
-  -webkit-text-stroke: 2px var(--primary);
-  font-size: 5rem;
+.textContainer main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.container button {
-  width: 20%;
-  padding: 20px;
-  background: white;
+.textContainer h1 {
   color: var(--primary);
-  outline: none;
-  font-weight: bold;
-  font-size: 1.5;
-  border: 2px solid white;
-  border-radius: 10px;
-  transition: background-color 0.1s ease-in;
+  font-size: 5rem;
+  width: 100%;
+  text-align: center;
+  margin-top: 10%;
+}
+.textContainer p {
+  font-size: 1.3rem;
+}
+@media (max-width: 700px) {
+  .textContainer h1 {
+    font-size: 4rem;
+  }
 }
 
-.container button:hover {
+.textContainer button {
+  width: 20%;
+  min-width: 210px;
+  padding: 10px;
   background: var(--primary);
   color: white;
+  outline: none;
+  font-weight: bold;
+  font-size: 1.5rem;
+  border-radius: 10px;
+  transition: transform 0.1s ease-out;
+  text-align: center;
+}
+
+.textContainer button:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.description {
+  display: flex;
+  height: fit-content;
+  flex-direction: column;
+  align-items: center;
+}
+
+.description p {
+  margin-bottom: 20%;
 }

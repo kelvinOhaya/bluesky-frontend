@@ -1,0 +1,23 @@
+.phone {
+  margin: 2.5rem auto 0; /* mt-10 mx-auto */
+  width: 100%; /* w-64 */
+  transform: rotate(3deg); /* rotate-3 */
+  filter: drop-shadow(0 20px 13px rgb(0 0 0 / 0.03))
+    drop-shadow(0 8px 5px rgb(0 0 0 / 0.08)); /* drop-shadow-xl */
+}
+
+.phoneBody {
+  fill: white;
+}
+
+.screen {
+  fill: #f3f4f6;
+}
+
+.bubble {
+  fill: #e5e7eb;
+}
+
+.bubbleAlt {
+  fill: #d1d5db;
+}

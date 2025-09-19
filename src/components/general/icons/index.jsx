@@ -10,3 +10,6 @@ export { default as SearchIcon } from "./SearchIcon.jsx";
 export { default as SendIcon } from "./SendIcon.jsx";
 export { default as SettingsIcon } from "./SettingsIcon.jsx";
 export { default as CloudIcon } from "./CloudIcon.jsx";
+export { default as GlobeIcon } from "./GlobeIcon.jsx";
+export { default as MessageIcon } from "./MessageIcon.jsx";
+export { default as LockIcon } from "./LockIcon.jsx";
