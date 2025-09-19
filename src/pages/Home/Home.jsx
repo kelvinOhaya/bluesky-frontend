@@ -5,6 +5,8 @@ import {
   GlobeIcon,
   MessageIcon,
   LockIcon,
+  LinkedInIcon,
+  GithubIcon,
 } from "../../components/general/icons";
 import "../../styles/global.css";
 import Background from "./Background/Background";
@@ -28,35 +30,61 @@ function Home() {
         <Background />
       </motion.div>
 
-      <div className={styles.container}>
-        <main className={styles.textContainer}>
-          <h1 className={styles.textContent}>Blue Sky</h1>
-          <div className={styles.description}>
-            <p>Chat without distractions - fast, fun, and free</p>
-          </div>
-          {/* Icons and stuff */}
-          {!isMobile && (
-            <>
-              <div className={styles.descriptorContainer}>
-                <div className={styles.feature}>
-                  <MessageIcon size={35} color={"#0d4ae2"} />
-                  <p>Real-Time Messaging</p>
+      <div className={styles.background}>
+        <div className={styles.mainContent}>
+          <main className={styles.textContainer}>
+            <h1 className={styles.textContent}>Blue Sky</h1>
+            <p className={styles.description}>
+              Chat without distractions - fast, fun, and free
+            </p>
+            <button onClick={() => navigate("./register")}>
+              <p className={styles.buttonText}>Start Here</p>
+            </button>
+            {/* Icons and stuff */}
+            {!isMobile && (
+              <>
+                <div className={styles.descriptorContainer}>
+                  <div className={styles.feature}>
+                    <MessageIcon size={35} color={"#0d4ae2"} />
+                    <p>Real-Time</p>
+                  </div>
+                  <div className={styles.feature}>
+                    <GlobeIcon size={35} color={"#0d4ae2"} />
+                    <p>Works Anywhere</p>
+                  </div>
+                  <div className={styles.feature}>
+                    <LockIcon size={35} color={"#0d4ae2"} />
+                    <p>JWT Protected</p>
+                  </div>
                 </div>
-                <div className={styles.feature}>
-                  <GlobeIcon size={35} color={"#0d4ae2"} />
-                  <p>Works Anywhere</p>
-                </div>
-                <div className={styles.feature}>
-                  <LockIcon size={35} color={"#0d4ae2"} />
-                  <p>Protected With JWT Authentication</p>
-                </div>
-              </div>
-            </>
-          )}
-          <button onClick={() => navigate("./register")}>
-            <p className={styles.buttonText}>Start Here</p>
-          </button>
-        </main>
+              </>
+            )}
+          </main>
+          <footer className={styles.footer}>
+            <ul>
+              <li>Privacy Policy</li>
+              <li>&nbsp;&nbsp;&nbsp;•&nbsp;Terms</li>
+            </ul>
+            <ul>
+              <li>
+                <LinkedInIcon
+                  size={27}
+                  className={styles.iconWrapper}
+                  color={"white"}
+                  href={"https://www.linkedin.com/in/kelvin-ohaya/"}
+                />
+              </li>
+              <li>
+                <GithubIcon
+                  className={styles.iconWrapper}
+                  size={27}
+                  color={"white"}
+                  href={"https://github.com/kelvinOhaya"}
+                />
+              </li>
+            </ul>
+          </footer>
+        </div>
       </div>
     </motion.div>
   );
