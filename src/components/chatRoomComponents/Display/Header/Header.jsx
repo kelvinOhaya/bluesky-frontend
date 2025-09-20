@@ -53,6 +53,16 @@ function Header({ className }) {
     changeGroupProfilePicture: false,
   });
 
+  const selectFeature = (type) => {
+    setDropdownFeatures((prevFeatures) => ({
+      ...prevFeatures,
+      [type]: true,
+      ...Object.keys(prevFeatures)
+        .filter((key) => key !== type)
+        .reduce((acc, key) => ({ ...acc, [key]: false }), {}),
+    }));
+  };
+
   const [activeFeature, setActiveFeature] = useState(null);
 
   useEffect(() => {
@@ -149,23 +159,13 @@ function Header({ className }) {
                     className={styles.option}
                     icon={PencilIcon}
                     label={"Change Group Picture"}
-                    onClick={() =>
-                      setDropdownFeatures({
-                        dropdownFeatures,
-                        changeGroupProfilePicture: true,
-                      })
-                    }
+                    onClick={() => selectFeature("changeGroupProfilePicture")}
                   />
                   <Option
                     className={styles.option}
                     icon={PlusIcon}
                     label={"Change Group Name"}
-                    onClick={() =>
-                      setDropdownFeatures({
-                        dropdownFeatures,
-                        changeName: true,
-                      })
-                    }
+                    onClick={() => selectFeature("changeName")}
                   />
                 </>
               )}
@@ -173,12 +173,7 @@ function Header({ className }) {
                 className={styles.option}
                 icon={LeaveIcon}
                 label={currentChat.isDm ? "Leave Chat" : "Leave Group"}
-                onClick={() =>
-                  setDropdownFeatures({
-                    dropdownFeatures,
-                    leaveRoom: true,
-                  })
-                }
+                onClick={() => selectFeature("leaveChatRoom")}
               />
             </Dropdown>
           </>
@@ -204,39 +199,25 @@ function Header({ className }) {
             icon={PencilIcon}
             label={"Change Profile Picture"}
             condition={dropdownFeatures.changeProfilePicture}
-            onClick={() =>
-              setDropdownFeatures({
-                ...dropdownFeatures,
-                changeProfilePicture: true,
-              })
-            }
+            onClick={() => selectFeature("changeProfilePicture")}
           />
           <Option
             className={styles.option}
             icon={PlusIcon}
             label={"Create Group Chat"}
             condition={dropdownFeatures.createGroupChat}
-            onClick={() =>
-              setDropdownFeatures({
-                ...dropdownFeatures,
-                createGroupChat: true,
-              })
-            }
+            onClick={() => selectFeature("createGroupChat")}
           />
           <Option
             className={styles.option}
             icon={ProfileIcon}
-            onClick={() =>
-              setDropdownFeatures({ ...dropdownFeatures, userSearch: true })
-            }
+            onClick={() => selectFeature("userSearch")}
             label={"Find Other Users"}
           />
           <Option
             className={styles.option}
             icon={SearchIcon}
-            onClick={() =>
-              setDropdownFeatures({ ...dropdownFeatures, roomSearch: true })
-            }
+            onClick={() => selectFeature("roomSearch")}
             label={"Find Group Chats"}
           />
 
@@ -244,12 +225,7 @@ function Header({ className }) {
             className={styles.option}
             icon={LeaveIcon}
             label={"Logout"}
-            onClick={() =>
-              setDropdownFeatures({
-                dropdownFeatures,
-                logoutConfirmation: true,
-              })
-            }
+            onClick={() => selectFeature("logoutConfirmation")}
           />
         </Dropdown>
 

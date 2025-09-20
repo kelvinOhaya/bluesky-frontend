@@ -12,11 +12,11 @@ function LeaveChatRoom({ dropdownFeatures, setDropdownFeatures }) {
 
   return (
     <AnimatePresence>
-      {dropdownFeatures.leaveRoom && (
+      {dropdownFeatures.leaveChatRoom && (
         <motion.div
-          initial={{ left: "-50%" }}
+          initial={{ left: "-100%" }}
           animate={{ left: "50%" }}
-          exit={{ left: "150%", transition: { duration: "0.7" } }}
+          exit={{ left: "130%" }}
           transition={{ duration: "0.3" }}
           className={styles.container}
         >

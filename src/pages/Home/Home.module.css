@@ -1,8 +1,9 @@
 @import url("../../styles/variables.css");
 
+/*General background Container. allows mainPane to squish with screens
+*/
 .background {
   /* border: 1px solid red; */
-  color: white;
   position: fixed;
   top: 0;
   left: 0;
@@ -14,108 +15,46 @@
   z-index: 99;
 }
 
-.mainContent {
+/* White transparent container. Holds the mainContent and footer */
+.mainPane {
+  /* border: 1px solid red; */
   position: relative;
   width: 50%;
-  background-color: rgba(255, 255, 255, 0.95);
   height: 100%;
+  background-color: rgba(255, 255, 255, 0.95);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
-.descriptorContainer {
-  /* border: 1px solid red !important; */
-  margin-top: auto;
+
+/* Holds the Title, description, button, and icons*/
+.mainContent {
+  /* border: 1px solid rgb(62, 17, 58); */
+  height: 90%;
   display: flex;
-  width: 70%;
-  justify-content: space-evenly;
-}
-.descriptorContainer * {
-  /* border: 1px solid var(--primary); */
-}
-
-.feature {
-  flex: 1;
-}
-
-.feature p {
-  font-size: 0.7rem !important;
-}
-
-.phoneWrapper {
-  position: absolute;
-  right: 0;
-  width: 200px;
-  bottom: 60%;
-  height: 20%;
-}
-
-.textContainer {
-  position: absolute;
-  margin-top: 2px;
-  display: flex;
-  height: 55%;
-  width: 85%;
   flex-direction: column;
   text-align: center;
   align-items: center;
-  gap: 12px;
+  justify-content: space-between;
   border-radius: 20px;
 }
 
-/* For debugging purposes */
-.textContainer * {
-  /* border: 1px solid yellow; */
-}
+/*For debugging purposes*/
+/* .mainContent * {
+  border: 1px solid red;
+} */
 
-.footer {
-  margin-top: auto;
-  width: 100%;
-  background-color: var(--dark-primary);
-  color: white;
-  border-top: 1px solid white;
-  box-shadow: 2px 0 5px -2px #030e2b;
-  padding: 10px;
-  display: flex;
-  justify-content: space-between;
-}
+/* .mainPane * {
+  border: 1px solid darkred;
+} 
+*/
 
-.footer ul {
-  display: flex;
-  list-style-type: none;
-  gap: 5px;
-}
-
-.footer ul li {
-  display: flex;
-  align-items: center;
-  font-weight: lighter;
-  gap: 50px;
-}
-
-.textContainer h1 {
-  color: var(--dark-primary);
-  width: 100%;
-  font-size: 4rem;
-  text-align: center;
-}
-.textContainer p {
-  font-size: 1.4rem;
-}
-@media (max-width: 700px) {
-  .textContainer h1 {
-    font-size: 4rem;
-  }
-}
-
-.textContainer button {
+/* Main Content styles */
+.mainContent button {
   width: 20%;
   min-width: 210px;
   padding: 20px;
   background: var(--dark-primary);
-  margin-top: 20%;
-  margin-bottom: 20px;
   color: white;
   outline: none;
   font-weight: bold;
@@ -128,18 +67,89 @@
   align-items: center;
 }
 
-.textContainer button:hover {
+.mainContent button:hover {
   transform: scale(1.05);
   cursor: pointer;
 }
 
-.description {
+/* Title and description */
+
+.titleAndDescription {
+  /* border: 1px solid orange; */
+}
+
+.titleAndDescription h1 {
+  color: var(--dark-primary);
+  width: 100%;
+  font-size: 4rem;
+  text-align: center;
+}
+
+.titleAndDescription p {
   display: flex;
   font-size: 1.1rem !important;
-  margin-bottom: 0px;
   color: var(--dark-primary);
 }
 
+.buttonAndIconsContainer {
+  display: flex;
+  padding: 10% 0;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+}
+
+/* Container for the three icons and their descriptions */
+.featureContainer {
+  /* border: 1px solid red !important; */
+  display: flex;
+  width: 80% !important;
+  justify-content: space-evenly;
+}
+.featureContainer * {
+  /* border: 1px solid var(--primary); */
+}
+
+/* Container for each individual style */
+.feature {
+  flex: 1;
+}
+
+.feature p {
+  font-size: 0.7rem !important;
+}
+
+/* Styling for the footer */
+.footer {
+  margin-top: auto;
+  width: 100%;
+  background-color: var(--dark-primary);
+  color: white;
+  border-top: 1px solid white;
+  box-shadow: 2px 0 5px -2px #030e2b;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* How the icons/elements are spread */
+.footer ul {
+  display: flex;
+  list-style-type: none;
+  gap: 5px;
+}
+
+/* Individual elements/icons */
+.footer ul li {
+  display: flex;
+  align-items: center;
+  font-weight: lighter;
+  gap: 50px;
+}
+
+/* Stying for Github and LinkedIn icons */
 .iconWrapper {
   transition: transform 0.2s cubic-bezier(0, 0, 0.58, 1);
 }
@@ -150,3 +160,35 @@
 .iconWrapper:hover {
   transform: scale(1.1);
 }
+
+/* Media Queries */
+@media (max-width: 900px) {
+  .mainPane {
+    width: 100%;
+  }
+}
+
+@media (max-width: 450px) {
+  .mainContent {
+    height: 100%;
+  }
+
+  .titleAndDescription {
+    margin: 10%;
+    /* background-color: rgba(243, 136, 14, 0.5); */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+    height: 30%;
+  }
+
+  .buttonAndIconsContainer {
+    gap: 60px;
+  }
+  .titleAndDescription h1 {
+    font-size: 3rem;
+  }
+}
+
+/* Height Media Queries */

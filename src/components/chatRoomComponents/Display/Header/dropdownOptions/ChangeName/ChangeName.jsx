@@ -31,16 +31,17 @@ function ChangeName({ dropdownFeatures, setDropdownFeatures }) {
 
     await changeName(newName);
     setNewName("");
-    setDropdownFeatures({ dropdownFeatures, changeName: false });
+    setDropdownFeatures({ ...dropdownFeatures, changeName: false });
   };
   return (
     <AnimatePresence>
       {dropdownFeatures.changeName && (
         <motion.div
-          initial={{ left: "400px" }}
-          animate={{ left: "50%" }}
-          exit={{ left: "105%" }}
           className={styles.container}
+          initial={{ left: "-400px" }}
+          animate={{ left: "50%" }}
+          exit={{ left: " 105%" }}
+          transition={{ duration: "0.3" }}
         >
           <p>Enter new name:</p>
           <form onSubmit={handleNameChange}>
@@ -58,7 +59,10 @@ function ChangeName({ dropdownFeatures, setDropdownFeatures }) {
               <button
                 type="button"
                 onClick={() => {
-                  setDropdownFeatures({ dropdownFeatures, changeName: false });
+                  setDropdownFeatures({
+                    ...dropdownFeatures,
+                    changeName: false,
+                  });
                   setNewName("");
                 }}
               >
