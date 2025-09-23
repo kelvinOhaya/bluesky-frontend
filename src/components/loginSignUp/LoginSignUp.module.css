@@ -106,10 +106,6 @@
     height: fit-content;
   }
 
-  .container h1 {
-    font-size: 2.5rem;
-  }
-
   .background {
     background-color: var(--dark-primary);
     width: 100vw;
