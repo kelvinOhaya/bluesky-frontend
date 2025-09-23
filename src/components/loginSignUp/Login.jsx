@@ -30,7 +30,9 @@ function Login({ setMode }) {
       console.log("Login response:", loginStatus);
       if (loginStatus === 200) {
         console.log("Login successful, navigating...");
-        // navigate("/chatroom", { replace: true });
+        setTimeout(() => {
+          navigate("/chatroom");
+        }, 100);
       } else {
         console.log("Login failed:", loginStatus);
         loginStatus == 500
