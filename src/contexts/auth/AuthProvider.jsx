@@ -30,11 +30,14 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const refresh = async () => {
       try {
+        console.log("AuthProvider: Attempting refresh token...");
         const { data } = await api.post("/auth/refresh-token", { test: true });
+        console.log("AuthProvider: Refresh successful, got token");
         setAccessToken(data.accessToken);
         await fetchUser(data.accessToken);
-      } catch {
-        setAccessToken(null);
+      } catch (error) {
+        console.log("AuthProvider: Refresh failed:", error);
+        setAccessToken(null); // This is probably what's happening
       } finally {
         setIsLoading(false);
       }
