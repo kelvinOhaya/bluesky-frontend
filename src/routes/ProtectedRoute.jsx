@@ -3,7 +3,7 @@ import LoadingIcon from "../components/general/LoadingIcon/LoadingIcon";
 import useAuth from "../contexts/auth/useAuth";
 
 const ProtectedRoute = ({ children }) => {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, accessToken } = useAuth();
 
   const loadingStyle = {
     position: "absolute",
@@ -18,7 +18,7 @@ const ProtectedRoute = ({ children }) => {
         <LoadingIcon />
       </div>
     );
-  if (!user) {
+  if (!user && !accessToken) {
     return <Navigate to="/register" replace />;
   }
 

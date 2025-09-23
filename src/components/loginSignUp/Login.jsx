@@ -31,7 +31,7 @@ function Login({ setMode }) {
       if (loginStatus === 200) {
         console.log("Login successful, navigating...");
         setTimeout(() => {
-          navigate("/chatroom");
+          window.location.href = "/chatroom";
         }, 100);
       } else {
         console.log("Login failed:", loginStatus);
