@@ -14,6 +14,16 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Create a simple debug component
+  const [debugLogs, setDebugLogs] = useState([]);
+
+  const addLog = (message) => {
+    setDebugLogs((prev) => [
+      ...prev.slice(-10),
+      `${new Date().toLocaleTimeString()}: ${message}`,
+    ]);
+  };
+
   //whenever the website mounts, set up the axios interceptors to always use the latest access token for a request
   //if that doesn't work, just set these state variables to null
   //regardless, set isLoading to false, signalling that the page can now render
@@ -49,12 +59,16 @@ const AuthProvider = ({ children }) => {
   //send a post request to the login route and get an accessToken
   const login = async (credentials) => {
     try {
+      addLog("Making login request...");
       const response = await api.post("/auth/login", credentials);
+      addLog(`Response status: ${response.status}`);
+      addLog(`Response data: ${JSON.stringify(response.data)}`);
+
       setAccessToken(response.data.accessToken);
       await fetchUser(response.data.accessToken);
       return response.status;
     } catch (error) {
-      //console.log("Error when trying to login: ", error);
+      addLog(`Login error: ${error.message}`);
       return error.response?.status;
     }
   };
@@ -97,6 +111,22 @@ const AuthProvider = ({ children }) => {
       }}
     >
       {children}
+      {/* Display logs on screen */}
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          background: "black",
+          color: "white",
+          fontSize: "10px",
+          zIndex: 9999,
+        }}
+      >
+        {debugLogs.map((log, i) => (
+          <div key={i}>{log}</div>
+        ))}
+      </div>
     </AuthContext.Provider>
   );
 };
