@@ -32,7 +32,7 @@ function Login({ setMode }) {
         console.log("Login successful, navigating...");
         setTimeout(() => {
           window.location.href = "/chatroom";
-        }, 100);
+        }, 200);
       } else {
         console.log("Login failed:", loginStatus);
         loginStatus == 500
