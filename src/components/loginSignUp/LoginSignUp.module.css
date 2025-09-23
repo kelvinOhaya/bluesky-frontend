@@ -55,7 +55,7 @@
 }
 
 .formsContainer button {
-  background: var(--primary);
+  background: var(--dark-primary);
   color: white;
   border: none;
   padding: 10px;

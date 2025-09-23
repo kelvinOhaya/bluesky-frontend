@@ -16,18 +16,9 @@ function Home() {
   const navigate = useNavigate();
   const { isMobile, windowWidth } = useChatRoom();
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 0.9 }}
-      transition={{ duration: 1, ease: "easeIn", delay: 0.2 }}
-    >
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, ease: "easeIn", delay: 0.7 }}
-      >
-        <Background />
-      </motion.div>
+    <>
+      <Background />
+
       {/* White Background Portion */}
       <div className={styles.background}>
         {/* Contains the stuff on the page and footer */}
@@ -93,7 +84,7 @@ function Home() {
           )}
         </main>
       </div>
-    </motion.div>
+    </>
   );
 }
 

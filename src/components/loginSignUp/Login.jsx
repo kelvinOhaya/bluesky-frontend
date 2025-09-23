@@ -31,7 +31,7 @@ function Login({ setMode }) {
 
   return (
     <section className={styles.container}>
-      <h1>Welcome Back!</h1>
+      <h1>Login</h1>
       <form className={styles.formsContainer} onSubmit={handleLogin}>
         <div className={styles.field}>
           <label>Username </label>
