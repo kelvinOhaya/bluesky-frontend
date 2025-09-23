@@ -35,7 +35,6 @@
   flex-direction: column;
   text-align: center;
   align-items: center;
-  justify-content: space-between;
   border-radius: 20px;
 }
 
@@ -75,6 +74,7 @@
 /* Title and description */
 
 .titleAndDescription {
+  margin-top: 27vh;
   /* border: 1px solid orange; */
 }
 
@@ -95,6 +95,7 @@
   display: flex;
   padding: 10% 0;
   width: 100%;
+  height: 100%;
   flex-direction: column;
   justify-content: center;
   gap: 20px;
@@ -104,6 +105,7 @@
 /* Container for the three icons and their descriptions */
 .featureContainer {
   /* border: 1px solid red !important; */
+  margin-top: auto;
   display: flex;
   width: 80% !important;
   justify-content: space-evenly;
@@ -171,6 +173,7 @@
 @media (max-width: 450px) {
   .mainContent {
     height: 100%;
+    justify-content: space-between;
   }
 
   .titleAndDescription {

@@ -4,7 +4,7 @@ import { useState } from "react";
 import useAuth from "../../contexts/auth/useAuth";
 import api from "../../utils/api";
 
-function SignUp() {
+function SignUp({ setMode }) {
   const navigate = useNavigate();
   const { signUp } = useAuth();
 
@@ -66,7 +66,7 @@ function SignUp() {
         <p className={styles.error}>* Please fill in all fields</p>
       )}
       <form className={styles.formsContainer} onSubmit={handleSignUp}>
-        <div>
+        <div className={styles.field}>
           <label>Username </label>
           <input
             type="text"
@@ -79,7 +79,7 @@ function SignUp() {
             <p className={styles.error}>*Username is already in use</p>
           )}
         </div>
-        <div>
+        <div className={styles.field}>
           <label>Password </label>
           <input
             type="password"
@@ -93,7 +93,7 @@ function SignUp() {
             <p className={styles.error}>* Password is under 8 characters</p>
           )}
         </div>
-        <div>
+        <div className={styles.field}>
           <label>{"Password (again)"}</label>
           <input
             value={confirmedPassword}
@@ -104,8 +104,12 @@ function SignUp() {
             <p className={styles.error}>* Passwords do not match</p>
           )}
         </div>
-        <span>
+        <span className={styles.submitAndReminder}>
           <button type="submit">Sign Up</button>
+          <p>
+            Already have an account?{" "}
+            <a onClick={() => setMode("login")}>Log in here</a>
+          </p>
         </span>
       </form>
     </section>

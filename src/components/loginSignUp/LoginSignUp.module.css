@@ -2,16 +2,26 @@
 
 .container {
   /* border: 1px solid yellow; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
-  width: fit-content;
+  width: 25%;
   align-items: center;
   background: white;
   padding: 10px;
   border-radius: 20px;
+  box-shadow: -5px 5px black;
+}
+
+.container h1 {
+  padding-bottom: 20px;
 }
 
 .formsContainer {
+  /* background: rgba(44, 11, 11, 0.3); */
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -19,18 +29,29 @@
   align-items: center;
 }
 
-.formsContainer div {
+.field {
+  /* background: rgba(44, 11, 11, 0.3); */
   display: flex;
   flex-direction: column;
+  /* align-items: center; */
   margin-top: 10px;
+  color: rgb(124, 124, 124);
+  font-weight: bolder;
+  width: 80%;
 }
 
-.formsContainer label {
+.field label {
+  text-align: left;
   margin-bottom: 5px;
 }
 
-.formsContainer input {
+.field input {
+  width: 100%;
+  border: 3px solid rgb(77, 77, 77);
+  border-radius: 5px;
   padding: 5px 10px;
+  font-size: 1.2rem;
+  margin: auto;
 }
 
 .formsContainer button {
@@ -39,7 +60,7 @@
   border: none;
   padding: 10px;
   border-radius: 5px;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .formsContainer button:hover {
@@ -51,4 +72,20 @@
   color: red;
   font-size: 0.7rem;
   margin-top: 10px;
+}
+
+.submitAndReminder {
+  display: flex;
+  margin-top: 5px;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.submitAndReminder a {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.submitAndReminder a:active {
+  color: red;
 }

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../contexts/auth/useAuth";
 
-function Login() {
+function Login({ setMode }) {
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -31,9 +31,9 @@ function Login() {
 
   return (
     <section className={styles.container}>
-      <h1>Login</h1>
+      <h1>Welcome Back!</h1>
       <form className={styles.formsContainer} onSubmit={handleLogin}>
-        <div>
+        <div className={styles.field}>
           <label>Username </label>
           <input
             id="Username"
@@ -44,7 +44,7 @@ function Login() {
             type="text"
           />
         </div>
-        <div>
+        <div className={styles.field}>
           <label>Password </label>
           <input
             type="password"
@@ -57,8 +57,11 @@ function Login() {
         {usernameOrPasswordIsIncorrect && (
           <p className={styles.error}>*Username Or Password Is Incorrect</p>
         )}
-        <span>
+        <span className={styles.submitAndReminder}>
           <button type="submit">Login</button>
+          <p>
+            Not logged in? <a onClick={() => setMode("signup")}>Sign Up</a>
+          </p>
         </span>
       </form>
     </section>
