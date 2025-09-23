@@ -25,15 +25,20 @@ function Login({ setMode }) {
     const { username, password } = userData;
 
     try {
+      console.log("Calling login...");
       const loginStatus = await login({ username, password });
+      console.log("Login response:", loginStatus);
       if (loginStatus === 200) {
+        console.log("Login successful, navigating...");
         navigate("/chatroom", { replace: true });
       } else {
+        console.log("Login failed:", loginStatus);
         loginStatus == 500
           ? setError("server error")
           : setError("incorrect credentials");
       }
     } catch (error) {
+      console.log("Login error:", error);
       setError("network error");
     } finally {
       e.target.submitting = false;
