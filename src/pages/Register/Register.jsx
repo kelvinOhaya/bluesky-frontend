@@ -5,6 +5,7 @@ import useChatRoom from "../../contexts/chatRoom/useChatRoom";
 import { useNavigate } from "react-router-dom";
 import "../../styles/global.css";
 import { useState } from "react";
+import { HomeIcon } from "../../components/general/icons";
 
 function Register() {
   const { chatRooms } = useChatRoom();
@@ -15,7 +16,7 @@ function Register() {
   return (
     <div className={styles.container}>
       <button className={styles.goBack} onClick={() => navigate("/")}>
-        &lt;
+        <HomeIcon size={40} color={"currentColor"} />
       </button>
 
       {mode === "login" ? (

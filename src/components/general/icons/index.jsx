@@ -15,3 +15,4 @@ export { default as MessageIcon } from "./MessageIcon.jsx";
 export { default as LockIcon } from "./LockIcon.jsx";
 export { default as LinkedInIcon } from "./LinkedInIcon.jsx";
 export { default as GithubIcon } from "./GithubIcon.jsx";
+export { default as HomeIcon } from "./HomeIcon.jsx";

@@ -42,17 +42,23 @@
 
 .goBack {
   position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 5px;
   top: 3%;
   left: 3%;
   color: white;
   background: transparent;
   border: none;
   font-weight: bolder;
-  font-size: 3rem;
+  font-size: 1.5rem;
   z-index: 3;
+  transition: transform 0.3s cubic-bezier(0.445, 0.05, 0.55, 0.95),
+    color 0.3s cubic-bezier(0.445, 0.05, 0.55, 0.95);
 }
 
 .goBack:hover {
-  transform: scale(1.2);
+  transform: scale(1.1);
+  color: skyblue;
   cursor: pointer;
 }
