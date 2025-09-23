@@ -5,7 +5,11 @@ import useAuth from "../contexts/auth/useAuth";
 const ProtectedRoute = ({ children }) => {
   const { user, isLoading, accessToken } = useAuth();
 
-   console.log("ProtectedRoute render:", { user: !!user, isLoading, accessToken: !!accessToken });
+  console.log("ProtectedRoute render:", {
+    user: !!user,
+    isLoading,
+    accessToken: !!accessToken,
+  });
 
   const loadingStyle = {
     position: "absolute",
@@ -14,13 +18,14 @@ const ProtectedRoute = ({ children }) => {
     left: "50%",
   };
 
-  if (isLoading)
+  if (isLoading) {
     console.log("ProtectedRoute: no access token, redirecting");
     return (
       <div style={loadingStyle}>
         <LoadingIcon />
       </div>
     );
+  }
   if (!user) {
     console.log("ProtectedRoute: no access token, redirecting");
     return <Navigate to="/register" replace />;
