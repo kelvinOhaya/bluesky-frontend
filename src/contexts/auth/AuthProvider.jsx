@@ -52,20 +52,15 @@ const AuthProvider = ({ children }) => {
   //send a post request to the login route and get an accessToken
   const login = async (credentials) => {
     try {
-      addLog("Making login request...");
       const response = await api.post("/auth/login", credentials);
-      addLog(`Response status: ${response.status}`);
-      addLog(`Response data: ${JSON.stringify(response.data)}`);
 
       setAccessToken(response.data.accessToken);
       await fetchUser(response.data.accessToken);
       return response.status;
     } catch (error) {
-      addLog(`Login error: ${error.message}`);
       return error.response?.status;
     }
   };
-
   //send a post request to the logout route to delete the access and refresh tokens, and set the state accordingly
   const logout = async () => {
     await api.post("/auth/logout");
@@ -116,9 +111,7 @@ const AuthProvider = ({ children }) => {
           zIndex: 9999,
         }}
       >
-        {debugLogs.map((log, i) => (
-          <div key={i}>{log}</div>
-        ))}
+        
       </div>
     </AuthContext.Provider>
   );
