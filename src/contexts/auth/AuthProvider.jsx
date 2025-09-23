@@ -49,7 +49,7 @@ const AuthProvider = ({ children }) => {
   //send a post request to the login route and get an accessToken
   const login = async (credentials) => {
     try {
-      const response = await api.post("/auth/login", credentials);
+      const { response } = await api.post("/auth/login", credentials);
       setAccessToken(response.data.accessToken);
       await fetchUser(response.data.accessToken);
       return response.status;

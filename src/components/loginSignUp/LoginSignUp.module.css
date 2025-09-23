@@ -81,6 +81,10 @@
   gap: 10px;
 }
 
+.submitAndReminder p {
+  text-align: center;
+}
+
 .submitAndReminder a {
   text-decoration: underline;
   cursor: pointer;
@@ -88,4 +92,30 @@
 
 .submitAndReminder a:active {
   color: red;
+}
+
+@media (max-width: 840px) {
+  .container {
+    background: white;
+    width: 60%;
+    height: fit-content;
+  }
+  .background {
+    background-color: var(--dark-primary);
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+  }
+}
+
+@media (max-width: 300px) {
+  .container {
+    width: 80%;
+  }
+  .submitAndReminder p {
+    font-size: 0.7rem;
+  }
 }
