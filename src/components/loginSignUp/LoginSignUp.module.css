@@ -98,6 +98,7 @@
   color: red;
 }
 
+/* media query for mobile */
 @media (max-width: 840px) {
   .container {
     background: white;
