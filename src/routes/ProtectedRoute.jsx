@@ -18,7 +18,7 @@ const ProtectedRoute = ({ children }) => {
         <LoadingIcon />
       </div>
     );
-  if (!accessToken) {
+  if (!user) {
     return <Navigate to="/register" replace />;
   }
 
