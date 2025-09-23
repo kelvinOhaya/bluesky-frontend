@@ -30,8 +30,8 @@ function Login({ setMode }) {
       console.log("Login response:", loginStatus);
       if (loginStatus === 200) {
         console.log("Login successful, navigating...");
-        const last = "/chatroom";
-        window.location.href = last;
+        // const last = "/chatroom";
+        // window.location.href = last;
       } else {
         console.log("Login failed:", loginStatus);
         loginStatus == 500
