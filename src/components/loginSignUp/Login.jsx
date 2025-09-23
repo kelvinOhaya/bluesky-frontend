@@ -16,16 +16,27 @@ function Login({ setMode }) {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    e.stopPropagation(); // Prevent event bubbling
+
+    // Prevent multiple submissions
+    if (e.target.submitting) return;
+    e.target.submitting = true;
 
     const { username, password } = userData;
 
-    const loginStatus = await login({ username, password });
-    if (loginStatus === 200) {
-      navigate("/chatroom");
-    } else {
-      loginStatus == 500
-        ? setError("server error")
-        : setError("incorrect credentials");
+    try {
+      const loginStatus = await login({ username, password });
+      if (loginStatus === 200) {
+        navigate("/chatroom", { replace: true });
+      } else {
+        loginStatus == 500
+          ? setError("server error")
+          : setError("incorrect credentials");
+      }
+    } catch (error) {
+      setError("network error");
+    } finally {
+      e.target.submitting = false;
     }
   };
 
