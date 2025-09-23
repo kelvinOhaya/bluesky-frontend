@@ -14,16 +14,6 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Create a simple debug component
-  const [debugLogs, setDebugLogs] = useState([]);
-
-  const addLog = (message) => {
-    setDebugLogs((prev) => [
-      ...prev.slice(-10),
-      `${new Date().toLocaleTimeString()}: ${message}`,
-    ]);
-  };
-
   //whenever the website mounts, set up the axios interceptors to always use the latest access token for a request
   //if that doesn't work, just set these state variables to null
   //regardless, set isLoading to false, signalling that the page can now render
