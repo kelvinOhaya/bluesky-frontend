@@ -30,7 +30,7 @@ function Login({ setMode }) {
       console.log("Login response:", loginStatus);
       if (loginStatus === 200) {
         console.log("Login successful, navigating...");
-        navigate("/chatroom", { replace: true });
+        // navigate("/chatroom", { replace: true });
       } else {
         console.log("Login failed:", loginStatus);
         loginStatus == 500
