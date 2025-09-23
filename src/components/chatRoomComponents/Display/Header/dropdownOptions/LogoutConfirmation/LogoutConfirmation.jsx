@@ -19,7 +19,8 @@ function LogoutConfirmation({ dropdownFeatures, setDropdownFeatures }) {
     setUser(null);
     await logout();
 
-    navigate("/register");
+    const last = "/register";
+    window.location.href = last;
   };
 
   return (
