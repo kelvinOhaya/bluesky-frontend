@@ -21,7 +21,7 @@ function Login({ setMode }) {
 
     const loginStatus = await login({ username, password });
     if (loginStatus === 200) {
-      window.location.replace("/chatroom");
+      navigate("/chatroom");
     } else {
       loginStatus == 500
         ? setError("server error")
