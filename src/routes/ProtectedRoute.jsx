@@ -3,11 +3,11 @@ import LoadingIcon from "../components/general/LoadingIcon/LoadingIcon";
 import useAuth from "../contexts/auth/useAuth";
 
 const ProtectedRoute = ({ children }) => {
-  const { user, bootstrapTried, accessToken } = useAuth();
+  const { user, isLoading, accessToken } = useAuth();
 
   console.log("ProtectedRoute render:", {
     user: !!user,
-    bootstrapTried,
+    isLoading,
     accessToken: !!accessToken,
   });
 
@@ -18,7 +18,7 @@ const ProtectedRoute = ({ children }) => {
     left: "50%",
   };
 
-  if (bootstrapTried) {
+  if (isLoading) {
     console.log("ProtectedRoute: no access token, redirecting");
     return (
       <div style={loadingStyle}>
@@ -28,7 +28,7 @@ const ProtectedRoute = ({ children }) => {
   }
   if (!user) {
     console.log("ProtectedRoute: no access token, redirecting");
-    return <Navigate to="/register" replace />;
+    <Navigate to="/register" replace />;
   }
 
   return children;
