@@ -12,28 +12,34 @@ const AuthProvider = ({ children }) => {
   //the accessToken from the backend, the user data, and checking if the website is loading
   const [accessToken, setAccessToken] = useState(null);
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [bootstrapTried, setBootstrapTried] = useState(false);
 
   //whenever the website mounts, set up the axios interceptors to always use the latest access token for a request
   //if that doesn't work, just set these state variables to null
   //regardless, set isLoading to false, signalling that the page can now render
   useEffect(() => {
+    let cancelled = false;
     const refresh = async () => {
       try {
         console.log("AuthProvider: Attempting refresh token...");
         const { data } = await api.post("/auth/refresh-token", { test: true });
+        if (cancelled) return;
         console.log("AuthProvider: Refresh successful, got token");
         setAccessToken(data.accessToken);
         await fetchUser(data.accessToken);
       } catch (error) {
+        if (cancelled) return;
         console.log("AuthProvider: Refresh failed:", error);
         setAccessToken(null); // This is probably what's happening
       } finally {
-        setIsLoading(false);
+        if (!cancelled) setBootstrapTried(true);
       }
     };
     injectAuthToken(() => accessToken, setAccessToken);
     refresh();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   //creates a user in mongodb and gets a refresh token in cookies and access token for the user
@@ -94,8 +100,8 @@ const AuthProvider = ({ children }) => {
         fetchUser,
         accessToken,
         setAccessToken,
-        isLoading,
-        setIsLoading,
+        bootstrapTried,
+        setBootstrapTried,
       }}
     >
       {children}
@@ -110,9 +116,7 @@ const AuthProvider = ({ children }) => {
           fontSize: "10px",
           zIndex: 9999,
         }}
-      >
-        
-      </div>
+      ></div>
     </AuthContext.Provider>
   );
 };
