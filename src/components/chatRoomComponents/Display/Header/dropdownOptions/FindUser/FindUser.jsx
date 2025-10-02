@@ -44,7 +44,6 @@ function FindUser({ dropdownFeatures, setDropdownFeatures }) {
     // vFrOqPjN
     try {
       await findUser(joinCode);
-
       setDropdownFeatures({ dropdownFeatures, userSearch: false });
     } catch (error) {
       setUserDoesNotExist(true);

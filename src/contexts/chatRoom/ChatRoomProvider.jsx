@@ -12,6 +12,7 @@ function ChatRoomProvider({ children }) {
   const [chatRooms, setChatRooms] = useState([]);
   const [currentChatId, setCurrentChatId] = useState(null);
   const [messages, setMessages] = useState(null);
+  const [messagesCache, setMessagesCache] = useState(null);
   const [isTablet, setIsTablet] = useState(window.innerWidth < 1010);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 798);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -36,6 +37,15 @@ function ChatRoomProvider({ children }) {
     () => console.log(`Is it Tablet?: ${isTablet}\nIs it Mobile?: ${isMobile}`),
     [isTablet, isMobile]
   );
+
+  //every time the room changes, add it to the cache
+  const updateMessagesCache = (roomId, messages) => {
+    //add the messages as a key value pair of roomIds and the messages themselves
+    setMessagesCache((prev) => ({
+      ...prev,
+      [roomId]: messages,
+    }));
+  };
 
   const activateChat = async (element) => {
     //store the old room value in prevRoomId
@@ -72,12 +82,22 @@ function ChatRoomProvider({ children }) {
   };
 
   const loadMessages = async () => {
+    //check for cache first
+    if (messagesCache && messagesCache[currentChatId]) {
+      setMessages(messagesCache[currentChatId]); //set the messages state to the cache object with the matching currentChatId key
+      return;
+    }
+
     try {
+      console.log("Loading messages from API"); // Debug log
       const { data } = await api.post("/chatroom/load-messages", {
-        currentChatId: currentChatId,
+        currentChatId,
       });
 
       setMessages(data.messages);
+
+      //cache the loaded messages using currentChat as the key
+      updateMessagesCache(currentChatId, data.messages);
     } catch (error) {
       //console.log("Error loading all the messages: ", error);
     }
@@ -97,16 +117,27 @@ function ChatRoomProvider({ children }) {
     });
   }, [currentChat]);
 
+  const clearAllCache = () => {
+    setMessagesCache(null);
+  };
   //socket event listeners
   useEffect(() => {
     if (!socket) return;
     //utilities
     const handleReceiveMessage = (message) => {
-      setMessages((prev) =>
-        prev
-          ? [...prev, { ...message, createdAt: Date.now() }]
-          : [{ ...message, createdAt: Date.now() }]
-      );
+      const newMessage = { ...message, createdAt: Date.now() };
+      setMessages((prev) => (prev ? [...prev, newMessage] : [newMessage]));
+
+      setMessagesCache((prevCache) => {
+        //if there is no previous cache at all, or just no cache for the current room, return the previous cache state
+        if (!prevCache || !prevCache[currentChatId]) return prevCache;
+
+        //Otherwise, add the new message to the appropriate message state
+        return {
+          ...prevCache,
+          [currentChatId]: [...prevCache[currentChatId], newMessage],
+        };
+      });
     };
 
     const handleUpdateRoomName = (data) => {
@@ -368,6 +399,9 @@ function ChatRoomProvider({ children }) {
   return (
     <chatRoomContext.Provider
       value={{
+        messagesCache,
+        updateMessagesCache,
+        clearAllCache,
         chatRooms,
         setChatRooms,
         messages,

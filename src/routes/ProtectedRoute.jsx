@@ -28,7 +28,7 @@ const ProtectedRoute = ({ children }) => {
   }
   if (!user) {
     console.log("ProtectedRoute: no access token, redirecting");
-    <Navigate to="/register" replace />;
+    window.location.href = "/register";
   }
 
   return children;

@@ -1,15 +1,13 @@
 import styles from "./ChatRoom.module.css";
 import { useState, useEffect } from "react";
 import "../../styles/global.css";
-import { motion, useAnimation } from "framer-motion";
+import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import useChatRoom from "../../contexts/chatRoom/useChatRoom";
 import useSocket from "../../contexts/socket/useSocket";
 import useAuth from "../../contexts/auth/useAuth";
-import MenuIconVertical from "../../components/general/icons/MenuIconVertical";
 import ChatsTab from "../../components/chatRoomComponents/ChatsTab/ChatsTab";
 import Display from "../../components/chatRoomComponents/Display/Display";
 import { useLocation } from "react-router-dom";
-import { useRef } from "react";
 
 function ChatRoom() {
   const { loadChatRooms, currentChat, isMobile, isTablet, windowWidth } =
@@ -20,19 +18,6 @@ function ChatRoom() {
   const { socket } = useSocket();
   const controls = useAnimation();
   const location = useLocation();
-
-  const getNavOffset = () => {
-    // Define screen size ranges
-    const isSmallMobile = windowWidth < 670;
-    const isRegularMobile = windowWidth >= 670 && windowWidth < 790;
-    const isTabletSize = windowWidth >= 790 && windowWidth < 900;
-    const isDesktop = windowWidth >= 900;
-
-    if (isSmallMobile) return "-97%";
-    if (isRegularMobile) return "-98%";
-    if (isTabletSize) return "-98%";
-    if (isDesktop) return "-95%";
-  };
 
   useEffect(() => {
     if (!socket) return;
@@ -54,17 +39,10 @@ function ChatRoom() {
   if (!isLoading) {
     return (
       <div className={styles.container}>
-        <motion.nav
-          initial={{ x: getNavOffset() }}
-          animate={{
-            x: sidebarIsOpen ? 0 : getNavOffset(),
-            width: sidebarIsOpen ? (isMobile ? "100vw" : "300px") : "300px",
-          }}
-          transition={{ duration: 0.3 }}
-          style={{
-            pointerEvents: sidebarIsOpen ? "all" : "auto",
-          }}
-          className={styles.nav}
+        <nav
+          className={`${styles.nav} ${
+            sidebarIsOpen ? styles.open : styles.closed
+          }`}
         >
           <ChatsTab
             isOpen={sidebarIsOpen}
@@ -73,7 +51,20 @@ function ChatRoom() {
             setActiveGroupChat={setActiveGroupChat}
             setSidebarIsOpen={setSidebarIsOpen}
           />
-        </motion.nav>
+        </nav>
+        <AnimatePresence>
+          {sidebarIsOpen && (
+            <motion.button
+              type="button"
+              className={styles.navOverlay}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={() => setSidebarIsOpen(false)}
+            ></motion.button>
+          )}
+        </AnimatePresence>
         <motion.div
           className={styles.mainContent}
           initial={{ marginLeft: "-300px" }}
