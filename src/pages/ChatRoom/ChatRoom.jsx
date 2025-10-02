@@ -65,16 +65,9 @@ function ChatRoom() {
             ></motion.button>
           )}
         </AnimatePresence>
-        <motion.div
-          className={styles.mainContent}
-          initial={{ marginLeft: "-300px" }}
-          animate={{
-            marginLeft: !isMobile ? (sidebarIsOpen ? "0px" : "-300px") : "0",
-          }}
-          transition={{ duration: 0.3 }}
-        >
+        <div className={styles.mainContent}>
           <Display className={styles.display} />
-        </motion.div>
+        </div>
       </div>
     );
   }
