@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_URL,
+  // Use proxy in development, environment variable in production
+  baseURL: import.meta.env.DEV ? '' : import.meta.env.VITE_BACKEND_URL,
   withCredentials: true,
 });
 
