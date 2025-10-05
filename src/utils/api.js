@@ -5,58 +5,13 @@ const api = axios.create({
   withCredentials: true,
 });
 
-// Safari debugging - log all requests
-api.interceptors.request.use(
-  (config) => {
-    console.log(
-      "🔵 Safari Debug: API Request:",
-      config.method.toUpperCase(),
-      config.url
-    );
-    console.log("🔵 Safari Debug: Request headers:", config.headers);
-    return config;
-  },
-  (error) => {
-    console.error("🔴 Safari Debug: Request error:", error);
-    return Promise.reject(error);
-  }
-);
-
-api.interceptors.response.use(
-  (response) => {
-    console.log(
-      "🔵 Safari Debug: API Response:",
-      response.status,
-      response.config.url
-    );
-    return response;
-  },
-  (error) => {
-    console.error(
-      "🔴 Safari Debug: Response error:",
-      error.response?.status,
-      error.config?.url
-    );
-    return Promise.reject(error);
-  }
-);
-
 //function that intercepts requests and tries to add an access token if needed, and will retry a request under certain conditions
 export const injectAuthToken = (getToken, setAccessToken) => {
   api.interceptors.request.use((config) => {
     //request for the object that will be sent out
     const token = getToken(); //get the LATEST token (has to be a function because javascript won't update otherwise)
-    console.log(
-      "🔍 Auth interceptor - Token available:",
-      token ? token.substring(0, 20) + "..." : "NO TOKEN"
-    );
     if (token) {
       config.headers.Authorization = `Bearer ${token}`; //if the token exists, send it in this format
-      console.log("✅ Auth interceptor - Authorization header set");
-    } else {
-      console.log(
-        "🔴 Auth interceptor - No token, Authorization header NOT set"
-      );
     }
     return config; //let the config continue on its way
   });
