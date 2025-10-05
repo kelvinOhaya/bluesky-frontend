@@ -93,7 +93,7 @@ const AuthProvider = ({ children }) => {
     };
     injectAuthToken(() => accessToken, setAccessToken);
     refresh();
-  }, []); // Keep empty - only run once on mount
+  }, [accessToken]); // Keep empty - only run once on mount
 
   //creates a user in mongodb and gets a refresh token in cookies and access token for the user
   const signUp = async (credentials) => {
