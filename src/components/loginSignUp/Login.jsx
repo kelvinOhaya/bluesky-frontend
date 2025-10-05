@@ -30,9 +30,8 @@ function Login({ setMode }) {
       console.log("Login response:", loginStatus);
       if (loginStatus === 200) {
         console.log("Login successful, navigating...");
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        const last = "/chatroom";
-        window.location.href = last;
+        // Use React Router navigate instead of window.location.href
+        navigate("/chatroom", { replace: true });
       } else {
         console.log("Login failed:", loginStatus);
         loginStatus == 500

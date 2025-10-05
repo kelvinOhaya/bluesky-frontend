@@ -53,13 +53,34 @@ const AuthProvider = ({ children }) => {
         // Fallback for mobile devices - use sessionStorage token
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         const fallbackToken = sessionStorage.getItem("fallback_token");
+        const lastUserId = sessionStorage.getItem("lastUserId");
 
         if (isMobile && fallbackToken) {
           console.log(
             "🔵 Mobile Debug: Using fallback token from sessionStorage"
           );
           setAccessToken(fallbackToken);
-          await fetchUser(fallbackToken);
+
+          try {
+            await fetchUser(fallbackToken);
+
+            // Validate that the token belongs to the expected user
+            const currentUserId = user?._id;
+            if (lastUserId && currentUserId && lastUserId !== currentUserId) {
+              console.log(
+                "🔴 Account Switch: User mismatch detected, clearing fallback"
+              );
+              sessionStorage.removeItem("fallback_token");
+              sessionStorage.removeItem("lastUserId");
+              setAccessToken(null);
+              setUser(null);
+            }
+          } catch (fetchError) {
+            console.log("🔴 Mobile Debug: Fallback token invalid, clearing");
+            sessionStorage.removeItem("fallback_token");
+            sessionStorage.removeItem("lastUserId");
+            setAccessToken(null);
+          }
         } else {
           console.log(
             "🔴 Mobile Debug: No fallback available, setting token to null"
@@ -72,7 +93,7 @@ const AuthProvider = ({ children }) => {
     };
     injectAuthToken(() => accessToken, setAccessToken);
     refresh();
-  }, []);
+  }, []); // Keep empty - only run once on mount
 
   //creates a user in mongodb and gets a refresh token in cookies and access token for the user
   const signUp = async (credentials) => {
@@ -119,7 +140,11 @@ const AuthProvider = ({ children }) => {
       // TEMPORARY: Store access token in sessionStorage as fallback
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         sessionStorage.setItem("fallback_token", response.data.accessToken);
-        console.log("🔵 Mobile Debug: Stored fallback token");
+        // Store user identifier to detect account switches
+        if (user && user._id) {
+          sessionStorage.setItem("lastUserId", user._id);
+        }
+        console.log("🔵 Mobile Debug: Stored fallback token and user ID");
       }
 
       return response.status;
@@ -132,15 +157,43 @@ const AuthProvider = ({ children }) => {
   };
   //send a post request to the logout route to delete the access and refresh tokens, and set the state accordingly
   const logout = async () => {
-    await api.post("/auth/logout");
+    console.log("🔵 Account Switch: Starting logout process");
+
+    try {
+      await api.post("/auth/logout");
+    } catch (error) {
+      console.log("🔴 Logout API call failed, but continuing cleanup:", error);
+    }
+
+    // Complete cleanup for account switching
     sessionStorage.setItem("reloaded", "false");
-
-    // Clear fallback token
     sessionStorage.removeItem("fallback_token");
-    console.log("🔵 Mobile Debug: Cleared fallback token on logout");
 
+    // Clear any other cached data
+    sessionStorage.removeItem("lastUserId"); // Track user switches
+    localStorage.removeItem("messagesCache"); // Clear message cache
+    localStorage.removeItem("chatRoomsCache"); // Clear chat rooms cache
+
+    console.log("🔵 Account Switch: Cleared all cached data");
+
+    // Reset all auth state
     setAccessToken(null);
     setUser(null);
+    setIsLoading(false);
+
+    console.log("🔵 Account Switch: Logout complete");
+  };
+
+  // Explicit account switching function
+  const switchAccount = async () => {
+    console.log("🔵 Account Switch: Initiating account switch");
+    await logout();
+
+    // Force a brief delay to ensure cleanup is complete
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    // Navigate back to login
+    window.location.href = "/register"; // Force full reload to ensure clean state
   };
 
   //get the user data from the /me route (doesn't include the password)
@@ -176,6 +229,7 @@ const AuthProvider = ({ children }) => {
         login,
         signUp,
         logout,
+        switchAccount,
         fetchUser,
         accessToken,
         setAccessToken,
