@@ -49,7 +49,23 @@ const AuthProvider = ({ children }) => {
         );
         console.error("🔴 Mobile Debug: Error details:", error.response?.data);
         console.log("AuthProvider: Refresh failed:", error);
-        setAccessToken(null); // This is probably what's happening
+
+        // Fallback for mobile devices - use sessionStorage token
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const fallbackToken = sessionStorage.getItem("fallback_token");
+
+        if (isMobile && fallbackToken) {
+          console.log(
+            "🔵 Mobile Debug: Using fallback token from sessionStorage"
+          );
+          setAccessToken(fallbackToken);
+          await fetchUser(fallbackToken);
+        } else {
+          console.log(
+            "🔴 Mobile Debug: No fallback available, setting token to null"
+          );
+          setAccessToken(null);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -118,6 +134,11 @@ const AuthProvider = ({ children }) => {
   const logout = async () => {
     await api.post("/auth/logout");
     sessionStorage.setItem("reloaded", "false");
+
+    // Clear fallback token
+    sessionStorage.removeItem("fallback_token");
+    console.log("🔵 Mobile Debug: Cleared fallback token on logout");
+
     setAccessToken(null);
     setUser(null);
   };
