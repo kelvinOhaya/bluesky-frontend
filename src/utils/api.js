@@ -46,8 +46,17 @@ export const injectAuthToken = (getToken, setAccessToken) => {
   api.interceptors.request.use((config) => {
     //request for the object that will be sent out
     const token = getToken(); //get the LATEST token (has to be a function because javascript won't update otherwise)
+    console.log(
+      "🔍 Auth interceptor - Token available:",
+      token ? token.substring(0, 20) + "..." : "NO TOKEN"
+    );
     if (token) {
       config.headers.Authorization = `Bearer ${token}`; //if the token exists, send it in this format
+      console.log("✅ Auth interceptor - Authorization header set");
+    } else {
+      console.log(
+        "🔴 Auth interceptor - No token, Authorization header NOT set"
+      );
     }
     return config; //let the config continue on its way
   });
