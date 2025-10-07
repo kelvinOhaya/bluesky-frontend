@@ -14,4 +14,13 @@ export default defineConfig({
       },
     },
   },
+  // Copy netlify.toml to build output
+  publicDir: "public",
+  build: {
+    rollupOptions: {
+      input: {
+        main: "./index.html",
+      },
+    },
+  },
 });
