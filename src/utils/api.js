@@ -1,8 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  // Always use /api/ - proxy handles routing in both dev and production
-  baseURL: "/api/",
+  baseURL: import.meta.env.VITE_BACKEND_URL,
   withCredentials: true,
 });
 
