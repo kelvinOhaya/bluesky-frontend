@@ -9,10 +9,17 @@ import AuthContext from "./AuthContext";
 import useChatRoom from "../chatRoom/useChatRoom";
 
 const AuthProvider = ({ children }) => {
-  //the accessToken from the backend, the user data, and checking if the website is loading
+  //the tokens from the backend, the user data, and checking if the website is loading
   const [accessToken, setAccessToken] = useState(null);
+  const [refreshToken, setRefreshToken] = useState(null);
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Helper function to set both tokens
+  const setTokens = (newAccessToken, newRefreshToken) => {
+    setAccessToken(newAccessToken);
+    setRefreshToken(newRefreshToken);
+  };
 
   //whenever the website mounts, set up the axios interceptors to always use the latest access token for a request
   //if that doesn't work, just set these state variables to null
@@ -20,51 +27,78 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const refresh = async () => {
       try {
-        const { data } = await api.post("/auth/refresh-token");
-        setAccessToken(data.accessToken);
+        // Try to get refresh token from sessionStorage on app start
+        const storedRefreshToken = sessionStorage.getItem("refreshToken");
+        if (!storedRefreshToken) {
+          throw new Error("No refresh token found");
+        }
+
+        const { data } = await api.post("/auth/refresh-token", {
+          refreshToken: storedRefreshToken,
+        });
+        setTokens(data.accessToken, data.refreshToken);
+
+        // Update sessionStorage with new refresh token
+        sessionStorage.setItem("refreshToken", data.refreshToken);
+
         await fetchUser(data.accessToken);
-      } catch (error) {
-        setAccessToken(null);
+      } catch {
+        setTokens(null, null);
+        sessionStorage.removeItem("refreshToken");
       } finally {
         setIsLoading(false);
       }
     };
-    injectAuthToken(() => accessToken, setAccessToken);
-    refresh();
-  }, []);
 
-  //creates a user in mongodb and gets a refresh token in cookies and access token for the user
+    injectAuthToken(
+      () => accessToken,
+      setTokens,
+      () => refreshToken || sessionStorage.getItem("refreshToken")
+    );
+    refresh();
+  }, [accessToken, refreshToken]);
+
+  //creates a user in mongodb and gets both access and refresh tokens
   const signUp = async (credentials) => {
     try {
       const response = await api.post("/auth/signup", credentials);
+      setTokens(response.data.accessToken, response.data.refreshToken);
+
+      // Store refresh token in sessionStorage
+      sessionStorage.setItem("refreshToken", response.data.refreshToken);
+
       await fetchUser(response.data.accessToken);
-      setAccessToken(response.data.accessToken);
       return response.status;
     } catch (error) {
-      //console.log("Error when trying to login: ", error);
+      //console.log("Error when trying to signup: ", error);
       return error.response.status;
     }
   };
 
-  //send a post request to the login route and get an accessToken
+  //send a post request to the login route and get both tokens
   const login = async (credentials) => {
     try {
       const response = await api.post("/auth/login", credentials);
-      setAccessToken(response.data.accessToken);
+      setTokens(response.data.accessToken, response.data.refreshToken);
+
+      // Store refresh token in sessionStorage
+      sessionStorage.setItem("refreshToken", response.data.refreshToken);
+
       await fetchUser(response.data.accessToken);
       return response.status;
     } catch (error) {
       return error.response?.status;
     }
   };
-  //send a post request to the logout route to delete the access and refresh tokens, and set the state accordingly
+  //send a post request to the logout route and clear all tokens
   const logout = async () => {
     try {
       await api.post("/auth/logout");
-    } catch (error) {
+    } catch {
       //ignore error, continue with logout
     }
-    setAccessToken(null);
+    setTokens(null, null);
+    sessionStorage.removeItem("refreshToken");
     setUser(null);
     setIsLoading(false);
   };
@@ -76,7 +110,7 @@ const AuthProvider = ({ children }) => {
     try {
       const { data } = await api.get("/auth/me");
       setUser(data.user);
-    } catch (error) {
+    } catch {
       setUser(null);
     }
   };

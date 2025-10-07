@@ -2,11 +2,10 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
-  withCredentials: true,
 });
 
 //function that intercepts requests and tries to add an access token if needed, and will retry a request under certain conditions
-export const injectAuthToken = (getToken, setAccessToken) => {
+export const injectAuthToken = (getToken, setTokens, getRefreshToken) => {
   api.interceptors.request.use((config) => {
     //request for the object that will be sent out
     const token = getToken(); //get the LATEST token (has to be a function because javascript won't update otherwise)
@@ -41,12 +40,19 @@ export const injectAuthToken = (getToken, setAccessToken) => {
         originalRequest._retry = true;
 
         try {
-          const { data } = await api.post("/auth/refresh-token", {
-            dummy: true,
-          });
-          const newAccessToken = data.accessToken;
+          const refreshToken = getRefreshToken();
+          if (!refreshToken) {
+            throw new Error("No refresh token available");
+          }
 
-          setAccessToken(newAccessToken);
+          const { data } = await api.post("/auth/refresh-token", {
+            refreshToken: refreshToken,
+          });
+
+          const newAccessToken = data.accessToken;
+          const newRefreshToken = data.refreshToken;
+
+          setTokens(newAccessToken, newRefreshToken);
 
           api.defaults.headers.Authorization = `Bearer ${newAccessToken}`;
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
