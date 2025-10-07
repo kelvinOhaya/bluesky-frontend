@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "/api/",
+  // Use proxy in development, direct backend URL in production
+  baseURL: import.meta.env.DEV ? "/api/" : "http://localhost:5000/api/",
   withCredentials: true,
 });
 
