@@ -44,6 +44,7 @@ function ChatsTab({ className, setSidebarIsOpen }) {
                     key={chatRoom._id}
                     onClick={async () => {
                       await activateChat(chatRoom);
+                      setSidebarIsOpen(false); // Close sidebar when selecting a chat
                       console.log(JSON.stringify(messagesCache, null, 2));
                     }}
                   >

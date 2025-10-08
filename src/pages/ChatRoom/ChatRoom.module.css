@@ -123,13 +123,33 @@
 }
 
 @media (max-width: 798px) {
-  .open {
-    width: 100vw !important;
+  .container {
+    /* Use dvh (dynamic viewport height) for mobile browsers */
+    height: 100dvh;
   }
 
-  /* On mobile, display should be hidden when nav is open */
+  .nav {
+    /* Use dvh for mobile navbar */
+    height: 100dvh;
+  }
+
+  .display {
+    /* Fix mobile display positioning */
+    top: 0;
+    left: 0 !important; /* No navbar offset on mobile */
+    width: 100vw !important; /* Full width on mobile */
+    height: 100dvh; /* Dynamic viewport height for mobile */
+    /* Add safe area insets for modern mobile devices */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
   .display.navOpen {
-    left: 100vw; /* Push off screen */
+    left: 100vw; /* Push off screen when nav is open */
     width: 0;
+  }
+
+  .open {
+    width: 100vw !important;
   }
 }
