@@ -65,9 +65,9 @@ function ChatRoom() {
             ></motion.button>
           )}
         </AnimatePresence>
-        <div className={styles.mainContent}>
-          <Display className={styles.display} />
-        </div>
+        <Display
+          className={`${styles.display} ${sidebarIsOpen ? styles.navOpen : ""}`}
+        />
       </div>
     );
   }

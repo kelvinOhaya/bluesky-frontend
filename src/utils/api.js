@@ -23,13 +23,13 @@ export const injectAuthToken = (getToken, setTokens, getRefreshToken) => {
       const originalRequest = error.config; //the request that was sent out
 
       /* These are things we don't want to repeat:
-                - Any error that isn't 401(unauthorized)
-                - Any requests to login, sign up, or refresh the token
-                *If these are true, just send the error to the client
+          - Any error that isn't 401(unauthorized)
+          - Any requests to login, sign up, or refresh the token
+          *If these are true, just send the error to the client
 
-                - Any other request, we try to get a new access token, set the default header and the header of the original request to that token, and try the request again.
-                    * If that still doesn't work, send the user back to the login page and just send the error to the client
-            */
+          - Any other request, we try to get a new access token, set the default header and the header of the original request to that token, and try the request again.
+          - If that still doesn't work, send the user back to the login page and just send the error to the client
+      */
       if (
         error.response?.status === 401 &&
         !originalRequest._retry &&
