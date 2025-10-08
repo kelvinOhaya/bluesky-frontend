@@ -136,8 +136,6 @@
   .display {
     /* Fix mobile display positioning */
     top: 0;
-    left: 0 !important; /* No navbar offset on mobile */
-    width: 100dvw !important; /* Full width on mobile */
     height: 100dvh; /* Dynamic viewport height for mobile */
     /* Add safe area insets for modern mobile devices */
     padding-top: env(safe-area-inset-top);
