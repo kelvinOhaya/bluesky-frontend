@@ -58,7 +58,7 @@ function Home() {
           </section>
 
           <footer className={styles.footer}>
-            {windowWidth > 450 && (
+            {windowWidth > 500 && (
               <>
                 <ul>
                   <li>Privacy Policy</li>
