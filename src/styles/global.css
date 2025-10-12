@@ -29,8 +29,8 @@ body {
 
 #root {
   width: 100%;
-  /* Use regular viewport height like Safari */
-  height: 100vh;
+  /* Use dynamic viewport height to account for status bar */
+  height: 100dvh;
   overflow: hidden;
 }
 

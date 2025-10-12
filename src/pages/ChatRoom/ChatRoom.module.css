@@ -5,7 +5,7 @@
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh; /* Use dynamic viewport height */
+  height: 100dvh; /* Use dynamic viewport height */
   /* border: 1px solid red; */
   display: flex;
   flex-direction: row;

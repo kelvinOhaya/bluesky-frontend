@@ -9,7 +9,7 @@
   left: 0;
   width: 100%;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   /* Use dynamic viewport height for better mobile support */
   /* Extend content behind status bar for translucent effect */
 
