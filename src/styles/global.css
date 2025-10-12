@@ -29,7 +29,8 @@ body {
 
 #root {
   width: 100%;
-  height: 100vh;
+  /* Use dynamic viewport height for better mobile PWA support */
+  height: 100dvh;
   overflow: hidden;
   /* Add safe area padding for fullscreen PWA */
   padding-top: env(safe-area-inset-top, 0px);
