@@ -27,6 +27,13 @@ body {
   background: var(--dark-primary);
 }
 
+@media (display-mode: minimal-ui) {
+  html,
+  body {
+    padding: 30px 0;
+  }
+}
+
 #root {
   width: 100%;
   /* Use dynamic viewport height to account for status bar */
