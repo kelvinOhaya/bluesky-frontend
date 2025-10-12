@@ -4,11 +4,10 @@
 */
 .background {
   /* border: 1px solid red; */
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  width: 100vw;
   height: 100dvh;
   /* Use dynamic viewport height for better mobile support */
   /* Extend content behind status bar for translucent effect */
@@ -20,9 +19,8 @@
   /* Prevent any overflow issues */
   overflow: hidden;
 
+  padding-bottom: constant(safe-area-inset-bottom); /* For older iOS */
   /* Force fullscreen on mobile Safari */
-  -webkit-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
 }
 
 /* White transparent container. Holds the mainContent and footer */
@@ -147,6 +145,11 @@
   justify-content: space-between;
 }
 
+@media (display-mode: standalone) {
+  .footer {
+    min-height: 4rem !important;
+  }
+}
 /* How the icons/elements are spread */
 .footer ul {
   display: flex;
@@ -217,6 +220,11 @@
 
   .titleAndDescription p {
     width: 80%;
+  }
+  .footer {
+    height: 0;
+    margin: 0;
+    padding: 0;
   }
 }
 

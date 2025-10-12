@@ -56,32 +56,35 @@ function Home() {
               )}
             </div>
           </section>
-          {windowWidth > 450 && (
-            <footer className={styles.footer}>
-              <ul>
-                <li>Privacy Policy</li>
-                <li>&nbsp;&nbsp;&nbsp;•&nbsp;Terms</li>
-              </ul>
-              <ul>
-                <li>
-                  <LinkedInIcon
-                    size={27}
-                    className={styles.iconWrapper}
-                    color={"white"}
-                    href={"https://www.linkedin.com/in/kelvin-ohaya/"}
-                  />
-                </li>
-                <li>
-                  <GithubIcon
-                    className={styles.iconWrapper}
-                    size={27}
-                    color={"white"}
-                    href={"https://github.com/kelvinOhaya"}
-                  />
-                </li>
-              </ul>
-            </footer>
-          )}
+
+          <footer className={styles.footer}>
+            {windowWidth > 450 && (
+              <>
+                <ul>
+                  <li>Privacy Policy</li>
+                  <li>&nbsp;&nbsp;&nbsp;•&nbsp;Terms</li>
+                </ul>
+                <ul>
+                  <li>
+                    <LinkedInIcon
+                      size={27}
+                      className={styles.iconWrapper}
+                      color={"white"}
+                      href={"https://www.linkedin.com/in/kelvin-ohaya/"}
+                    />
+                  </li>
+                  <li>
+                    <GithubIcon
+                      className={styles.iconWrapper}
+                      size={27}
+                      color={"white"}
+                      href={"https://github.com/kelvinOhaya"}
+                    />
+                  </li>
+                </ul>
+              </>
+            )}
+          </footer>
         </main>
       </div>
     </>

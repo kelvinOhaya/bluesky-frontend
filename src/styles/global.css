@@ -11,20 +11,17 @@
 /* Ensure full mobile coverage */
 html,
 body {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   /* Use dynamic viewport units for mobile */
-  height: 100dvh;
-  overflow: hidden;
   /* Prevent mobile browser zooming */
-  touch-action: manipulation;
-  /* Disable text selection highlighting on mobile */
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
   background: var(--dark-primary);
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
 }
 
 #root {
@@ -54,4 +51,43 @@ body {
 .safe-area-conservative {
   padding-top: env(safe-area-inset-top, 20px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* RELIABLE PWA-specific styles using JavaScript-added body classes */
+
+/* PWA-only styles - applied when body has 'pwa-mode' class */
+body.pwa-mode #root {
+  /* PWA-specific adjustments */
+  border: 2px solid green; /* TEST: This should show green border in PWA */
+}
+
+body.pwa-mode .pwa-only {
+  display: block;
+}
+
+body.pwa-mode .browser-only {
+  display: none;
+}
+
+/* Browser-only styles - applied when body has 'browser-mode' class */
+body.browser-mode #root {
+  /* Browser-specific adjustments */
+  border: 2px solid red; /* TEST: This should show red border in browser */
+}
+
+body.browser-mode .browser-only {
+  display: block;
+}
+
+body.browser-mode .pwa-only {
+  display: none;
+}
+
+/* Default states for elements */
+.pwa-only {
+  display: none; /* Hidden by default */
+}
+
+.browser-only {
+  display: block; /* Shown by default */
 }
