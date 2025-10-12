@@ -145,6 +145,11 @@
   justify-content: space-between;
 }
 
+@media (display-mode: standalone) {
+  .footer {
+    min-height: 4rem !important;
+  }
+}
 /* How the icons/elements are spread */
 .footer ul {
   display: flex;
