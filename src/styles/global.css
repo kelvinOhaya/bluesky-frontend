@@ -69,12 +69,6 @@ body.pwa-mode .browser-only {
   display: none;
 }
 
-/* Browser-only styles - applied when body has 'browser-mode' class */
-body.browser-mode #root {
-  /* Browser-specific adjustments */
-  border: 2px solid red; /* TEST: This should show red border in browser */
-}
-
 body.browser-mode .browser-only {
   display: block;
 }
