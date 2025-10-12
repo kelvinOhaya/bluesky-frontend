@@ -32,3 +32,5 @@ dist-ssr/
 Thumbs.db
 
 frontend/notes.txt
+node_modules
+node_modules
