@@ -1,8 +1,14 @@
 .textbar {
   /* border: 1px solid yellow; */
   width: 100%;
+  height: 100%;
   margin-top: auto;
-  padding-bottom: 100px;
+}
+
+@media (display-mode: standalone) {
+  .textbar {
+    padding-bottom: 100px !important;
+  }
 }
 
 .header {
@@ -12,6 +18,7 @@
 .messageContainer {
   width: 100%;
   height: 100%;
+  background-color: white;
   display: flex;
   padding: 0 20px 10px;
   flex-direction: column;

@@ -18,70 +18,10 @@ body {
   /* Use dynamic viewport units for mobile */
   /* Prevent mobile browser zooming */
   background: var(--dark-primary);
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  padding-left: env(safe-area-inset-left, 0px);
-  padding-right: env(safe-area-inset-right, 0px);
 }
 
 #root {
   width: 100%;
-  /* Use dynamic viewport height to account for status bar */
   height: 100dvh;
   overflow: hidden;
-}
-
-/* Safe area utility classes for targeted application */
-.safe-area-top {
-  padding-top: env(safe-area-inset-top, 0px);
-}
-
-.safe-area-bottom {
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-
-.safe-area-full {
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  padding-left: env(safe-area-inset-left, 0px);
-  padding-right: env(safe-area-inset-right, 0px);
-}
-
-/* Conservative fallback with status bar height */
-.safe-area-conservative {
-  padding-top: env(safe-area-inset-top, 20px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-
-/* RELIABLE PWA-specific styles using JavaScript-added body classes */
-
-/* PWA-only styles - applied when body has 'pwa-mode' class */
-body.pwa-mode #root {
-  /* PWA-specific adjustments */
-  border: 2px solid green; /* TEST: This should show green border in PWA */
-}
-
-body.pwa-mode .pwa-only {
-  display: block;
-}
-
-body.pwa-mode .browser-only {
-  display: none;
-}
-
-body.browser-mode .browser-only {
-  display: block;
-}
-
-body.browser-mode .pwa-only {
-  display: none;
-}
-
-/* Default states for elements */
-.pwa-only {
-  display: none; /* Hidden by default */
-}
-
-.browser-only {
-  display: block; /* Shown by default */
 }
