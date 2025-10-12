@@ -3,7 +3,7 @@
   "short_name": "Blue Sky",
   "description": "Real-time chat application",
   "start_url": "/",
-  "display": "fullscreen",
+  "display": "standalone",
   "display_override": ["fullscreen", "standalone"],
   "background_color": "#1e40af",
   "theme_color": "#1e40af",
