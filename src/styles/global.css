@@ -27,22 +27,6 @@ body {
   background: var(--dark-primary);
 }
 
-@media (display-mode: minimal-ui) {
-  html,
-  body {
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-}
-
-@media (display-mode: browser) {
-  html,
-  body {
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-}
-
 #root {
   width: 100%;
   /* Use dynamic viewport height to account for status bar */

@@ -10,6 +10,17 @@
   align-items: center;
 }
 
+@media (display-mode: minimal-ui) {
+  .container {
+    padding-bottom: env(safe-area-inset-bottom, 30px) !important;
+  }
+}
+@media (display-mode: browser) {
+  .container {
+    padding-bottom: env(safe-area-inset-bottom, 30px) !important;
+  }
+}
+
 .form {
   /* border: 1px solid white; */
   width: 100%;
