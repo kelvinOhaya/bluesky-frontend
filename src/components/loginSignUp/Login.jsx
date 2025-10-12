@@ -14,6 +14,11 @@ function Login({ setMode }) {
   // possible states: "incorrect credentials"
   const [error, setError] = useState("");
 
+  const handleLoginDev = () => {
+    const last = "/chatroom";
+    window.location.href = last;
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     e.stopPropagation(); // Prevent event bubbling

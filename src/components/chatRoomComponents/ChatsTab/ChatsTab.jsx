@@ -12,8 +12,10 @@ function ChatsTab({ className, setSidebarIsOpen }) {
     chatRooms,
     currentChatId,
     setCurrentChatId,
+    windowWidth,
     activateChat,
     messagesCache,
+    isTablet,
   } = useChatRoom();
 
   return (
@@ -76,12 +78,6 @@ function ChatsTab({ className, setSidebarIsOpen }) {
           )}
         </div>
       </div>
-      <button
-        onClick={() => setSidebarIsOpen((prev) => !prev)}
-        className={styles.sidebarButton}
-      >
-        <MenuIconVertical size={15} />
-      </button>
     </div>
   );
 }

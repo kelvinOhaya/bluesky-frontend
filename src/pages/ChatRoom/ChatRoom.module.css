@@ -9,6 +9,7 @@
   /* border: 1px solid red; */
   display: flex;
   flex-direction: row;
+  background: white;
   overflow: hidden;
 }
 .nav {
@@ -31,7 +32,7 @@
   width: 400px;
 }
 .closed {
-  width: 15px;
+  width: 0px;
 }
 
 .navOverlay {
@@ -92,8 +93,8 @@
   /* border: 1px solid green; */
   position: fixed;
   top: 0;
-  left: 15px; /* Account for closed navbar width */
-  width: calc(100vw - 15px); /* Subtract navbar width */
+  left: 0px; /* Account for closed navbar width */
+  width: 100vw; /* Subtract navbar width */
   height: 100dvh; /* Use dynamic viewport height */
   display: flex;
   flex-direction: column;
@@ -130,7 +131,12 @@
     /* Use dvh for mobile navbar */
     height: 100dvh;
   }
+}
 
+@media (max-width: 1010px) {
+  .closed {
+    width: 0;
+  }
   .display {
     /* Fix mobile display positioning - take full space */
     top: 0 !important;

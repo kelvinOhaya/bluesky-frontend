@@ -10,10 +10,17 @@ import Display from "../../components/chatRoomComponents/Display/Display";
 import { useLocation } from "react-router-dom";
 
 function ChatRoom() {
-  const { loadChatRooms, currentChat, isMobile, isTablet, windowWidth } =
-    useChatRoom();
+  const {
+    loadChatRooms,
+    currentChat,
+    isMobile,
+    isTablet,
+    windowWidth,
+    sidebarIsOpen,
+    setSidebarIsOpen,
+  } = useChatRoom();
   const { isLoading, setIsLoading, user, accessToken, fetchUser } = useAuth();
-  const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
+
   const [activeGroupChat, setActiveGroupChat] = useState(0);
   const { socket } = useSocket();
   const controls = useAnimation();

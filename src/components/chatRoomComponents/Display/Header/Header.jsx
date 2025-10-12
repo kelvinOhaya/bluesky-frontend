@@ -33,10 +33,18 @@ import {
 
 import useChatRoom from "../../../../contexts/chatRoom/useChatRoom";
 import useAuth from "../../../../contexts/auth/useAuth";
+import MenuIconHorizontal from "../../../general/icons/MenuIconHorizontal";
 
 function Header({ className }) {
   const { user } = useAuth();
-  const { currentChat, currentChatId, isTablet } = useChatRoom();
+  const {
+    currentChat,
+    currentChatId,
+    isTablet,
+    windowWidth,
+    sidebarIsOpen,
+    setSidebarIsOpen,
+  } = useChatRoom();
   const [isActive, setIsActive] = useState({
     settings: false,
     groupOptions: false,
@@ -80,10 +88,33 @@ function Header({ className }) {
   return (
     <div className={className}>
       <div className={styles.container}>
+        {
+          /*
+           * Sandwich Icon goes here when screen is < 400px
+           * OnClick - setNavbarIsOpen(!navbarIsOpen)
+           */
+
+          <button
+            style={{
+              border: 0,
+              background: "none",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onClick={() => setSidebarIsOpen((prev) => !prev)}
+          >
+            <MenuIconHorizontal
+              className={styles.MenuIconHorizontal}
+              color="white"
+            />
+          </button>
+        }
         {currentChatId && (
           <>
             <UserLabel
               className={styles.userLabel}
+              overrideStyle={styles.overrideUserLabel}
               name={
                 currentChat?.isDm === true
                   ? currentChat.otherUser?.username ?? "Loading..."
@@ -109,125 +140,126 @@ function Header({ className }) {
                 )}
               </>
             )}
+            <div className={styles.dropdownGroup}>
+              {isTablet && (
+                <Dropdown
+                  isActive={isActive.mobileFacts}
+                  type={"mobileFacts"}
+                  setIsActive={setIsActive}
+                  icon={
+                    <ChevronIcon
+                      className={styles.mobileDropdownIcon}
+                      isActive={isActive.mobileFacts}
+                      direction={"down"}
+                      size={30}
+                    />
+                  }
+                >
+                  <Option
+                    className={styles.option}
+                    label={`Members: ${currentChat?.memberCount}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                    }}
+                  />
+                  <Option
+                    className={styles.option}
+                    label={`Join Code: ${currentChat?.joinCode || "999999"}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                    }}
+                  />
+                </Dropdown>
+              )}
 
-            {isTablet && (
               <Dropdown
-                isActive={isActive.mobileFacts}
-                type={"mobileFacts"}
+                isActive={isActive.groupOptions}
+                type={"groupOptions"}
                 setIsActive={setIsActive}
                 icon={
-                  <ChevronIcon
-                    className={styles.mobileDropdownIcon}
-                    isActive={isActive.mobileFacts}
-                    direction={"down"}
-                    size={30}
+                  <ChatRoomIcon
+                    isActive={isActive}
+                    className={styles.iconWrapper}
+                    size={34}
                   />
                 }
               >
+                {currentChat.isDm === false && (
+                  <>
+                    <Option
+                      className={styles.option}
+                      icon={PencilIcon}
+                      label={"Change Group Picture"}
+                      onClick={() => selectFeature("changeGroupProfilePicture")}
+                    />
+                    <Option
+                      className={styles.option}
+                      icon={PlusIcon}
+                      label={"Change Group Name"}
+                      onClick={() => selectFeature("changeName")}
+                    />
+                  </>
+                )}
                 <Option
                   className={styles.option}
-                  label={`Members: ${currentChat?.memberCount}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                  }}
-                />
-                <Option
-                  className={styles.option}
-                  label={`Join Code: ${currentChat?.joinCode || "999999"}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                  }}
+                  icon={LeaveIcon}
+                  label={currentChat.isDm ? "Leave Chat" : "Leave Group"}
+                  onClick={() => selectFeature("leaveChatRoom")}
                 />
               </Dropdown>
-            )}
 
-            <Dropdown
-              isActive={isActive.groupOptions}
-              type={"groupOptions"}
-              setIsActive={setIsActive}
-              icon={
-                <ChatRoomIcon
-                  isActive={isActive}
-                  className={styles.iconWrapper}
-                  size={34}
+              <Dropdown
+                isActive={isActive.settings}
+                setIsActive={setIsActive}
+                type={"settings"}
+                icon={
+                  <SettingsIcon
+                    isActive={isActive}
+                    className={styles.iconWrapper}
+                    size={34}
+                  />
+                }
+              >
+                <span className={styles.personalJoinCode}>
+                  Personal Join Code: {user.joinCode}
+                </span>
+                <Option
+                  className={styles.option}
+                  icon={PencilIcon}
+                  label={"Change Profile Picture"}
+                  condition={dropdownFeatures.changeProfilePicture}
+                  onClick={() => selectFeature("changeProfilePicture")}
                 />
-              }
-            >
-              {currentChat.isDm === false && (
-                <>
-                  <Option
-                    className={styles.option}
-                    icon={PencilIcon}
-                    label={"Change Group Picture"}
-                    onClick={() => selectFeature("changeGroupProfilePicture")}
-                  />
-                  <Option
-                    className={styles.option}
-                    icon={PlusIcon}
-                    label={"Change Group Name"}
-                    onClick={() => selectFeature("changeName")}
-                  />
-                </>
-              )}
-              <Option
-                className={styles.option}
-                icon={LeaveIcon}
-                label={currentChat.isDm ? "Leave Chat" : "Leave Group"}
-                onClick={() => selectFeature("leaveChatRoom")}
-              />
-            </Dropdown>
+                <Option
+                  className={styles.option}
+                  icon={PlusIcon}
+                  label={"Create Group Chat"}
+                  condition={dropdownFeatures.createGroupChat}
+                  onClick={() => selectFeature("createGroupChat")}
+                />
+                <Option
+                  className={styles.option}
+                  icon={ProfileIcon}
+                  onClick={() => selectFeature("userSearch")}
+                  label={"Find Other Users"}
+                />
+                <Option
+                  className={styles.option}
+                  icon={SearchIcon}
+                  onClick={() => selectFeature("roomSearch")}
+                  label={"Find Group Chats"}
+                />
+
+                <Option
+                  className={styles.option}
+                  icon={LeaveIcon}
+                  label={"Logout"}
+                  onClick={() => selectFeature("logoutConfirmation")}
+                />
+              </Dropdown>
+            </div>
           </>
         )}
-
-        <Dropdown
-          isActive={isActive.settings}
-          setIsActive={setIsActive}
-          type={"settings"}
-          icon={
-            <SettingsIcon
-              isActive={isActive}
-              className={styles.iconWrapper}
-              size={34}
-            />
-          }
-        >
-          <span className={styles.personalJoinCode}>
-            Personal Join Code: {user.joinCode}
-          </span>
-          <Option
-            className={styles.option}
-            icon={PencilIcon}
-            label={"Change Profile Picture"}
-            condition={dropdownFeatures.changeProfilePicture}
-            onClick={() => selectFeature("changeProfilePicture")}
-          />
-          <Option
-            className={styles.option}
-            icon={PlusIcon}
-            label={"Create Group Chat"}
-            condition={dropdownFeatures.createGroupChat}
-            onClick={() => selectFeature("createGroupChat")}
-          />
-          <Option
-            className={styles.option}
-            icon={ProfileIcon}
-            onClick={() => selectFeature("userSearch")}
-            label={"Find Other Users"}
-          />
-          <Option
-            className={styles.option}
-            icon={SearchIcon}
-            onClick={() => selectFeature("roomSearch")}
-            label={"Find Group Chats"}
-          />
-
-          <Option
-            className={styles.option}
-            icon={LeaveIcon}
-            label={"Logout"}
-            onClick={() => selectFeature("logoutConfirmation")}
-          />
-        </Dropdown>
 
         {/* Put the dropdown features here */}
         <NewGroupForm

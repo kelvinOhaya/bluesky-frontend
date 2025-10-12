@@ -5,7 +5,6 @@
   background-color: none;
   padding: 15px;
   display: flex;
-  justify-content: center;
   align-items: center;
 }
 
@@ -24,6 +23,7 @@
 }
 
 .tabButtonContainer {
+  margin-right: auto;
   margin-top: 20px;
   background: none;
   display: flex;

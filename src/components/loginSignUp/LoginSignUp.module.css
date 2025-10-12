@@ -1,7 +1,7 @@
 @import url(../../styles/variables.css);
 
 .container {
-  /* border: 1px solid yellow; */
+  border: 1px solid black;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -13,7 +13,6 @@
   background: white;
   padding: 10px;
   border-radius: 20px;
-  box-shadow: -5px 5px black;
 }
 
 .container h1 {
@@ -102,7 +101,7 @@
 @media (max-width: 840px) {
   .container {
     background: white;
-    width: 60%;
+    width: 80%;
     height: fit-content;
   }
 

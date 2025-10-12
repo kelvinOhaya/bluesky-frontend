@@ -16,6 +16,7 @@ function ChatRoomProvider({ children }) {
   const [isTablet, setIsTablet] = useState(window.innerWidth < 1010);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 798);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
   const currentChat =
     chatRooms?.find((room) => currentChatId === room._id) || null;
   const prevRoomId = useRef(); //seems to be for debugging purposes
@@ -426,6 +427,8 @@ function ChatRoomProvider({ children }) {
         loadChatRooms,
         sendMessage,
         changeName,
+        sidebarIsOpen,
+        setSidebarIsOpen,
       }}
     >
       {children}

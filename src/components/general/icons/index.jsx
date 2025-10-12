@@ -16,3 +16,5 @@ export { default as LockIcon } from "./LockIcon.jsx";
 export { default as LinkedInIcon } from "./LinkedInIcon.jsx";
 export { default as GithubIcon } from "./GithubIcon.jsx";
 export { default as HomeIcon } from "./HomeIcon.jsx";
+export { default as MenuIconHorizontal } from "./MenuIconHorizontal.jsx";
+export { default as CloseIcon } from "./CloseIcon.jsx";

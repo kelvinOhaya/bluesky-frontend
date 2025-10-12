@@ -5,15 +5,17 @@
   width: 100%;
   min-height: 60px;
   height: 60px;
-  padding-left: 10px;
-  padding-top: calc(10px + env(safe-area-inset-top));
-  margin-top: calc(-1 * env(safe-area-inset-top));
-  background: var(--primary);
+  padding: 10px;
+  background: var(--dark-primary);
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 10px;
   color: white;
 }
-
+/* .container * {
+  border: 1px solid green;
+} */
 .option {
   padding: 10px;
 }
@@ -21,20 +23,50 @@
 /* UserLabel Styles */
 .userLabel {
   /* border: 1px solid magenta; */
-  flex: 1;
-  min-width: 0; /* Allows flex item to shrink below its content size */
+
+  min-width: 0; /* allow flex to shrink */
+  width: fit-content;
   overflow: hidden;
   height: fit-content;
-  padding: 5px 5px 5px 0px;
-  font-size: 2rem;
-  font-weight: medium;
+  margin-right: auto;
+  padding: 5px;
+  font-size: 1.2rem;
+  font-weight: 500;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start; /* Align to left instead of center */
+  align-items: center;
+  gap: 6px;
+  /* Align to left instead of center */
 }
-.userLabel p {
-  width: fit-content !important;
+
+.overrideUserLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: auto;
+  overflow: hidden;
+
+  /* background-color: green !important; */
+}
+
+.overrideUserLabel img {
+  height: 2rem !important;
+  width: 2rem !important;
+  object-fit: cover;
+  min-width: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.overrideUserLabel p {
+  font-size: 1.6rem;
+  width: 100% !important;
+  min-width: 0;
+  margin-left: 15px;
+  overflow-x: hidden;
   text-overflow: ellipsis !important;
+  white-space: nowrap;
 }
 
 .joinCode {
@@ -95,4 +127,17 @@
   border-radius: 7px;
   white-space: nowrap;
   margin-right: 10px;
+}
+
+/* Wrapper for grouping dropdown icons */
+.dropdownGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 600px) {
+  .dropdownGroup {
+    gap: 6px;
+  }
 }
