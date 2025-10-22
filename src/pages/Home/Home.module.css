@@ -19,7 +19,6 @@
   /* Prevent any overflow issues */
   overflow: hidden;
 
-  padding-bottom: constant(safe-area-inset-bottom); /* For older iOS */
   /* Force fullscreen on mobile Safari */
 }
 
