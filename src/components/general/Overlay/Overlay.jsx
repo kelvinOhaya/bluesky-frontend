@@ -1,7 +1,13 @@
 import styles from "./Overlay.module.css";
 import { AnimatePresence, motion } from "framer-motion";
 
-function Overlay({ isActive, setIsActive, setSettingsIsOpened }) {
+function Overlay({
+  settingsIsOpened,
+  setSettingsIsOpened,
+  groupOptionsIsOpened,
+  setGroupOptionsIsOpened,
+}) {
+  const isActive = settingsIsOpened === true || groupOptionsIsOpened === true;
   return (
     <AnimatePresence>
       {isActive && (
@@ -15,7 +21,13 @@ function Overlay({ isActive, setIsActive, setSettingsIsOpened }) {
           }}
           exit={{ opacity: 0, transition: { duration: "0.7" } }}
           transition={{ duration: "0.3" }}
-          onClick={() => setSettingsIsOpened(false)}
+          onClick={() => {
+            if (groupOptionsIsOpened) {
+              setGroupOptionsIsOpened(false);
+            } else {
+              setSettingsIsOpened(false);
+            }
+          }}
         ></motion.button>
       )}
     </AnimatePresence>

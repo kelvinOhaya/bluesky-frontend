@@ -21,6 +21,12 @@
   max-width: 300px;
 }
 
+@media (max-width: 500px) {
+  .open {
+    max-width: 100%;
+  }
+}
+
 .button {
   position: absolute;
   top: 15px;

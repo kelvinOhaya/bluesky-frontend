@@ -64,7 +64,7 @@ function Display({ className }) {
           );
         })}
       </div>
-      {!isWelcomePage && <TextBar />}
+      {!isWelcomePage && currentChatId && <TextBar />}
     </div>
   );
 }

@@ -5,7 +5,7 @@
   flex-direction: column;
   display: flex;
   align-items: center;
-  width: fit-content;
+  width: 100%;
   height: fit-content;
   gap: 5px;
   background: var(--dark-primary);
@@ -20,6 +20,7 @@
 }
 
 .container form {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -29,6 +30,7 @@
   background: var(--primary);
   border: 1px solid rgb(0, 49, 245);
   color: white;
+  flex: 5;
   padding: 5px 10px;
   font-size: 0.9rem;
   border-radius: 5px;
@@ -53,7 +55,6 @@
   border: none;
   border-radius: 5px;
   background: var(--primary);
-  width: 45%;
   color: white;
   display: flex;
   justify-content: center;
@@ -68,7 +69,7 @@
 
 .container label {
   text-align: center;
-
+  width: 100%;
   background-color: var(--primary);
   padding: 15px 0;
 }
@@ -81,6 +82,6 @@
 }
 
 .container p {
-  width: 200px;
+  width: 100%;
   /* border: 1px solid yellow; */
 }

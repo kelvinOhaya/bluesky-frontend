@@ -25,20 +25,12 @@
   gap: 20px;
 }
 
-.buttonContainer button:first-child {
+.buttonContainer button:last-child {
   background-color: red;
 }
-.buttonContainer button:first-child:hover {
+.buttonContainer button:last-child:hover {
   background-color: white;
   color: red;
-}
-
-.buttonContainer button:last-child {
-  background-color: green;
-}
-.buttonContainer button:last-child:hover {
-  color: green;
-  background: white;
 }
 
 .buttonContainer button {

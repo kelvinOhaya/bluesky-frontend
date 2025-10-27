@@ -204,8 +204,10 @@ function Header({ className }) {
         )}
 
         <Overlay
-          isActive={settingsIsOpened === true || groupOptionsIsOpened === true}
+          settingsIsOpened={settingsIsOpened}
           setSettingsIsOpened={setSettingsIsOpened}
+          groupOptionsIsOpened={groupOptionsIsOpened}
+          setGroupOptionsIsOpened={setGroupOptionsIsOpened}
         />
       </div>
     </div>

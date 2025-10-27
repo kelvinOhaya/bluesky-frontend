@@ -1,11 +1,9 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import styles from "./Option.module.css";
 import DropdownContext from "../Dropdown/DropdownContext";
-import { AnimatePresence, motion } from "framer-motion";
-import { ChangeProfilePicture } from "../dropdownOptions";
 
 const Option = ({ icon: Icon, label, panel }) => {
-  const { navbarIsOpened, openPanel, activePanel, setActivePanel, closePanel } =
+  const { navbarIsOpened, openPanel, activePanel } =
     useContext(DropdownContext);
   return (
     <>
@@ -23,15 +21,7 @@ const Option = ({ icon: Icon, label, panel }) => {
         <p>{label}</p>
       </button>
       {activePanel && navbarIsOpened && (
-        <div
-          initial={{ maxWidth: 0 }}
-          animate={{ maxWidth: 900 }}
-          exit={{ maxWidth: 0 }}
-          transition={{ duration: 0.3 }}
-          className={styles.featureContainer}
-        >
-          {activePanel}
-        </div>
+        <div className={styles.featureContainer}>{activePanel}</div>
       )}
     </>
   );
