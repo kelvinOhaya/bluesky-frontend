@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./Header.module.css";
 
 // General UI components
@@ -14,7 +14,6 @@ import {
   SearchIcon,
   PencilIcon,
   ProfileIcon,
-  ChevronIcon,
   SettingsIcon,
   ChatRoomIcon,
 } from "../../../general/icons";
@@ -34,56 +33,55 @@ import {
 import useChatRoom from "../../../../contexts/chatRoom/useChatRoom";
 import useAuth from "../../../../contexts/auth/useAuth";
 import MenuIconHorizontal from "../../../general/icons/MenuIconHorizontal";
+import MobileFacts from "./dropdownOptions/MobileFacts/MobileFacts";
 
 function Header({ className }) {
   const { user } = useAuth();
-  const {
-    currentChat,
-    currentChatId,
-    isTablet,
-    windowWidth,
-    sidebarIsOpen,
-    setSidebarIsOpen,
-  } = useChatRoom();
-  const [isActive, setIsActive] = useState({
-    settings: false,
-    groupOptions: false,
-    mobileFacts: false,
-  });
-  const [dropdownFeatures, setDropdownFeatures] = useState({
-    createGroupChat: false,
-    roomSearch: false,
-    userSearch: false,
-    logoutConfirmation: false,
-    changeName: false,
-    leaveRoom: false,
-    changeProfilePicture: false,
-    changeGroupProfilePicture: false,
-  });
+  const { currentChat, currentChatId, setSidebarIsOpen } = useChatRoom();
+  const settingsOptions = [
+    {
+      icon: PencilIcon,
+      label: "Change Profile Picture",
+      panel: <ChangeProfilePicture />,
+    },
+    {
+      icon: PlusIcon,
+      label: "Create Group Chat",
+      panel: <NewGroupForm />,
+    },
+    {
+      icon: ProfileIcon,
+      label: "Find User",
+      panel: <FindUser />,
+    },
+    {
+      icon: SearchIcon,
+      label: "Join A Room",
+      panel: <JoinRoom />,
+    },
+    {
+      icon: LeaveIcon,
+      label: "Logout",
+      panel: <LogoutConfirmation />,
+    },
+  ];
 
-  const selectFeature = (type) => {
-    setDropdownFeatures((prevFeatures) => ({
-      ...prevFeatures,
-      [type]: true,
-      ...Object.keys(prevFeatures)
-        .filter((key) => key !== type)
-        .reduce((acc, key) => ({ ...acc, [key]: false }), {}),
-    }));
-  };
-
-  const [activeFeature, setActiveFeature] = useState(null);
-
-  useEffect(() => {
-    for (const key of Object.keys(dropdownFeatures)) {
-      if (dropdownFeatures[key]) {
-        setActiveFeature({ key: key, value: dropdownFeatures[key] });
-      } else setActiveFeature(null);
-    }
-
-    if (Object.values(dropdownFeatures).some((value) => value)) {
-      setIsActive(false);
-    }
-  }, [dropdownFeatures]);
+  const groupOptions = [
+    { icon: SettingsIcon, label: "Configs", panel: <MobileFacts /> },
+    {
+      icon: PencilIcon,
+      label: "Edit Group Profile",
+      panel: <ChangeGroupProfilePicture />,
+    },
+    { icon: PlusIcon, label: "Change Group Name", panel: <ChangeName /> },
+    {
+      icon: LeaveIcon,
+      label: currentChat?.isDm ? "Leave Chat" : "Leave Group",
+      panel: <LeaveChatRoom />,
+    },
+  ];
+  const [settingsIsOpened, setSettingsIsOpened] = useState(false);
+  const [groupOptionsIsOpened, setGroupOptionsIsOpened] = useState(false);
 
   return (
     <div className={className}>
@@ -127,186 +125,87 @@ function Header({ className }) {
                   : currentChat.profilePicture?.url || null
               }
             />
-            {!isTablet && (
-              <>
-                <p className={styles.memberCount}>
-                  Members: {currentChat.memberCount}
-                </p>
 
-                {!currentChat.isDm && (
-                  <span className={styles.joinCode}>
-                    Join Code: {currentChat?.joinCode || "999999"}
-                  </span>
-                )}
-              </>
-            )}
             <div className={styles.dropdownGroup}>
-              {isTablet && (
-                <Dropdown
-                  isActive={isActive.mobileFacts}
-                  type={"mobileFacts"}
-                  setIsActive={setIsActive}
-                  icon={
-                    <ChevronIcon
-                      className={styles.mobileDropdownIcon}
-                      isActive={isActive.mobileFacts}
-                      direction={"down"}
-                      size={30}
-                    />
-                  }
-                >
-                  <Option
-                    className={styles.option}
-                    label={`Members: ${currentChat?.memberCount}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                    }}
-                  />
-                  <Option
-                    className={styles.option}
-                    label={`Join Code: ${currentChat?.joinCode || "999999"}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                    }}
-                  />
-                </Dropdown>
-              )}
-
-              <Dropdown
-                isActive={isActive.groupOptions}
-                type={"groupOptions"}
-                setIsActive={setIsActive}
-                icon={
-                  <ChatRoomIcon
-                    isActive={isActive}
-                    className={styles.iconWrapper}
-                    size={34}
-                  />
-                }
+              {/* Group Settings Dropdown */}
+              <button
+                className={styles.groupSettingsButton}
+                onClick={() => setGroupOptionsIsOpened(true)}
               >
-                {currentChat.isDm === false && (
-                  <>
-                    <Option
-                      className={styles.option}
-                      icon={PencilIcon}
-                      label={"Change Group Picture"}
-                      onClick={() => selectFeature("changeGroupProfilePicture")}
-                    />
-                    <Option
-                      className={styles.option}
-                      icon={PlusIcon}
-                      label={"Change Group Name"}
-                      onClick={() => selectFeature("changeName")}
-                    />
-                  </>
-                )}
-                <Option
-                  className={styles.option}
-                  icon={LeaveIcon}
-                  label={currentChat.isDm ? "Leave Chat" : "Leave Group"}
-                  onClick={() => selectFeature("leaveChatRoom")}
-                />
+                <ChatRoomIcon size={34} />
+              </button>
+              <Dropdown
+                navbarIsOpened={groupOptionsIsOpened}
+                setNavbarIsOpened={setGroupOptionsIsOpened}
+                title={"Group Settings"}
+              >
+                {/* If the label is "configs", we don't want to show the user that if the chat is a dm. Other than that, it is fine */}
+                {groupOptions.map((option, index) => {
+                  if (option.label === "Configs") {
+                    return currentChat.isDm ? (
+                      <Option
+                        key={index}
+                        className={styles.option}
+                        label={option.label}
+                        icon={option.icon}
+                        panel={option.panel}
+                      />
+                    ) : (
+                      <Option
+                        key={index}
+                        className={styles.option}
+                        label={option.label}
+                        icon={option.icon}
+                        panel={option.panel}
+                      />
+                    );
+                  } else {
+                    return (
+                      <Option
+                        key={index}
+                        className={styles.option}
+                        label={option.label}
+                        icon={option.icon}
+                        panel={option.panel}
+                      />
+                    );
+                  }
+                })}
               </Dropdown>
 
+              {/* Settings Icon and Navbar*/}
+              <button
+                className={styles.settingsButton}
+                onClick={() => setSettingsIsOpened(true)}
+              >
+                <SettingsIcon className={styles.iconWrapper} size={34} />
+              </button>
               <Dropdown
-                isActive={isActive.settings}
-                setIsActive={setIsActive}
-                type={"settings"}
-                icon={
-                  <SettingsIcon
-                    isActive={isActive}
-                    className={styles.iconWrapper}
-                    size={34}
-                  />
-                }
+                navbarIsOpened={settingsIsOpened}
+                setNavbarIsOpened={setSettingsIsOpened}
+                title={"Settings"}
               >
                 <span className={styles.personalJoinCode}>
                   Personal Join Code: {user.joinCode}
                 </span>
-                <Option
-                  className={styles.option}
-                  icon={PencilIcon}
-                  label={"Change Profile Picture"}
-                  condition={dropdownFeatures.changeProfilePicture}
-                  onClick={() => selectFeature("changeProfilePicture")}
-                />
-                <Option
-                  className={styles.option}
-                  icon={PlusIcon}
-                  label={"Create Group Chat"}
-                  condition={dropdownFeatures.createGroupChat}
-                  onClick={() => selectFeature("createGroupChat")}
-                />
-                <Option
-                  className={styles.option}
-                  icon={ProfileIcon}
-                  onClick={() => selectFeature("userSearch")}
-                  label={"Find Other Users"}
-                />
-                <Option
-                  className={styles.option}
-                  icon={SearchIcon}
-                  onClick={() => selectFeature("roomSearch")}
-                  label={"Find Group Chats"}
-                />
 
-                <Option
-                  className={styles.option}
-                  icon={LeaveIcon}
-                  label={"Logout"}
-                  onClick={() => selectFeature("logoutConfirmation")}
-                />
+                {settingsOptions.map((option, index) => (
+                  <Option
+                    key={index}
+                    className={styles.option}
+                    icon={option.icon}
+                    label={option.label}
+                    panel={option.panel}
+                  />
+                ))}
               </Dropdown>
             </div>
           </>
         )}
 
-        {/* Put the dropdown features here */}
-        <NewGroupForm
-          dropdownFeatures={dropdownFeatures}
-          setDropdownFeatures={setDropdownFeatures}
-        />
-        <LeaveChatRoom
-          dropdownFeatures={dropdownFeatures}
-          setDropdownFeatures={setDropdownFeatures}
-        />
-        <ChangeProfilePicture
-          dropdownFeatures={dropdownFeatures}
-          setDropdownFeatures={setDropdownFeatures}
-        />
-        <LogoutConfirmation
-          dropdownFeatures={dropdownFeatures}
-          setDropdownFeatures={setDropdownFeatures}
-        />
-        <JoinRoom
-          dropdownFeatures={dropdownFeatures}
-          setDropdownFeatures={setDropdownFeatures}
-        />
-        <FindUser
-          dropdownFeatures={dropdownFeatures}
-          setDropdownFeatures={setDropdownFeatures}
-        />
-        <ChangeName
-          dropdownFeatures={dropdownFeatures}
-          setDropdownFeatures={setDropdownFeatures}
-        />
-        <ChangeGroupProfilePicture
-          dropdownFeatures={dropdownFeatures}
-          setDropdownFeatures={setDropdownFeatures}
-        />
         <Overlay
-          dropdownFeatures={dropdownFeatures}
-          getActiveFeature={() =>
-            dropdownFeatures.createGroupChat ||
-            dropdownFeatures.roomSearch ||
-            dropdownFeatures.userSearch ||
-            dropdownFeatures.logoutConfirmation ||
-            dropdownFeatures.changeName ||
-            dropdownFeatures.changeProfilePicture ||
-            dropdownFeatures.changeGroupProfilePicture ||
-            dropdownFeatures.leaveChatRoom
-          }
-          setDropdownFeatures={setDropdownFeatures}
+          isActive={settingsIsOpened === true || groupOptionsIsOpened === true}
+          setSettingsIsOpened={setSettingsIsOpened}
         />
       </div>
     </div>

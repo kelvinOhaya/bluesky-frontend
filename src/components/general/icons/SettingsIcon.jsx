@@ -1,16 +1,19 @@
 import { motion } from "framer-motion";
-const SettingsIcon = ({
-  size = 24,
-  color = "currentColor",
-  isActive,
-  className,
-}) => {
+import { useState } from "react";
+
+const SettingsIcon = ({ size = 24, color = "currentColor", className }) => {
+  const [animateTrigger, setAnimateTrigger] = useState(false);
+
   return (
-    <div className={className}>
+    <div
+      className={className}
+      onMouseEnter={() => setAnimateTrigger(true)}
+      onMouseLeave={() => setAnimateTrigger(false)}
+    >
       <motion.svg
         width={size}
         height={size}
-        animate={{ rotate: isActive.settings ? 90 : 0 }}
+        animate={{ rotate: animateTrigger ? 90 : 0 }}
         viewBox="0 0 24 24"
         fill={color}
         xmlns="http://www.w3.org/2000/svg"

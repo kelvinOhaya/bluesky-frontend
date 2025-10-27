@@ -1,45 +1,36 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import SettingsIcon from "../../../../general/icons/SettingsIcon";
+import { useState, createContext } from "react";
 import styles from "./Dropdown.module.css";
-import useAuth from "../../../../../contexts/auth/useAuth";
+import DropdownContext from "./DropdownContext";
+import { CloseIcon } from "../../../../general/icons";
 
-const initial = {
-  maxHeight: "0px",
-  paddingBottom: "0px",
-  paddingTop: "0px",
-};
-
-const animate = {
-  maxHeight: "200px",
-  paddingBottom: "10px",
-  paddingTop: "10px",
-};
-
-function Dropdown({ isActive, setIsActive, icon, type, children }) {
-  const { user } = useAuth();
+function Dropdown({ title, navbarIsOpened, setNavbarIsOpened, children }) {
+  const [activePanel, setActivePanel] = useState(null);
+  const openPanel = (panel) => setActivePanel(panel);
+  const closePanel = () => setActivePanel(null);
   return (
-    <div
-      onClick={() => setIsActive((prev) => ({ ...prev, [type]: !prev[type] }))}
-      className={styles.container}
-    >
-      {icon}
-      <AnimatePresence>
-        {isActive && (
-          <>
-            <motion.nav
-              initial={initial}
-              animate={animate}
-              exit={initial}
-              transition={{ duration: "0.4", ease: "easeOut" }}
-              className={styles.navbarContent}
-            >
-              {children}
-            </motion.nav>
-          </>
-        )}
-      </AnimatePresence>
-    </div>
+    <nav className={`${styles.container} ${navbarIsOpened ? styles.open : ""}`}>
+      <button
+        className={styles.button}
+        onClick={() => setNavbarIsOpened(false)}
+      >
+        <CloseIcon className={styles.closeIcon} size={25} />
+      </button>
+      <div className={styles.navbarContent}>
+        <p className={styles.settingsTitle}>{title}</p>
+        <DropdownContext.Provider
+          value={{
+            navbarIsOpened,
+            setNavbarIsOpened,
+            openPanel,
+            activePanel,
+            setActivePanel,
+            closePanel,
+          }}
+        >
+          {children}
+        </DropdownContext.Provider>
+      </div>
+    </nav>
   );
 }
 

@@ -1,19 +1,22 @@
 @import url(../../../../../../styles/variables.css);
-
+/* USE FOR ALL FORMS FOR NOW */
 .container {
-  position: fixed;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  position: absolute;
+  flex-direction: column;
   display: flex;
+  align-items: center;
   width: fit-content;
-  padding: 10px;
   height: fit-content;
   gap: 5px;
   background: var(--dark-primary);
-  display: flex;
   text-align: center;
   border-radius: 15px;
   z-index: 4;
+}
+
+.container button {
+  padding: 0;
+  border: none;
 }
 
 .container form {
@@ -23,13 +26,20 @@
 }
 
 .container input {
-  background: transparent;
-  outline: white;
-  border: 1px solid white;
+  background: var(--primary);
+  border: 1px solid rgb(0, 49, 245);
   color: white;
   padding: 5px 10px;
   font-size: 0.9rem;
   border-radius: 5px;
+}
+
+.container input::placeholder {
+  color: rgb(210, 210, 210, 0.7);
+}
+
+.container:focus {
+  outline: rgb(0, 49, 245);
 }
 
 .container span {
@@ -41,18 +51,36 @@
 .container button {
   padding: 10px;
   border: none;
-  border-radius: 15px;
+  border-radius: 5px;
   background: var(--primary);
   width: 45%;
   color: white;
-  transition: filter 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .container button:hover {
   cursor: pointer;
-  filter: brightness(0.6);
+  background-color: white;
+  color: var(--dark-primary);
 }
 
 .container label {
   text-align: center;
+
+  background-color: var(--primary);
+  padding: 15px 0;
+}
+
+.inputAndButton {
+  padding: 0 10px;
+  height: 30px;
+  display: flex;
+  gap: 15px;
+}
+
+.container p {
+  width: 200px;
+  /* border: 1px solid yellow; */
 }

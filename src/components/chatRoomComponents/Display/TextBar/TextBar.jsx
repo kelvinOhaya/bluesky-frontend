@@ -32,7 +32,7 @@ function TextBar({ className }) {
             type="submit"
             className={styles.sendButton}
             onMouseEnter={() => setIsHovering(true)}
-            onMpouseLeave={() => setIsHovering(false)}
+            onMouseLeave={() => setIsHovering(false)}
           >
             <SendIcon
               className={styles.sendIcon}

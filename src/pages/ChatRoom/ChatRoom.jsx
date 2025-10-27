@@ -12,18 +12,13 @@ import { useLocation } from "react-router-dom";
 function ChatRoom() {
   const {
     loadChatRooms,
-    currentChat,
-    isMobile,
-    isTablet,
-    windowWidth,
+
     sidebarIsOpen,
     setSidebarIsOpen,
   } = useChatRoom();
-  const { isLoading, setIsLoading, user, accessToken, fetchUser } = useAuth();
-
+  const { isLoading, user, accessToken } = useAuth();
   const [activeGroupChat, setActiveGroupChat] = useState(0);
   const { socket } = useSocket();
-  const controls = useAnimation();
   const location = useLocation();
 
   useEffect(() => {
@@ -59,19 +54,6 @@ function ChatRoom() {
             setSidebarIsOpen={setSidebarIsOpen}
           />
         </nav>
-        <AnimatePresence>
-          {sidebarIsOpen && (
-            <motion.button
-              type="button"
-              className={styles.navOverlay}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              onClick={() => setSidebarIsOpen(false)}
-            ></motion.button>
-          )}
-        </AnimatePresence>
         <Display
           className={`${styles.display} ${sidebarIsOpen ? styles.navOpen : ""}`}
         />

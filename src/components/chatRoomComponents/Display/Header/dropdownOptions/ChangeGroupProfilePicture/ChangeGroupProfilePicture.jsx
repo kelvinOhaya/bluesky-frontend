@@ -1,18 +1,18 @@
 import { useState, useCallback, useRef } from "react";
 import styles from "../ChangeProfilePicture/ChangeProfilePicture.module.css";
-import { motion, AnimatePresence } from "framer-motion";
-import { PlusIcon } from "../../../../../general/icons";
-// import useAuth from "../../../../../../contexts/auth/useAuth";
+import { PlusIcon, PencilIcon } from "../../../../../general/icons";
 import useChatRoom from "../../../../../../contexts/chatRoom/useChatRoom";
 import { useDropzone } from "react-dropzone";
 import api from "../../../../../../utils/api";
-import useSocket from "../../../../../../contexts/socket/useSocket";
+import GoBack from "../GoBack/GoBack";
+import { useContext } from "react";
+import DropdownContext from "../../Dropdown/DropdownContext";
 
-function ChangeGroupProfilePicture({ dropdownFeatures, setDropdownFeatures }) {
-  // const { user, setUser } = useAuth();
+function ChangeGroupProfilePicture() {
   const { currentChat } = useChatRoom();
-  const { socket } = useSocket();
+  const { closePanel } = useContext(DropdownContext);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuccessful, setIsSuccessful] = useState(false);
   const fileRef = useRef(null);
   const [preview, setPreview] = useState(null);
   const onDrop = useCallback((acceptedFiles) => {
@@ -32,13 +32,9 @@ function ChangeGroupProfilePicture({ dropdownFeatures, setDropdownFeatures }) {
     formData.append("image", preview[0]);
     formData.append("roomId", currentChat._id);
     try {
-      const { data } = await api.post(
-        "/upload/group-profile-picture",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      await api.post("/upload/group-profile-picture", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
     } catch (error) {
       if (error && error.response && error.response.data) {
         // console.log(
@@ -48,15 +44,12 @@ function ChangeGroupProfilePicture({ dropdownFeatures, setDropdownFeatures }) {
       }
     } finally {
       setIsLoading(false);
-      setDropdownFeatures({
-        ...dropdownFeatures,
-        changeGroupProfilePicture: false,
-      });
+      closePanel();
       setPreview(null);
     }
   };
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: {
       "image/jpeg": [".jpeg", ".jpg"],
@@ -67,46 +60,40 @@ function ChangeGroupProfilePicture({ dropdownFeatures, setDropdownFeatures }) {
   });
 
   return (
-    <AnimatePresence>
-      {dropdownFeatures.changeGroupProfilePicture && (
-        <motion.form
-          className={styles.container}
-          initial={{ left: "-400px" }}
-          animate={{ left: "50%" }}
-          exit={{ left: " 105%" }}
-          transition={{ duration: "0.3" }}
-          onSubmit={handleSubmit}
-        >
-          <h5 style={{ paddingBottom: "10px" }}>Enter Profile Picture Here</h5>
+    <div className={styles.container}>
+      <GoBack onClick={() => closePanel()} />
+      <p className={styles.p}>Edit Group Profile</p>
+      <form onSubmit={handleSubmit}>
+        <div className={styles.content} {...getRootProps()}>
+          <input
+            ref={fileRef}
+            {...getInputProps()}
+            type="file"
+            id="choose-file"
+          />
 
-          <div {...getRootProps()}>
-            <input
-              ref={fileRef}
-              {...getInputProps()}
-              type="file"
-              id="choose-file"
-            />
-            {
-              <span>
-                {preview != null ? (
-                  preview.map((file, index) => (
-                    <img key={index} src={file.preview} />
-                  ))
-                ) : (
-                  <PlusIcon
-                    size={120}
-                    className={styles.plusIcon}
-                    type="file"
-                  />
-                )}
-              </span>
-            }
+          <div className={styles.inputStyling}>
+            {preview != null ? (
+              preview.map((file, index) => (
+                <img key={index} src={file.preview} />
+              ))
+            ) : (
+              <PlusIcon size={120} className={styles.plusIcon} type="file" />
+            )}
+            <span className={styles.pencilIcon}>
+              <PencilIcon />
+            </span>
           </div>
-          <button type="submit">Confirm</button>
-          {isLoading && <p>Loading...</p>}
-        </motion.form>
-      )}
-    </AnimatePresence>
+        </div>
+        <button className={styles.confirm} type="submit">
+          Confirm
+        </button>
+        {isLoading && <p>Loading...</p>}
+        {isSuccessful && (
+          <p style={{ color: "green" }}>Successfully Uploaded!</p>
+        )}
+      </form>
+    </div>
   );
 }
 

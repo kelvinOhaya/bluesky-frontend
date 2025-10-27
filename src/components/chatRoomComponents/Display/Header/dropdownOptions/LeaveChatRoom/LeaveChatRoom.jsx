@@ -1,47 +1,32 @@
+import { useContext } from "react";
 import useChatRoom from "../../../../../../contexts/chatRoom/useChatRoom";
 import styles from "./LeaveChatRoom.module.css";
-import { motion, AnimatePresence } from "framer-motion";
+import DropdownContext from "../../Dropdown/DropdownContext";
 
-function LeaveChatRoom({ dropdownFeatures, setDropdownFeatures }) {
+function LeaveChatRoom() {
   const { leaveChatRoom, currentChat } = useChatRoom();
+  const { closePanel } = useContext(DropdownContext);
 
   const handleLeaveRoom = async () => {
     await leaveChatRoom();
-    setDropdownFeatures({ dropdownFeatures, leaveRoom: false });
   };
 
   return (
-    <AnimatePresence>
-      {dropdownFeatures.leaveChatRoom && (
-        <motion.div
-          initial={{ left: "-100%" }}
-          animate={{ left: "50%" }}
-          exit={{ left: "130%" }}
-          transition={{ duration: "0.3" }}
-          className={styles.container}
-        >
-          <p style={{ textAlign: "center" }}>
-            {currentChat.isDm
-              ? "Are you sure you want to leave this chat?"
-              : "Are you sure you want to leave?"}
-          </p>
-          <p style={{ textAlign: "center" }}>
-            {currentChat.memberCount === 1 &&
-              "You are the last member. All messages will be lost forever!"}
-          </p>
-          <div className={styles.buttonContainer}>
-            <button
-              onClick={() =>
-                setDropdownFeatures({ dropdownFeatures, leaveRoom: false })
-              }
-            >
-              No
-            </button>
-            <button onClick={handleLeaveRoom}>Yes</button>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <div className={styles.container}>
+      <p style={{ textAlign: "center" }}>
+        {currentChat.isDm
+          ? "Are you sure you want to leave this chat?"
+          : "Are you sure you want to leave?"}
+      </p>
+      <div className={styles.buttonContainer}>
+        <button onClick={() => closePanel()}>No</button>
+        <button onClick={handleLeaveRoom}>Yes</button>
+      </div>
+      <p style={{ color: "red", fontSize: "0.8rem", textAlign: "center" }}>
+        {currentChat.memberCount === 1 &&
+          "*You are the last member. All messages will be lost forever!"}
+      </p>
+    </div>
   );
 }
 

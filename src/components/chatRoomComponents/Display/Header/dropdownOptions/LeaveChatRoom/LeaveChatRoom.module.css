@@ -3,12 +3,10 @@
 .container {
   background: var(--dark-primary);
   padding: 10px;
-  position: fixed;
-  width: 23%;
+  position: absolute;
+  width: 100%;
   height: fit-content;
   border-radius: 15px;
-  top: 50%;
-  transform: translatey(-50%);
   z-index: 9999;
   display: flex;
   flex-direction: column;
@@ -16,7 +14,8 @@
 }
 
 .container p {
-  font-size: 1rem;
+  width: 100%;
+  font-size: 0.9rem;
 }
 
 .buttonContainer {
@@ -24,6 +23,22 @@
   flex-direction: row;
   height: 30px;
   gap: 20px;
+}
+
+.buttonContainer button:first-child {
+  background-color: red;
+}
+.buttonContainer button:first-child:hover {
+  background-color: white;
+  color: red;
+}
+
+.buttonContainer button:last-child {
+  background-color: green;
+}
+.buttonContainer button:last-child:hover {
+  color: green;
+  background: white;
 }
 
 .buttonContainer button {
@@ -38,6 +53,7 @@
 }
 
 .buttonContainer button:hover {
+  cursor: pointer;
   background: white;
   color: var(--primary);
 }

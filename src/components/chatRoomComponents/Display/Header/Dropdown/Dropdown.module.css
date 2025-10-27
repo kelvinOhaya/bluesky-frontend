@@ -2,33 +2,61 @@
 
 /* Container Styles */
 .container {
-  position: relative;
+  position: absolute;
+  max-width: 0;
+  width: 7000px;
+  background-color: var(--dark-primary);
+  top: 0;
+  right: 0;
   display: flex;
-  padding: 0 10px;
-  height: fit-content;
-  cursor: pointer;
-  margin-left: auto;
+  height: 100vh;
+  overflow: hidden;
   z-index: 99;
   pointer-events: auto;
+  transition: max-width 0.3s ease;
+  border-left: 1px solid var(--primary);
+}
+
+.open {
+  max-width: 300px;
+}
+
+.button {
+  position: absolute;
+  top: 15px;
+  left: 10px;
+  background: white;
+  color: var(--dark-primary);
+  border-radius: 5px;
+  background-color: none;
+  outline: none;
+  border: none;
+  width: fit-content;
+  height: fit-content;
+  transition: transform 0.2s ease-out;
+}
+
+.button:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+/* Settings Title */
+.settingsTitle {
+  background: var(--dark-primary);
+
+  text-align: center;
+  padding: 15px 0;
+  font-size: 1.5rem;
+  border-bottom: 1px solid var(--primary);
+  /* border: 1px solid yellow; */
+  height: fit-content;
+  width: 100%;
 }
 
 /* Navbar Content Styles */
 .navbarContent {
-  position: absolute;
-  top: 100%;
-  right: 0px;
-  max-height: 0px;
-  white-space: nowrap;
-  width: fit-content;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-  pointer-events: all;
-  background: var(--dark-primary);
-  font-size: 2rem;
   display: flex;
   flex-direction: column;
-  cursor: default;
-  overflow: hidden;
+  width: 100%;
 }

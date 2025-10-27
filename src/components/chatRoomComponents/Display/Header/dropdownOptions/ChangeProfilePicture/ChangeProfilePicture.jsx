@@ -1,18 +1,18 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useContext } from "react";
 import styles from "./ChangeProfilePicture.module.css";
 import { motion, AnimatePresence } from "framer-motion";
-import { PlusIcon } from "../../../../../general/icons";
+import { PencilIcon, PlusIcon } from "../../../../../general/icons";
 import useAuth from "../../../../../../contexts/auth/useAuth";
-import useChatRoom from "../../../../../../contexts/chatRoom/useChatRoom";
 import { useDropzone } from "react-dropzone";
 import api from "../../../../../../utils/api";
-import useSocket from "../../../../../../contexts/socket/useSocket";
+import DropdownContext from "../../Dropdown/DropdownContext";
+import GoBack from "../GoBack/GoBack";
 
-function ChangeProfilePicture({ dropdownFeatures, setDropdownFeatures }) {
+function ChangeProfilePicture() {
   const { user, setUser } = useAuth();
-  const { messages, setMessages, currentChat, setChatRooms } = useChatRoom();
-  const { socket } = useSocket();
-  const { isLoading, setIsLoading } = useState(false);
+  const { closePanel } = useContext(DropdownContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccessful, setIsSuccessful] = useState(false);
   const fileRef = useRef(null);
   const [preview, setPreview] = useState(null);
   const onDrop = useCallback((acceptedFiles) => {
@@ -27,6 +27,7 @@ function ChangeProfilePicture({ dropdownFeatures, setDropdownFeatures }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     if (preview === null) return;
     const formData = new FormData(e.target);
     formData.append("image", preview[0]);
@@ -38,7 +39,9 @@ function ChangeProfilePicture({ dropdownFeatures, setDropdownFeatures }) {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
+      setIsLoading(false);
       setUser((prev) => ({ ...prev, profilePicture: data.newProfilePicture }));
+      setIsSuccessful(true);
     } catch (error) {
       if (error && error.response && error.response.data) {
         console.log(
@@ -47,15 +50,11 @@ function ChangeProfilePicture({ dropdownFeatures, setDropdownFeatures }) {
         );
       }
     } finally {
-      setDropdownFeatures({
-        ...dropdownFeatures,
-        changeProfilePicture: false,
-      });
       console.log("Currently, the user is: \n", user);
     }
   };
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: {
       "image/jpeg": [".jpeg", ".jpg"],
@@ -66,46 +65,40 @@ function ChangeProfilePicture({ dropdownFeatures, setDropdownFeatures }) {
   });
 
   return (
-    <AnimatePresence>
-      {dropdownFeatures.changeProfilePicture && (
-        <motion.form
-          className={styles.container}
-          initial={{ left: "-400px" }}
-          animate={{ left: "50%" }}
-          exit={{ left: " 105%" }}
-          transition={{ duration: "0.3" }}
-          onSubmit={handleSubmit}
-        >
-          <h5 style={{ paddingBottom: "10px" }}>Enter Profile Picture Here</h5>
+    <div className={styles.container}>
+      <GoBack onClick={() => closePanel()} />
+      <p className={styles.p}>Edit Profile Picture</p>
+      <form onSubmit={handleSubmit}>
+        <div className={styles.content} {...getRootProps()}>
+          <input
+            ref={fileRef}
+            {...getInputProps()}
+            type="file"
+            id="choose-file"
+          />
 
-          <div {...getRootProps()}>
-            <input
-              ref={fileRef}
-              {...getInputProps()}
-              type="file"
-              id="choose-file"
-            />
-            {
-              <span>
-                {preview != null ? (
-                  preview.map((file, index) => (
-                    <img key={index} src={file.preview} />
-                  ))
-                ) : (
-                  <PlusIcon
-                    size={120}
-                    className={styles.plusIcon}
-                    type="file"
-                  />
-                )}
-              </span>
-            }
+          <div className={styles.inputStyling}>
+            {preview != null ? (
+              preview.map((file, index) => (
+                <img key={index} src={file.preview} />
+              ))
+            ) : (
+              <PlusIcon size={120} className={styles.plusIcon} type="file" />
+            )}
+            <span className={styles.pencilIcon}>
+              <PencilIcon />
+            </span>
           </div>
-          <button type="submit">Confirm</button>
-          {isLoading && <p>Loading...</p>}
-        </motion.form>
-      )}
-    </AnimatePresence>
+        </div>
+        <button className={styles.confirm} type="submit">
+          Confirm
+        </button>
+        {isLoading && <p>Loading...</p>}
+        {isSuccessful && (
+          <p style={{ color: "green" }}>Successfully Uploaded!</p>
+        )}
+      </form>
+    </div>
   );
 }
 

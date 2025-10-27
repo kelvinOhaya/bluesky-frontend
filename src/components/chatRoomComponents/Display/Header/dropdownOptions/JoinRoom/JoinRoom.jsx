@@ -1,13 +1,18 @@
-import styles from "./JoinRoom.module.css";
+import styles from "../NewGroupForm/NewGroupForm.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 import useChatRoom from "../../../../../../contexts/chatRoom/useChatRoom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import DropdownContext from "../../Dropdown/DropdownContext";
+import GoBack from "../GoBack/GoBack";
+import { SendIcon } from "../../../../../general/icons";
 
 function JoinRoom({ dropdownFeatures, setDropdownFeatures }) {
   const { verifyJoinCode, joinRoom, checkIfRoomExists } = useChatRoom();
+  const { closePanel } = useContext(DropdownContext);
   const [roomDoesNotExist, setRoomDoesNotExist] = useState(false);
   const [roomAlreadyExists, setRoomAlreadyExists] = useState(false);
-  const [isSearching, setIsSearching] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccessful, setIsSuccessful] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
   const [joinCode, setJoinCode] = useState("");
 
@@ -19,20 +24,20 @@ function JoinRoom({ dropdownFeatures, setDropdownFeatures }) {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    setIsSearching(true);
+    setIsLoading(true);
     setIsEmpty(false);
     setRoomDoesNotExist(false);
     setRoomAlreadyExists(false);
 
     if (joinCode.trim() === "") {
-      setIsSearching(false);
+      setIsLoading(false);
       setIsEmpty(true);
       return;
     }
 
     const roomAlreadyExists = checkIfRoomExists(joinCode);
     if (roomAlreadyExists) {
-      setIsSearching(false);
+      setIsLoading(false);
       setRoomAlreadyExists(true);
       return;
     }
@@ -40,49 +45,57 @@ function JoinRoom({ dropdownFeatures, setDropdownFeatures }) {
     const isValid = await verifyJoinCode(joinCode);
     if (isValid) {
       await joinRoom(joinCode);
-      setIsSearching(false);
-      setDropdownFeatures({ dropdownFeatures, roomSearch: false });
+      setIsLoading(false);
+      closePanel();
     } else {
-      setIsSearching(false);
+      setIsLoading(false);
       setRoomDoesNotExist(true);
     }
   };
   return (
-    <AnimatePresence>
-      {dropdownFeatures.roomSearch && (
-        <motion.div
-          className={styles.container}
-          initial={{ left: "-400px" }}
-          animate={{ left: "50%" }}
-          exit={{ left: " 105%" }}
-          transition={{ duration: "0.3" }}
-        >
-          <form className={styles.formContainer} onSubmit={handleSearch}>
-            <span className={styles.inputErrorContainer}>
-              <input
-                type="text"
-                name="searchBar"
-                placeholder="Type Join Code Here: "
-                value={joinCode}
-                onChange={(e) => setJoinCode(e.target.value)}
-                className={styles.inputField}
-              />
-              {isSearching && <p>Searching...</p>}
-              {roomDoesNotExist && (
-                <p>*A room does not exist with that join code</p>
-              )}
-              {roomAlreadyExists && (
-                <p>*You are already in a room with that joinCode</p>
-              )}
-              {isEmpty && <p>*Please enter a join code</p>}
-            </span>
-            <button type="submit" className={styles.submitBtn}>
-              Search
+    <>
+      <GoBack onClick={() => closePanel()} />
+      <div className={styles.container}>
+        <form onSubmit={handleSearch}>
+          <label>Join A Room</label>
+          <span className={styles.inputAndButton}>
+            <input
+              type="text"
+              value={joinCode}
+              placeholder="Enter the room's join code"
+              onChange={(e) => {
+                setJoinCode(e.target.value);
+                //console.log(groupName);
+              }}
+            />
+            <button type="submit">
+              <SendIcon size={20} />
             </button>
-          </form>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          </span>
+        </form>
+        {isLoading && <p style={{ fontSize: "0.9rem" }}>Creating Chat...</p>}
+        {isSuccessful && (
+          <p style={{ color: "rgba(45, 198, 45, 1)", fontSize: "0.9rem" }}>
+            Successfully Joined!
+          </p>
+        )}
+        {roomAlreadyExists && (
+          <p style={{ color: "red", fontSize: "0.9rem" }}>
+            You are already in a room with this joinCode
+          </p>
+        )}
+        {roomDoesNotExist && (
+          <p style={{ color: "red", fontSize: "0.9rem" }}>
+            No room with the following join code was found
+          </p>
+        )}
+        {isEmpty && (
+          <p style={{ color: "red", fontSize: "0.9rem" }}>
+            Please make sure to fill the field first
+          </p>
+        )}
+      </div>
+    </>
   );
 }
 

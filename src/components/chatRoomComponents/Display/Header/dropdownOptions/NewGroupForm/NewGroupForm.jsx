@@ -1,54 +1,68 @@
 import styles from "./NewGroupForm.module.css";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import useAuth from "../../../../../../contexts/auth/useAuth";
 import useChatRoom from "../../../../../../contexts/chatRoom/useChatRoom";
+import DropdownContext from "../../Dropdown/DropdownContext";
+import { SendIcon } from "../../../../../general/icons";
+import GoBack from "../GoBack/GoBack";
 
-function NewGroupForm({ dropdownFeatures, setDropdownFeatures }) {
+function NewGroupForm() {
   const [groupName, setGroupName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [isSuccessful, setIsSuccessful] = useState(false);
   const { createGroup } = useChatRoom();
-
-  const toggleSearchOff = (e) => {
-    e.preventDefault();
-    setDropdownFeatures({ ...dropdownFeatures, createGroupChat: false });
-    setGroupName("");
-  };
+  const { closePanel } = useContext(DropdownContext);
 
   const handleCreateGroup = async (e) => {
     e.preventDefault();
-    await createGroup(groupName);
+
+    try {
+      setIsLoading(true);
+      await createGroup(groupName);
+      setIsLoading(false);
+      setIsSuccessful(true);
+    } catch {
+      setError(true);
+    }
     setGroupName("");
-    setDropdownFeatures({ ...dropdownFeatures, createGroupChat: false });
   };
 
   return (
-    <AnimatePresence>
-      {dropdownFeatures.createGroupChat && (
-        <motion.div
-          initial={{ left: "-50%" }}
-          animate={{ left: "50%" }}
-          exit={{ left: "150%", transition: { duration: "0.7" } }}
-          transition={{ duration: "0.3" }}
-          className={styles.container}
-        >
-          <form onSubmit={handleCreateGroup}>
-            <label>What will be your group name? </label>
+    <>
+      <GoBack onClick={() => closePanel()} />
+      <div className={styles.container}>
+        <form onSubmit={handleCreateGroup}>
+          <label>Create Group</label>
+          <span className={styles.inputAndButton}>
             <input
               type="text"
               value={groupName}
+              placeholder="Enter Name of New Group"
               onChange={(e) => {
                 setGroupName(e.target.value);
                 //console.log(groupName);
               }}
             />
-            <span>
-              <button onClick={toggleSearchOff}>Cancel</button>
-              <button type="submit">Make Group</button>
-            </span>
-          </form>
-        </motion.div>
-      )}
-    </AnimatePresence>
+            <button type="submit">
+              <SendIcon size={20} />
+            </button>
+          </span>
+        </form>
+        {isLoading && <p style={{ fontSize: "0.9rem" }}>Creating Chat...</p>}
+        {isSuccessful && (
+          <p style={{ color: "rgba(45, 198, 45, 1)", fontSize: "0.9rem" }}>
+            New group chat created!
+          </p>
+        )}
+        {error && (
+          <p style={{ color: "red", fontSize: "0.9rem" }}>
+            Sorry, an error occured
+          </p>
+        )}
+      </div>
+    </>
   );
 }
 

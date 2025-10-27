@@ -53,7 +53,7 @@
   height: 2rem !important;
   width: 2rem !important;
   object-fit: cover;
-  min-width: 0;
+  min-width: 2rem;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -76,6 +76,31 @@
 }
 
 /* Settings Icon Styles */
+.settingsButton {
+  background: var(--dark-primary);
+  color: white;
+  outline: none;
+  border: none;
+}
+
+.settingsButton:hover {
+  cursor: pointer;
+}
+
+/* Group Icon Styles */
+.groupSettingsButton {
+  margin-top: 10px;
+  margin-right: 10px;
+  background: transparent;
+  color: white;
+  outline: none;
+  border: none;
+}
+
+.groupSettingsButton:hover {
+  cursor: pointer;
+}
+
 .iconWrapper {
   /* border: 1px solid yellow; */
   padding-top: auto;
@@ -112,12 +137,12 @@
 .personalJoinCode {
   text-align: center;
   font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   padding: 10px;
-  margin-bottom: 5px;
+  width: 100%;
   background: var(--primary);
-  position: relative;
-  border-radius: 10px;
-  top: 0;
 }
 
 .memberCount {

@@ -8,15 +8,8 @@ import { MenuIconVertical } from "../../general/icons";
 // ChatsTab displays the list of chat rooms the user is a member of, and allows switching between them
 function ChatsTab({ className, setSidebarIsOpen }) {
   // Destructure chat room state and actions from context
-  const {
-    chatRooms,
-    currentChatId,
-    setCurrentChatId,
-    windowWidth,
-    activateChat,
-    messagesCache,
-    isTablet,
-  } = useChatRoom();
+  const { chatRooms, currentChatId, activateChat, messagesCache } =
+    useChatRoom();
 
   return (
     // Main container for the chat tab, receives optional className for layout

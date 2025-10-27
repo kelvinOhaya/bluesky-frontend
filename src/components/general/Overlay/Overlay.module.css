@@ -10,3 +10,7 @@
   background: black;
   z-index: 1;
 }
+
+.overlay:hover {
+  cursor: pointer;
+}

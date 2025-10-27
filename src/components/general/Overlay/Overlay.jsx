@@ -1,11 +1,10 @@
 import styles from "./Overlay.module.css";
 import { AnimatePresence, motion } from "framer-motion";
 
-function Overlay({ dropdownFeatures, setDropdownFeatures, getActiveFeature }) {
-  const activeFeature = getActiveFeature();
+function Overlay({ isActive, setIsActive, setSettingsIsOpened }) {
   return (
     <AnimatePresence>
-      {activeFeature && (
+      {isActive && (
         <motion.button
           className={styles.overlay}
           initial={{ opacity: 0 }}
@@ -16,9 +15,7 @@ function Overlay({ dropdownFeatures, setDropdownFeatures, getActiveFeature }) {
           }}
           exit={{ opacity: 0, transition: { duration: "0.7" } }}
           transition={{ duration: "0.3" }}
-          onClick={() =>
-            setDropdownFeatures({ dropdownFeatures, activeFeature: false })
-          }
+          onClick={() => setSettingsIsOpened(false)}
         ></motion.button>
       )}
     </AnimatePresence>

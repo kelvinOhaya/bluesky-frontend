@@ -1,34 +1,28 @@
-import styles from "./FindUser.module.css";
+import styles from "../NewGroupForm/NewGroupForm.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 import useChatRoom from "../../../../../../contexts/chatRoom/useChatRoom";
-import { useEffect, useState } from "react";
-import useSocket from "../../../../../../contexts/socket/useSocket";
-import useAuth from "../../../../../../contexts/auth/useAuth";
+import { useContext, useState } from "react";
+import DropdownContext from "../../Dropdown/DropdownContext";
+import GoBack from "../GoBack/GoBack";
+import { SendIcon } from "../../../../../general/icons";
 
-function FindUser({ dropdownFeatures, setDropdownFeatures }) {
-  const { verifyJoinCode, findUser, currentChatId, checkIfDmExists } =
-    useChatRoom();
-  const { user } = useAuth();
-  const { socket } = useSocket();
+function FindUser() {
+  const { findUser, checkIfDmExists } = useChatRoom();
+
   const [userDoesNotExist, setUserDoesNotExist] = useState(false);
   const [alreadyInDm, setAlreadyInDm] = useState(false);
-  const [isSearching, setIsSearching] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccessful, setIsSuccessful] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
   const [joinCode, setJoinCode] = useState("");
-
-  useEffect(() => {
-    setIsEmpty(false);
-    setUserDoesNotExist(false);
-    setAlreadyInDm(false);
-    setJoinCode("");
-  }, [dropdownFeatures]);
+  const { closePanel } = useContext(DropdownContext);
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    setIsSearching(true);
+    setIsLoading(true);
 
     if (joinCode.trim() === "") {
-      setIsSearching(false);
+      setIsLoading(false);
       setIsEmpty(true);
       return;
     }
@@ -36,7 +30,7 @@ function FindUser({ dropdownFeatures, setDropdownFeatures }) {
     const dmExists = checkIfDmExists(joinCode);
     // console.log(dmExists);
     if (dmExists) {
-      setIsSearching(false);
+      setIsLoading(false);
       setAlreadyInDm(true);
       return;
     }
@@ -44,48 +38,58 @@ function FindUser({ dropdownFeatures, setDropdownFeatures }) {
     // vFrOqPjN
     try {
       await findUser(joinCode);
-      setDropdownFeatures({ dropdownFeatures, userSearch: false });
+      setIsSuccessful(true);
     } catch (error) {
       setUserDoesNotExist(true);
       console.log("Error trying to find other users: ", error);
     } finally {
-      setIsSearching(false);
+      setIsLoading(false);
     }
   };
   return (
-    <AnimatePresence>
-      {dropdownFeatures.userSearch && (
-        <motion.div
-          className={styles.container}
-          initial={{ left: "-400px" }}
-          animate={{ left: "50%" }}
-          exit={{ left: " 105%" }}
-          transition={{ duration: "0.3" }}
-        >
-          <form className={styles.formContainer} onSubmit={handleSearch}>
-            <span className={styles.inputErrorContainer}>
-              <input
-                type="text"
-                name="searchBar"
-                placeholder="Type the user's join code here"
-                value={joinCode}
-                onChange={(e) => setJoinCode(e.target.value)}
-                className={styles.inputField}
-              />
-              {isSearching && <p>Searching...</p>}
-              {userDoesNotExist && (
-                <p>*A User does not exist with that join code</p>
-              )}
-              {alreadyInDm && <p>*You already have a room with this user</p>}
-              {isEmpty && <p>*Please enter a join code</p>}
-            </span>
-            <button type="submit" className={styles.submitBtn}>
-              Search
+    <>
+      <GoBack onClick={() => closePanel()} />
+      <div className={styles.container}>
+        <form onSubmit={handleSearch}>
+          <label>Find User</label>
+          <span className={styles.inputAndButton}>
+            <input
+              type="text"
+              value={joinCode}
+              placeholder="Enter the user's joinCode"
+              onChange={(e) => {
+                setJoinCode(e.target.value);
+                //console.log(groupName);
+              }}
+            />
+            <button type="submit">
+              <SendIcon size={20} />
             </button>
-          </form>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          </span>
+        </form>
+        {isLoading && <p style={{ fontSize: "0.9rem" }}>Creating Chat...</p>}
+        {isSuccessful && (
+          <p style={{ color: "rgba(45, 198, 45, 1)", fontSize: "0.9rem" }}>
+            Successfully Joined!
+          </p>
+        )}
+        {alreadyInDm && (
+          <p style={{ color: "red", fontSize: "0.9rem" }}>
+            You are alrady in a room with this user
+          </p>
+        )}
+        {userDoesNotExist && (
+          <p style={{ color: "red", fontSize: "0.9rem" }}>
+            This user does not exist
+          </p>
+        )}
+        {isEmpty && (
+          <p style={{ color: "red", fontSize: "0.9rem" }}>
+            Please make sure to fill the field first
+          </p>
+        )}
+      </div>
+    </>
   );
 }
 

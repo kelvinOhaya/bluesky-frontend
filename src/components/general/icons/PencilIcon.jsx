@@ -1,4 +1,4 @@
-const PencilIcon = ({ size = 24, className }) => {
+const PencilIcon = ({ size = 25, className }) => {
   return (
     <div className={className}>
       <svg

@@ -1,11 +1,13 @@
-import styles from "./ChangeName.module.css";
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import styles from "../NewGroupForm/NewGroupForm.module.css";
+import { useContext, useEffect, useState } from "react";
 import useChatRoom from "../../../../../../contexts/chatRoom/useChatRoom";
-import api from "../../../../../../utils/api";
+import DropdownContext from "../../Dropdown/DropdownContext";
+import { SendIcon } from "../../../../../general/icons";
+import GoBack from "../GoBack/GoBack";
 
 function ChangeName({ dropdownFeatures, setDropdownFeatures }) {
-  const { currentChatId, currentChat, changeName } = useChatRoom();
+  const { currentChat, changeName } = useChatRoom();
+  const { closePanel } = useContext(DropdownContext);
   const [newName, setNewName] = useState("");
   const [errors, setErrors] = useState({
     fieldIsEmpty: false,
@@ -34,19 +36,16 @@ function ChangeName({ dropdownFeatures, setDropdownFeatures }) {
     setDropdownFeatures({ ...dropdownFeatures, changeName: false });
   };
   return (
-    <AnimatePresence>
-      {dropdownFeatures.changeName && (
-        <motion.div
-          className={styles.container}
-          initial={{ left: "-400px" }}
-          animate={{ left: "50%" }}
-          exit={{ left: " 105%" }}
-          transition={{ duration: "0.3" }}
-        >
-          <p>Enter new name:</p>
-          <form onSubmit={handleNameChange}>
+    <>
+      <GoBack onClick={() => closePanel()} />
+      <div className={styles.container}>
+        <form onSubmit={handleNameChange}>
+          <label>Change Group Name</label>
+
+          <span className={styles.inputAndButton}>
             <input
               value={newName}
+              placeholder="Enter new name"
               onChange={(e) => setNewName(e.target.value)}
             />
             {errors.fieldIsEmpty && (
@@ -55,25 +54,13 @@ function ChangeName({ dropdownFeatures, setDropdownFeatures }) {
             {errors.nameHasNotChanged && (
               <p className={styles.error}>*This is the same name</p>
             )}
-            <span className={styles.buttonContainer}>
-              <button
-                type="button"
-                onClick={() => {
-                  setDropdownFeatures({
-                    ...dropdownFeatures,
-                    changeName: false,
-                  });
-                  setNewName("");
-                }}
-              >
-                Cancel
-              </button>
-              <button type="submit">Change Name</button>
-            </span>
-          </form>
-        </motion.div>
-      )}
-    </AnimatePresence>
+            <button type="submit">
+              <SendIcon />
+            </button>
+          </span>
+        </form>
+      </div>
+    </>
   );
 }
 
