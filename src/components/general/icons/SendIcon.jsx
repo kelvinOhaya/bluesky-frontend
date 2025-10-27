@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-function SendIcon({ size = 34, color = "currentcolor", className }) {
+function SendIcon({ size = 20, color = "currentcolor", className }) {
   return (
     <div className={className}>
       <svg

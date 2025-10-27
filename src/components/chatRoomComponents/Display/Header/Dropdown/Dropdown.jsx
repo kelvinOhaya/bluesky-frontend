@@ -1,4 +1,4 @@
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 import styles from "./Dropdown.module.css";
 import DropdownContext from "./DropdownContext";
 import { CloseIcon } from "../../../../general/icons";
@@ -7,6 +7,12 @@ function Dropdown({ title, navbarIsOpened, setNavbarIsOpened, children }) {
   const [activePanel, setActivePanel] = useState(null);
   const openPanel = (panel) => setActivePanel(panel);
   const closePanel = () => setActivePanel(null);
+
+  useEffect(() => {
+    if (navbarIsOpened === false) {
+      setActivePanel(null);
+    }
+  }, [navbarIsOpened]);
   return (
     <nav className={`${styles.container} ${navbarIsOpened ? styles.open : ""}`}>
       <button
