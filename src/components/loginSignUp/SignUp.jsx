@@ -4,7 +4,7 @@ import { useState } from "react";
 import useAuth from "../../contexts/auth/useAuth";
 import api from "../../utils/api";
 
-function SignUp({ setMode }) {
+function SignUp({ setMode, rememberMe, setRememberMe }) {
   const navigate = useNavigate();
   const { signUp } = useAuth();
 
@@ -49,7 +49,7 @@ function SignUp({ setMode }) {
       //console.log("Error verifying signup form: ", error);
     }
 
-    const signUpStatus = await signUp({ username, password });
+    const signUpStatus = await signUp({ username, password }, rememberMe);
     console.log(`Status: ${signUpStatus}`);
     if (signUpStatus === 200) {
       const last = "/chatroom";
@@ -106,6 +106,13 @@ function SignUp({ setMode }) {
         </div>
         <span className={styles.submitAndReminder}>
           <button type="submit">Sign Up</button>
+          <span className={styles.rememberMe}>
+            <label htmlFor="remember-me">Remember me</label>
+            <input
+              type="checkbox"
+              onChange={() => setRememberMe((prev) => !prev)}
+            />
+          </span>
           <p>
             Already have an account?{" "}
             <a onClick={() => setMode("login")}>Log in here</a>

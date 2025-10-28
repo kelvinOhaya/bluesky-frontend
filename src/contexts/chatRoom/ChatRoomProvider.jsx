@@ -17,10 +17,12 @@ function ChatRoomProvider({ children }) {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 798);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
+
   const currentChat =
     chatRooms?.find((room) => currentChatId === room._id) || null;
   const prevRoomId = useRef(); //seems to be for debugging purposes
 
+  // Recheck screen width every rerender
   useEffect(() => {
     const handleResize = () => {
       setIsTablet(window.innerWidth < 1010);

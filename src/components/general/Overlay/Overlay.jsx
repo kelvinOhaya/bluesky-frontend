@@ -22,7 +22,7 @@ function Overlay({
           exit={{ opacity: 0, transition: { duration: "0.7" } }}
           transition={{ duration: "0.3" }}
           onClick={() => {
-            if (groupOptionsIsOpened) {
+            if (groupOptionsIsOpened === true) {
               setGroupOptionsIsOpened(false);
             } else {
               setSettingsIsOpened(false);

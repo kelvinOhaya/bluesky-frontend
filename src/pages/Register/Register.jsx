@@ -13,6 +13,8 @@ function Register() {
   console.log(chatRooms);
   const navigate = useNavigate();
   const [mode, setMode] = useState("login");
+  const [rememberMe, setRememberMe] = useState(false);
+
   return (
     <div className={styles.container}>
       <button className={styles.goBack} onClick={() => navigate("/")}>
@@ -20,9 +22,17 @@ function Register() {
       </button>
 
       {mode === "login" ? (
-        <Login setMode={setMode} />
+        <Login
+          setMode={setMode}
+          rememberMe={rememberMe}
+          setRememberMe={setRememberMe}
+        />
       ) : (
-        <SignUp setMode={setMode} />
+        <SignUp
+          setMode={setMode}
+          rememberMe={rememberMe}
+          setRememberMe={setRememberMe}
+        />
       )}
     </div>
   );

@@ -101,6 +101,12 @@
   color: red;
 }
 
+.rememberMe {
+  color: rgb(47, 47, 47);
+  display: flex;
+  gap: 10px;
+}
+
 /* media query for mobile */
 @media (max-width: 840px) {
   /* .container {

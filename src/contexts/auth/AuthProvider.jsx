@@ -28,7 +28,9 @@ const AuthProvider = ({ children }) => {
     const refresh = async () => {
       try {
         // Try to get refresh token from sessionStorage on app start
-        const storedRefreshToken = sessionStorage.getItem("refreshToken");
+        const storedRefreshToken =
+          localStorage.getItem("refreshToken") ||
+          sessionStorage.getItem("refreshToken");
         if (!storedRefreshToken) {
           throw new Error("No refresh token found");
         }
@@ -59,13 +61,15 @@ const AuthProvider = ({ children }) => {
   }, [accessToken, refreshToken]);
 
   //creates a user in mongodb and gets both access and refresh tokens
-  const signUp = async (credentials) => {
+  const signUp = async (credentials, rememberMe) => {
     try {
       const response = await api.post("/auth/signup", credentials);
       setTokens(response.data.accessToken, response.data.refreshToken);
 
-      // Store refresh token in sessionStorage
-      sessionStorage.setItem("refreshToken", response.data.refreshToken);
+      // Store refresh token in sessionStorage, or local storage if the user wants to be remembered
+      rememberMe === true
+        ? localStorage.setItem("refreshToken", response.data.refreshToken)
+        : sessionStorage.setItem("refreshToken", response.data.refreshToken);
 
       await fetchUser(response.data.accessToken);
       return response.status;
@@ -76,13 +80,15 @@ const AuthProvider = ({ children }) => {
   };
 
   //send a post request to the login route and get both tokens
-  const login = async (credentials) => {
+  const login = async (credentials, rememberMe) => {
     try {
       const response = await api.post("/auth/login", credentials);
       setTokens(response.data.accessToken, response.data.refreshToken);
 
-      // Store refresh token in sessionStorage
-      sessionStorage.setItem("refreshToken", response.data.refreshToken);
+      // Store refresh token in sessionStorage, or local storage if the user wants to be remembered
+      rememberMe === true
+        ? localStorage.setItem("refreshToken", response.data.refreshToken)
+        : sessionStorage.setItem("refreshToken", response.data.refreshToken);
 
       await fetchUser(response.data.accessToken);
       return response.status;
@@ -98,6 +104,7 @@ const AuthProvider = ({ children }) => {
       //ignore error, continue with logout
     }
     setTokens(null, null);
+    localStorage.removeItem("refreshToken");
     sessionStorage.removeItem("refreshToken");
     setUser(null);
     setIsLoading(false);
@@ -126,6 +133,8 @@ const AuthProvider = ({ children }) => {
         fetchUser,
         accessToken,
         setAccessToken,
+        refreshToken,
+        setRefreshToken,
         isLoading,
         setIsLoading,
       }}

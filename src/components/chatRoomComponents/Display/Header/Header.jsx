@@ -160,15 +160,19 @@ function Header({ className }) {
                       />
                     );
                   } else {
-                    return (
-                      <Option
-                        key={index}
-                        className={styles.option}
-                        label={option.label}
-                        icon={option.icon}
-                        panel={option.panel}
-                      />
-                    );
+                    if (
+                      currentChat.joinCode === "1tOJxy" &&
+                      option.label !== "Edit Group Profile"
+                    )
+                      return (
+                        <Option
+                          key={index}
+                          className={styles.option}
+                          label={option.label}
+                          icon={option.icon}
+                          panel={option.panel}
+                        />
+                      );
                   }
                 })}
               </Dropdown>

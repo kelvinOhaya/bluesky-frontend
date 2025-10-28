@@ -1,11 +1,10 @@
 import styles from "./LoginSignUp.module.css";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import useAuth from "../../contexts/auth/useAuth";
 
-function Login({ setMode }) {
-  const { login } = useAuth();
-  const navigate = useNavigate();
+function Login({ setMode, rememberMe, setRememberMe }) {
+  const { login, refreshToken } = useAuth();
 
   const [userData, setUserData] = useState({
     username: "",
@@ -14,10 +13,12 @@ function Login({ setMode }) {
   // possible states: "incorrect credentials"
   const [error, setError] = useState("");
 
-  const handleLoginDev = () => {
-    const last = "/chatroom";
-    window.location.href = last;
-  };
+  useEffect(() => {
+    if (!refreshToken) return;
+    if (refreshToken) {
+      window.location.href = "/chatroom";
+    }
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -31,7 +32,7 @@ function Login({ setMode }) {
 
     try {
       console.log("Calling login...");
-      const loginStatus = await login({ username, password });
+      const loginStatus = await login({ username, password }, rememberMe);
       console.log("Login response:", loginStatus);
       if (loginStatus === 200) {
         console.log("Login successful, navigating...");
@@ -88,6 +89,13 @@ function Login({ setMode }) {
           )}
           <span className={styles.submitAndReminder}>
             <button type="submit">Login</button>
+            <span className={styles.rememberMe}>
+              <label htmlFor="remember-me">Remember me</label>
+              <input
+                type="checkbox"
+                onChange={() => setRememberMe((prev) => !prev)}
+              />
+            </span>
             <p>
               Not logged in? <a onClick={() => setMode("signup")}>Sign Up</a>
             </p>
