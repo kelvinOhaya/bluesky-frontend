@@ -128,12 +128,14 @@ function Header({ className }) {
 
             <div className={styles.dropdownGroup}>
               {/* Group Settings Dropdown */}
-              <button
-                className={styles.groupSettingsButton}
-                onClick={() => setGroupOptionsIsOpened(true)}
-              >
-                <ChatRoomIcon size={34} />
-              </button>
+              {!currentChat.isDm && (
+                <button
+                  className={styles.groupSettingsButton}
+                  onClick={() => setGroupOptionsIsOpened(true)}
+                >
+                  <ChatRoomIcon size={34} />
+                </button>
+              )}
               <Dropdown
                 navbarIsOpened={groupOptionsIsOpened}
                 setNavbarIsOpened={setGroupOptionsIsOpened}
@@ -141,29 +143,28 @@ function Header({ className }) {
               >
                 {/* If the label is "configs", we don't want to show the user that if the chat is a dm. Other than that, it is fine */}
                 {groupOptions.map((option, index) => {
-                  if (option.label === "Configs") {
-                    return currentChat.isDm ? (
-                      <Option
-                        key={index}
-                        className={styles.option}
-                        label={option.label}
-                        icon={option.icon}
-                        panel={option.panel}
-                      />
-                    ) : (
-                      <Option
-                        key={index}
-                        className={styles.option}
-                        label={option.label}
-                        icon={option.icon}
-                        panel={option.panel}
-                      />
-                    );
-                  } else {
+                  // if (
+                  //   currentChat.joinCode !== "1tOJxy" &&
+                  //   option.label !== "Edit Group Profile"
+                  // ) {
+                  //   return (
+                  //     <Option
+                  //       key={index}
+                  //       className={styles.option}
+                  //       label={option.label}
+                  //       icon={option.icon}
+                  //       panel={option.panel}
+                  //     />
+                  //   );
+                  // }
+
+                  if (currentChat.joinCode === "1tOJxy") {
                     if (
-                      currentChat.joinCode === "1tOJxy" &&
-                      option.label !== "Edit Group Profile"
+                      option.label === "Edit Group Profile" ||
+                      option.label === "Change Group Name"
                     )
+                      return;
+                    else
                       return (
                         <Option
                           key={index}
@@ -173,7 +174,16 @@ function Header({ className }) {
                           panel={option.panel}
                         />
                       );
-                  }
+                  } else
+                    return (
+                      <Option
+                        key={index}
+                        className={styles.option}
+                        label={option.label}
+                        icon={option.icon}
+                        panel={option.panel}
+                      />
+                    );
                 })}
               </Dropdown>
 
