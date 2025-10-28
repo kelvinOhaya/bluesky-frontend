@@ -60,7 +60,7 @@ function SignUp({ setMode, rememberMe, setRememberMe }) {
     console.log(`Status: ${signUpStatus}`);
     if (signUpStatus === 200) {
       const last = "/chatroom";
-      window.location.href = last;
+      navigate(last);
     } else return;
 
     // navigate("/chatroom");
