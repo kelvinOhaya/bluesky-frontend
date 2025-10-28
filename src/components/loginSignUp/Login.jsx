@@ -14,13 +14,6 @@ function Login({ setMode, rememberMe, setRememberMe }) {
   // possible states: "incorrect credentials"
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    if (!refreshToken) return;
-    if (refreshToken) {
-      navigate("/chatroom");
-    }
-  }, [refreshToken]);
-
   const handleLogin = async (e) => {
     e.preventDefault();
     e.stopPropagation(); // Prevent event bubbling

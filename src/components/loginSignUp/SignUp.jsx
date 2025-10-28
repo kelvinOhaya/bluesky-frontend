@@ -22,13 +22,6 @@ function SignUp({ setMode, rememberMe, setRememberMe }) {
     usernameIsAlreadyTaken: false,
   });
 
-  useEffect(() => {
-    if (!refreshToken) return;
-    if (refreshToken) {
-      navigate("/chatroom");
-    }
-  }, [refreshToken]);
-
   const handleSignUp = async (e) => {
     e.preventDefault();
     const { username, password } = userData;

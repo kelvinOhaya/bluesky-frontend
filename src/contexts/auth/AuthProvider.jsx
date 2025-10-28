@@ -15,6 +15,7 @@ const AuthProvider = ({ children }) => {
   const [refreshToken, setRefreshToken] = useState(null);
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const navigate = useNavigate();
 
   // Helper function to set both tokens
@@ -101,17 +102,19 @@ const AuthProvider = ({ children }) => {
   //send a post request to the logout route and clear all tokens
   const logout = async () => {
     try {
+      setIsLoggingOut(true);
+      navigate("/", { replace: true });
       await api.post("/auth/logout");
+      localStorage.removeItem("refreshToken");
+      console.log(`LOCAL STORAGE: ${localStorage.getItem("refreshToken")}`);
+      sessionStorage.removeItem("refreshToken");
+      console.log(`SESSION STORAGE: ${sessionStorage.getItem("refreshToken")}`);
+      setUser(null);
+      setTokens(null, null);
+      setIsLoggingOut(false);
     } catch {
       //ignore error, continue with logout
     }
-    localStorage.removeItem("refreshToken");
-    console.log(`LOCAL STORAGE: ${localStorage.getItem("refreshToken")}`);
-    sessionStorage.removeItem("refreshToken");
-    console.log(`SESSION STORAGE: ${sessionStorage.getItem("refreshToken")}`);
-    setUser(null);
-    setTokens(null, null);
-    window.location.href = "/";
   };
 
   //get the user data from the /me route (doesn't include the password)
@@ -141,6 +144,8 @@ const AuthProvider = ({ children }) => {
         setRefreshToken,
         isLoading,
         setIsLoading,
+        isLoggingOut,
+        setIsLoggingOut,
       }}
     >
       {children}

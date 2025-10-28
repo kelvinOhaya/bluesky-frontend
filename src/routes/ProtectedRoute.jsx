@@ -1,14 +1,15 @@
-import { Navigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import LoadingIcon from "../components/general/LoadingIcon/LoadingIcon";
 import useAuth from "../contexts/auth/useAuth";
 
 const ProtectedRoute = ({ children }) => {
-  const { user, isLoading, accessToken } = useAuth();
+  const { user, isLoading, accessToken, isLoggingOut } = useAuth();
+  const navigate = useNavigate();
 
   console.log("ProtectedRoute render:", {
-    user: !!user,
+    user,
     isLoading,
-    accessToken: !!accessToken,
+    accessToken,
   });
 
   const loadingStyle = {
@@ -19,19 +20,17 @@ const ProtectedRoute = ({ children }) => {
   };
 
   if (isLoading) {
-    console.log("ProtectedRoute: no access token, redirecting");
     return (
       <div style={loadingStyle}>
         <LoadingIcon />
       </div>
     );
+  } else {
+    if (!user && !isLoggingOut) {
+      console.log("ProtectedRoute: no access token, redirecting");
+      navigate("/register");
+    } else return children;
   }
-  if (!user) {
-    console.log("ProtectedRoute: no access token, redirecting");
-    window.location.href = "/register";
-  }
-
-  return children;
 };
 
 export default ProtectedRoute;
