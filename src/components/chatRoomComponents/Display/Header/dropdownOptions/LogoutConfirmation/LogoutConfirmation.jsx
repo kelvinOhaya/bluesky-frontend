@@ -28,7 +28,7 @@ function LogoutConfirmation() {
     await logout();
 
     const last = "/register";
-    window.location.href = last;
+    navigate(last);
   };
 
   return (

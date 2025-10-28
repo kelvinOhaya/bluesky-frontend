@@ -5,6 +5,7 @@ import useAuth from "../../contexts/auth/useAuth";
 
 function Login({ setMode, rememberMe, setRememberMe }) {
   const { login, refreshToken } = useAuth();
+  const navigate = useNavigate();
 
   const [userData, setUserData] = useState({
     username: "",
@@ -16,9 +17,9 @@ function Login({ setMode, rememberMe, setRememberMe }) {
   useEffect(() => {
     if (!refreshToken) return;
     if (refreshToken) {
-      window.location.href = "/chatroom";
+      navigate("/chatroom");
     }
-  }, []);
+  }, [refreshToken]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -38,7 +39,7 @@ function Login({ setMode, rememberMe, setRememberMe }) {
         console.log("Login successful, navigating...");
         await new Promise((resolve) => setTimeout(resolve, 1000));
         const last = "/chatroom";
-        window.location.href = last;
+        navigate(last);
       } else {
         console.log("Login failed:", loginStatus);
         loginStatus == 500

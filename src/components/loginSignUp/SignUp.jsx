@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./LoginSignUp.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAuth from "../../contexts/auth/useAuth";
 import api from "../../utils/api";
 
 function SignUp({ setMode, rememberMe, setRememberMe }) {
   const navigate = useNavigate();
-  const { signUp } = useAuth();
+  const { signUp, refreshToken } = useAuth();
 
   const [userData, setUserData] = useState({
     username: "",
@@ -21,6 +21,13 @@ function SignUp({ setMode, rememberMe, setRememberMe }) {
     passwordUnderEightCharacters: false,
     usernameIsAlreadyTaken: false,
   });
+
+  useEffect(() => {
+    if (!refreshToken) return;
+    if (refreshToken) {
+      navigate("/chatroom");
+    }
+  }, [refreshToken]);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
