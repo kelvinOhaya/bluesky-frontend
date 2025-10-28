@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import api, { injectAuthToken } from "../../utils/api";
 import AuthContext from "./AuthContext";
 import useChatRoom from "../chatRoom/useChatRoom";
+import { useNavigate } from "react-router-dom";
 
 const AuthProvider = ({ children }) => {
   //the tokens from the backend, the user data, and checking if the website is loading
@@ -14,6 +15,7 @@ const AuthProvider = ({ children }) => {
   const [refreshToken, setRefreshToken] = useState(null);
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   // Helper function to set both tokens
   const setTokens = (newAccessToken, newRefreshToken) => {
@@ -103,11 +105,13 @@ const AuthProvider = ({ children }) => {
     } catch {
       //ignore error, continue with logout
     }
-    setTokens(null, null);
     localStorage.removeItem("refreshToken");
+    console.log(`LOCAL STORAGE: ${localStorage.getItem("refreshToken")}`);
     sessionStorage.removeItem("refreshToken");
+    console.log(`SESSION STORAGE: ${sessionStorage.getItem("refreshToken")}`);
     setUser(null);
-    setIsLoading(false);
+    setTokens(null, null);
+    window.location.href = "/";
   };
 
   //get the user data from the /me route (doesn't include the password)

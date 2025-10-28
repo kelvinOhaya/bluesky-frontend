@@ -26,7 +26,6 @@ function LogoutConfirmation() {
     setUser(null);
     clearAllCache();
     await logout();
-    navigate("/");
   };
 
   return (
