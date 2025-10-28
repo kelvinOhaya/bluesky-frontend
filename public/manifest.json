@@ -11,13 +11,13 @@
   "scope": "/",
   "icons": [
     {
-      "src": "./src/assets/Blue Cloud Icon on Transparent Grid.png",
+      "src": "./src/assets/Blue-Cloud-Icon-on-Transparent-Grid.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "./src/assets/Blue Cloud Icon on Transparent Grid.png",
+      "src": "./src/assets/Blue-Cloud-Icon-on-Transparent-Grid.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
