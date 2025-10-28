@@ -27,8 +27,7 @@ function LogoutConfirmation() {
     clearAllCache();
     await logout();
 
-    const last = "/register";
-    navigate(last);
+    navigate("/");
   };
 
   return (
