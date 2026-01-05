@@ -1,0 +1,16 @@
+@import url("/src/styles/variables.css");
+
+.container {
+  width: 100%;
+}
+
+.title {
+  background: var(--primary);
+  text-align: center;
+  padding: 10px 0;
+  margin-bottom: 10px;
+}
+
+.fact {
+  padding: 5px 10px;
+}

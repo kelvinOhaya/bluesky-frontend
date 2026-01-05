@@ -1,0 +1,27 @@
+import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
+import socketContext from "./socketContext";
+import useAuth from "@contexts/auth/useAuth";
+
+function SocketProvider({ children }) {
+  const { user } = useAuth();
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    if (!user) return;
+    const socket = io(import.meta.env.VITE_BASE_BACKEND_URL, {
+      auth: { userId: user._id },
+      transports: ["websocket", "polling"],
+      withCredentials: true,
+    });
+    setSocket(socket);
+  }, [user]);
+
+  return (
+    <socketContext.Provider value={{ socket }}>
+      {children}
+    </socketContext.Provider>
+  );
+}
+
+export default SocketProvider;

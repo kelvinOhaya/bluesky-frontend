@@ -1,0 +1,87 @@
+@import url("/src/styles/variables.css");
+/* USE FOR ALL FORMS FOR NOW */
+.container {
+  position: absolute;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: fit-content;
+  gap: 5px;
+  background: var(--dark-primary);
+  text-align: center;
+  border-radius: 15px;
+  z-index: 4;
+}
+
+.container button {
+  padding: 0;
+  border: none;
+}
+
+.container form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.container input {
+  background: var(--primary);
+  border: 1px solid rgb(0, 49, 245);
+  color: white;
+  flex: 5;
+  padding: 5px 10px;
+  font-size: 0.9rem;
+  border-radius: 5px;
+}
+
+.container input::placeholder {
+  color: rgb(210, 210, 210, 0.7);
+}
+
+.container:focus {
+  outline: rgb(0, 49, 245);
+}
+
+.container span {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.container button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: var(--primary);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container button:hover {
+  cursor: pointer;
+  background-color: white;
+  color: var(--dark-primary);
+}
+
+.container label {
+  text-align: center;
+  width: 100%;
+  background-color: var(--primary);
+  padding: 15px 0;
+}
+
+.inputAndButton {
+  padding: 0 10px;
+  height: 30px;
+  display: flex;
+  gap: 15px;
+}
+
+.container p {
+  width: 100%;
+  /* border: 1px solid yellow; */
+}

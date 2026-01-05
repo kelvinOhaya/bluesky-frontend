@@ -1,0 +1,37 @@
+.textbar {
+  /* border: 1px solid yellow; */
+  width: 100%;
+  height: 100%;
+  margin-top: auto;
+}
+
+@media (display-mode: standalone) {
+  .textbar {
+    padding-bottom: 100px !important;
+  }
+}
+
+.header {
+  max-height: 100px;
+  /* border: 1px solid green !important; */
+}
+.messageContainer {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  display: flex;
+  padding: 0 20px 10px;
+  flex-direction: column;
+  align-items: stretch;
+  overflow-y: scroll;
+}
+
+.messageContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.messageWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}

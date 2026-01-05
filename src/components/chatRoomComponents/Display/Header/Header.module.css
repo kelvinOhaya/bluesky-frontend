@@ -1,0 +1,169 @@
+@import url("/src/styles/variables.css");
+
+/* Container Styles */
+.container {
+  width: 100%;
+  min-height: 60px;
+  height: 60px;
+  padding: 10px;
+  background: var(--dark-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: white;
+}
+/* .container * {
+  border: 1px solid green;
+} */
+.option {
+  padding: 10px;
+}
+
+/* UserLabel Styles */
+.userLabel {
+  /* border: 1px solid magenta; */
+
+  min-width: 0; /* allow flex to shrink */
+  width: fit-content;
+  overflow: hidden;
+  height: fit-content;
+  margin-right: auto;
+  padding: 5px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  /* Align to left instead of center */
+}
+
+.overrideUserLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: auto;
+  overflow: hidden;
+
+  /* background-color: green !important; */
+}
+
+.overrideUserLabel img {
+  height: 2rem !important;
+  width: 2rem !important;
+  object-fit: cover;
+  min-width: 2rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.overrideUserLabel p {
+  font-size: 1.6rem;
+  width: 100% !important;
+  min-width: 0;
+  margin-left: 15px;
+  overflow-x: hidden;
+  text-overflow: ellipsis !important;
+  white-space: nowrap;
+}
+
+.joinCode {
+  min-width: fit-content;
+  font-size: 1.2rem;
+  padding-right: 2%;
+}
+
+/* Settings Icon Styles */
+.settingsButton {
+  background: var(--dark-primary);
+  color: white;
+  outline: none;
+  border: none;
+}
+
+.settingsButton:hover {
+  cursor: pointer;
+}
+
+/* Group Icon Styles */
+.groupSettingsButton {
+  margin-top: 10px;
+  margin-right: 10px;
+  background: transparent;
+  color: white;
+  outline: none;
+  border: none;
+}
+
+.groupSettingsButton:hover {
+  cursor: pointer;
+}
+
+.iconWrapper {
+  /* border: 1px solid yellow; */
+  padding-top: auto;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  padding: 11px 2%;
+  width: fit-content;
+  height: fit-content;
+  pointer-events: auto;
+  color: white;
+}
+
+.mobileDropdownIcon {
+  /* border: 1px solid yellow; */
+  margin-bottom: 10px;
+  position: relative;
+  top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 2%;
+  pointer-events: auto;
+}
+
+.iconWrapper svg {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.personalJoinCode {
+  text-align: center;
+  font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 10px;
+  width: 100%;
+  background: var(--primary);
+}
+
+.memberCount {
+  width: fit-content;
+  background-color: var(--dark-primary);
+  padding: 5px;
+  border-radius: 7px;
+  white-space: nowrap;
+  margin-right: 10px;
+}
+
+/* Wrapper for grouping dropdown icons */
+.dropdownGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 600px) {
+  .dropdownGroup {
+    gap: 6px;
+  }
+}

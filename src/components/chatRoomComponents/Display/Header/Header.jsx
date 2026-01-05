@@ -1,0 +1,234 @@
+import { useState } from "react";
+import styles from "./Header.module.css";
+
+// General UI components
+import UserLabel from "@components/general/UserLabel/UserLabel";
+import Overlay from "@components/general/Overlay/Overlay";
+import Option from "./Dropdown/Option/Option";
+import Dropdown from "./Dropdown/Dropdown";
+
+// Icon components
+import {
+  PlusIcon,
+  LeaveIcon,
+  SearchIcon,
+  PencilIcon,
+  ProfileIcon,
+  SettingsIcon,
+  ChatRoomIcon,
+} from "@components/general/icons";
+
+// Dropdown option components
+import {
+  JoinRoom,
+  ChangeName,
+  NewGroupForm,
+  LeaveChatRoom,
+  LogoutConfirmation,
+  ChangeProfilePicture,
+  ChangeGroupProfilePicture,
+  FindUser,
+} from "./Dropdown/dropdownOptions";
+
+import useChatRoom from "@contexts/chatRoom/useChatRoom";
+import useAuth from "@contexts/auth/useAuth";
+import MenuIconHorizontal from "@components/general/icons/MenuIconHorizontal";
+import MobileFacts from "./Dropdown/dropdownOptions/MobileFacts/MobileFacts";
+
+function Header({ className }) {
+  const { user } = useAuth();
+  const { currentChat, currentChatId, setSidebarIsOpen } = useChatRoom();
+
+  console.log("Header render - currentChatId:", currentChatId);
+  console.log("Header render - currentChat:", currentChat);
+  console.log("Header render - user:", user);
+
+  const settingsOptions = [
+    {
+      icon: PencilIcon,
+      label: "Change Profile Picture",
+      panel: <ChangeProfilePicture />,
+    },
+    {
+      icon: PlusIcon,
+      label: "Create Group Chat",
+      panel: <NewGroupForm />,
+    },
+    {
+      icon: ProfileIcon,
+      label: "Find User",
+      panel: <FindUser />,
+    },
+    {
+      icon: SearchIcon,
+      label: "Join A Room",
+      panel: <JoinRoom />,
+    },
+    {
+      icon: LeaveIcon,
+      label: "Logout",
+      panel: <LogoutConfirmation />,
+    },
+  ];
+
+  const groupOptions = [
+    { icon: SettingsIcon, label: "Configs", panel: <MobileFacts /> },
+    {
+      icon: PencilIcon,
+      label: "Edit Group Profile",
+      panel: <ChangeGroupProfilePicture />,
+    },
+    { icon: PlusIcon, label: "Change Group Name", panel: <ChangeName /> },
+    {
+      icon: LeaveIcon,
+      label: currentChat?.isDm ? "Leave Chat" : "Leave Group",
+      panel: <LeaveChatRoom />,
+    },
+  ];
+  const [settingsIsOpened, setSettingsIsOpened] = useState(false);
+  const [groupOptionsIsOpened, setGroupOptionsIsOpened] = useState(false);
+
+  return (
+    <div className={className}>
+      <div className={styles.container}>
+        <button
+          style={{
+            border: 0,
+            background: "none",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onClick={() => setSidebarIsOpen((prev) => !prev)}
+        >
+          <MenuIconHorizontal
+            className={styles.MenuIconHorizontal}
+            color="white"
+          />
+        </button>
+
+        {currentChatId && (
+          <>
+            <UserLabel
+              className={styles.userLabel}
+              overrideStyle={styles.overrideUserLabel}
+              name={
+                currentChat?.isDm === true
+                  ? currentChat.otherUser?.username ?? "Loading..."
+                  : currentChat.name
+              }
+              imgSize={37}
+              src={
+                currentChat.isDm
+                  ? currentChat.otherUser?.profilePicture?.url || null
+                  : currentChat.profilePicture?.url || null
+              }
+            />
+
+            <div className={styles.dropdownGroup}>
+              {/* Group Settings Dropdown */}
+              {!currentChat.isDm && (
+                <button
+                  className={styles.groupSettingsButton}
+                  onClick={() => setGroupOptionsIsOpened(true)}
+                >
+                  <ChatRoomIcon size={34} color="white" />
+                </button>
+              )}
+              <Dropdown
+                navbarIsOpened={groupOptionsIsOpened}
+                setNavbarIsOpened={setGroupOptionsIsOpened}
+                title={"Group Settings"}
+              >
+                {/* If the label is "configs", we don't want to show the user that if the chat is a dm. Other than that, it is fine */}
+                {groupOptions.map((option, index) => {
+                  // if (
+                  //   currentChat.joinCode !== "1tOJxy" &&
+                  //   option.label !== "Edit Group Profile"
+                  // ) {
+                  //   return (
+                  //     <Option
+                  //       key={index}
+                  //       className={styles.option}
+                  //       label={option.label}
+                  //       icon={option.icon}
+                  //       panel={option.panel}
+                  //     />
+                  //   );
+                  // }
+
+                  if (currentChat.joinCode === "1tOJxy") {
+                    if (
+                      option.label === "Edit Group Profile" ||
+                      option.label === "Change Group Name"
+                    )
+                      return;
+                    else
+                      return (
+                        <Option
+                          key={index}
+                          className={styles.option}
+                          label={option.label}
+                          icon={option.icon}
+                          panel={option.panel}
+                        />
+                      );
+                  } else
+                    return (
+                      <Option
+                        key={index}
+                        className={styles.option}
+                        label={option.label}
+                        icon={option.icon}
+                        panel={option.panel}
+                      />
+                    );
+                })}
+              </Dropdown>
+
+              {/* Settings Icon and Navbar*/}
+              <button
+                className={styles.settingsButton}
+                onClick={() => setSettingsIsOpened(true)}
+              >
+                <SettingsIcon
+                  className={styles.iconWrapper}
+                  size={34}
+                  color="white"
+                />
+              </button>
+              <Dropdown
+                navbarIsOpened={settingsIsOpened}
+                setNavbarIsOpened={setSettingsIsOpened}
+                title={"Settings"}
+              >
+                <span className={styles.personalJoinCode}>
+                  Personal Join Code: {user.joinCode}
+                </span>
+
+                {settingsOptions.map((option, index) => (
+                  <Option
+                    key={index}
+                    className={styles.option}
+                    icon={option.icon}
+                    label={option.label}
+                    panel={option.panel}
+                  />
+                ))}
+              </Dropdown>
+            </div>
+          </>
+        )}
+
+        <Overlay
+          settingsIsOpened={settingsIsOpened}
+          setSettingsIsOpened={setSettingsIsOpened}
+          groupOptionsIsOpened={groupOptionsIsOpened}
+          setGroupOptionsIsOpened={setGroupOptionsIsOpened}
+        />
+      </div>
+    </div>
+  );
+}
+
+export default Header;
