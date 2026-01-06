@@ -3,13 +3,13 @@ function LinkedInIcon({ color = "currentColor", className, size, href }) {
     <a className={className} href={href} target="_blank">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
         height={size}
         width={size}
         version="1.1"
         id="Layer_1"
         viewBox="0 0 382 382"
-        xml:space="preserve"
+        xmlSpace="preserve"
       >
         <path
           style={{ fill: color }}

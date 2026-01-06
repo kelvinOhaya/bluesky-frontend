@@ -1,10 +1,10 @@
 import styles from "./LoginSignUp.module.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import useAuth from "../../contexts/auth/useAuth";
 
 function Login({ setMode, rememberMe, setRememberMe }) {
-  const { login, refreshToken } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const [userData, setUserData] = useState({
@@ -14,6 +14,7 @@ function Login({ setMode, rememberMe, setRememberMe }) {
   // possible states: "incorrect credentials"
   const [error, setError] = useState("");
 
+  //handles the state for logging in
   const handleLogin = async (e) => {
     e.preventDefault();
     e.stopPropagation(); // Prevent event bubbling

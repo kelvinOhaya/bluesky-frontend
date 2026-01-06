@@ -27,7 +27,7 @@ function Home() {
           <section className={styles.mainContent}>
             {/* Title and description */}
             <div className={styles.titleAndDescription}>
-              <h1>Blue Sky</h1>
+              <h1>Chat App</h1>
               <p>Chat without distractions - fast, fun, and free</p>
             </div>
             {/* Contains button and icons */}
